@@ -79,17 +79,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.main_activity_content_frame, new EventsFragment())
                 .commit();
 
+        // TODO : delete this test (check ApiTest)
         lyonRewardsApi.getHello(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 int statusCode = response.code();
                 JsonObject jsonObject = response.body();
-                Log.d("API", "Response : " + jsonObject.toString());
+                Log.d("API", "Response : " + jsonObject.getAsString());
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
             }
         });
     }

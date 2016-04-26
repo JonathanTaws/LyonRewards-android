@@ -20,7 +20,7 @@ public class MockLyonRewardsApplication extends LyonRewardsApplication {
         return DaggerMockAppComponent.builder()
                 // list of modules that are part of this component need to be created here too
                 .appModule(new AppModule(this))
-                .netModule(new NetModule(API_BASE_URL))
+                .netModule(new NetModule())
                 .build();
     }
 }
