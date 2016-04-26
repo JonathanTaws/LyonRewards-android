@@ -10,4 +10,6 @@ It was conducted as part of the final project of our 4th year Computer Science M
 
 ## Architecture
 
-The project is divided between a REST API, a website, and an Android app. This repository contains the code for the Android app. 
+The project is divided between a REST API, a website, and an Android app. This repository contains the code for the Android app.
+
+2016
