@@ -18,10 +18,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @Module
 public class NetModule {
-    private String mApiBaseUrl;
 
-    public NetModule(String apiBaseUrl) {
-        this.mApiBaseUrl = apiBaseUrl;
+    private static String API_BASE_URL = "https://lyonrewards.antoine-chabert.fr/api/";
+
+    public NetModule() {
+
     }
 
     @Provides
@@ -43,7 +44,7 @@ public class NetModule {
     @Singleton
     Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(mApiBaseUrl)
+                .baseUrl(API_BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
