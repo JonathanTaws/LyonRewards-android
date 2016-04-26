@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -77,20 +79,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.main_activity_content_frame, new EventsFragment())
                 .commit();
 
-        lyonRewardsApi.getHello(new Callback<ResponseBody>() {
+        lyonRewardsApi.getHello(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 int statusCode = response.code();
-                ResponseBody body = response.body();
-                try {
-                    Log.d("API", "Response : " + body.string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                JsonObject jsonObject = response.body();
+                Log.d("API", "Response : " + jsonObject.toString());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
         });

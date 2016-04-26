@@ -12,20 +12,21 @@ import h4311.hexanome.insa.lyonrewards.di.module.api.NetModule;
  */
 public class LyonRewardsApplication extends Application {
 
-    private static String API_BASE_URL = "https://lyonrewards.antoine-chabert.fr/api/";
+    protected static String API_BASE_URL = "https://lyonrewards.antoine-chabert.fr/api/";
 
-    private AppComponent mAppComponent;
+    private AppComponent mAppComponent = createAppComponent();
 
     @Override
     public void onCreate() {
         super.onCreate();
+    }
 
-        mAppComponent = DaggerAppComponent.builder()
-            // list of modules that are part of this component need to be created here too
-                        .appModule(new AppModule(this))
-                        .netModule(new NetModule(API_BASE_URL))
-                        .build();
-
+    protected AppComponent createAppComponent() {
+        return DaggerAppComponent.builder()
+                // list of modules that are part of this component need to be created here too
+                .appModule(new AppModule(this))
+                .netModule(new NetModule(API_BASE_URL))
+                .build();
     }
 
     public AppComponent getAppComponent() {
