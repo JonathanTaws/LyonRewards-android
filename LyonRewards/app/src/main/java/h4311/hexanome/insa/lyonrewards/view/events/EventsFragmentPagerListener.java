@@ -1,4 +1,4 @@
-package h4311.hexanome.insa.lyonrewards.view.scrolltab;
+package h4311.hexanome.insa.lyonrewards.view.events;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;

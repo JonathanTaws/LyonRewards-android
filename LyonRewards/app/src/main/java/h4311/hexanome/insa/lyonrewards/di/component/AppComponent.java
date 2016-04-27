@@ -6,6 +6,7 @@ import dagger.Component;
 import h4311.hexanome.insa.lyonrewards.di.module.AppModule;
 import h4311.hexanome.insa.lyonrewards.di.module.api.NetModule;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
+import h4311.hexanome.insa.lyonrewards.view.events.EventDetailActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTab;
 
 /**
@@ -17,4 +18,6 @@ public interface AppComponent {
     void inject(MainActivity activity);
 
     void inject(EventsFragmentGrandLyonTab fragment);
+
+    void inject(EventDetailActivity activity);
 }

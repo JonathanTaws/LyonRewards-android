@@ -8,6 +8,7 @@ import h4311.hexanome.insa.lyonrewards.business.Event;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Path;
 
 /**
  * Created by Pierre on 26/04/2016.
@@ -29,4 +30,10 @@ public class LyonRewardsApi {
         Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents();
         allEvents.enqueue(callback);
     }
+
+    public void getEventById(int eventId, Callback<Event> callback) {
+        Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId);
+        event.enqueue(callback);
+    }
+
 }

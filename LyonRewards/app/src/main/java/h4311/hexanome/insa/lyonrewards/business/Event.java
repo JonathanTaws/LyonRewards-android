@@ -1,5 +1,8 @@
 package h4311.hexanome.insa.lyonrewards.business;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +14,7 @@ import java.util.List;
 /**
  * Created by Pierre on 27/04/2016.
  */
-public class Event {
+public class Event implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -227,4 +230,43 @@ public class Event {
         this.tags = tags;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(id);
+        out.writeString(title);
+        out.writeString(description);
+        out.writeLong(publishDate.getTime());
+        out.writeLong(startDate.getTime());
+        out.writeLong(endDate.getTime());
+        out.writeDouble(latitude);
+        out.writeDouble(longitude);
+        out.writeList(tags);
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+    private Event(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.description = in.readString();
+        this.publishDate = new Date(in.readLong());
+        this.startDate = new Date(in.readLong());
+        this.endDate = new Date(in.readLong());
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
+        in.readList(this.tags, Integer.class.getClassLoader());
+    }
 }

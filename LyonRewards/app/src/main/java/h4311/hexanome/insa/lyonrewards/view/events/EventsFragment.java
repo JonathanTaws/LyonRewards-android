@@ -15,7 +15,6 @@ import com.github.florent37.materialviewpager.MaterialViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.R;
-import h4311.hexanome.insa.lyonrewards.view.scrolltab.EventsFragmentPagerListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,7 +79,7 @@ public class EventsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, view);
 
-        // Todo : make a custom MaterialViewPager
+        // Todo : make a custom MaterialViewPager ?
         mViewPager.getViewPager().setAdapter(new EventsFragmentPagerAdapter(getActivity().getSupportFragmentManager()));
         mViewPager.setMaterialViewPagerListener(new EventsFragmentPagerListener());
 
@@ -97,6 +96,7 @@ public class EventsFragment extends Fragment {
                 }
             });
 
+        // TODO : check
         Toolbar toolbar = mViewPager.getToolbar();
         toolbar.setVisibility(View.GONE);
 
