@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,6 +24,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
+import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener {
 
@@ -108,22 +110,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        Fragment fragment = null;
+        Bundle bundle = new Bundle();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
+        if(id == R.id.nav_scan_qrcode) {
+            fragment = QrReaderFragment.newInstance(bundle);
+        }
 
         drawer.closeDrawer(GravityCompat.START);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_activity_content_frame, fragment)//TODO use tags
+                .commit();
+
         return true;
     }
 
