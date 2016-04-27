@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,22 +65,26 @@ public class EventsFragmentGrandLyonTab extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new EventsFragmentGrandLyonTabViewAdapter(mContentEvents));
+        mAdapter = new RecyclerViewMaterialAdapter(new EventsFragmentGrandLyonTabViewAdapter(mContentEvents, getContext()));
         mRecyclerView.setAdapter(mAdapter);
+
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
         lyonRewardsApi.getAllEvents(new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 mContentEvents.addAll(response.body());
                 mAdapter.notifyDataSetChanged();
+                Log.d("API", "events received");
             }
 
             @Override
             public void onFailure(Call<List<Event>> call, Throwable t) {
                 // TODO : Error message
+                Log.d("API", "error : " + t.getMessage());
             }
         });
 
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
+
     }
 }

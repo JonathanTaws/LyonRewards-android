@@ -1,7 +1,7 @@
 package h4311.hexanome.insa.lyonrewards.view.events;
 
-import android.content.res.ObbInfo;
-import android.support.v7.widget.CardView;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 
@@ -20,6 +21,8 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private static int MAX_LENGTH_DESCRIPTION = 100;
+
+        protected Context mContext;
 
         @BindView(R.id.card_event_title)
         protected TextView mTitle;
@@ -45,9 +48,12 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
         @BindView(R.id.card_event_publish_date)
         protected TextView mPublishDate;
 
-        public ViewHolder(View view) {
+        private Event mEvent = null;
+
+        public ViewHolder(View view, Context context) {
             super(view);
             ButterKnife.bind(this, view);
+            mContext = context;
         }
 
         public void setEvent(Event event) {
@@ -74,19 +80,33 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
             mDescription.setText(description);
 
             mPublishDate.setText(event.getPublishDateString());
+
+            mEvent = event;
+        }
+
+        @OnClick(R.id.card_event_card_view)
+        public void cardviewOnClick() {
+            if (mEvent != null) {
+                Intent intent = new Intent(mContext, EventDetailActivity.class);
+                intent.putExtra(EventDetailActivity.INTENT_EVENT, mEvent);
+                mContext.startActivity(intent);
+            }
         }
     }
 
     protected List<Event> events;
 
-    public EventsFragmentGrandLyonTabViewAdapter(List<Event> events) {
+    protected Context mContext;
+
+    public EventsFragmentGrandLyonTabViewAdapter(List<Event> events, Context context) {
         this.events = events;
+        this.mContext = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_event_layout, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mContext);
     }
 
     @Override

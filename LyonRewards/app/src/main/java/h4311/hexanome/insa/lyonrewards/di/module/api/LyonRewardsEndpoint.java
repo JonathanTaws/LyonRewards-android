@@ -21,4 +21,7 @@ public interface LyonRewardsEndpoint {
 
     @GET("events")
     Call<List<Event>> getAllEvents();
+
+    @GET("events/{id}")
+    Call<Event> getEventById(@Path("id") int eventId);
 }

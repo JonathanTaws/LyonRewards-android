@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="h4311.hexanome.insa.lyonrewards">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".LyonRewardsApplication"
         android:allowBackup="true"
@@ -19,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.events.EventDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
