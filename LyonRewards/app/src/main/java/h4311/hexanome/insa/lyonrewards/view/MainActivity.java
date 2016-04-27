@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,10 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.JsonObject;
-
-import java.io.IOException;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -27,15 +22,11 @@ import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
-import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsEndpoint;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener {
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
 
     @BindView(R.id.fab)
@@ -78,20 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction()
                 .replace(R.id.main_activity_content_frame, new EventsFragment())
                 .commit();
-
-        lyonRewardsApi.getHello(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                int statusCode = response.code();
-                JsonObject jsonObject = response.body();
-                Log.d("API", "Response : " + jsonObject.getAsString());
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                //TODO
-            }
-        });
     }
 
     @Override
@@ -155,4 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // TODO : Action ?
 
     }
+
+
 }
