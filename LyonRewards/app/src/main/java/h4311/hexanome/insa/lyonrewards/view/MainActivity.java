@@ -24,9 +24,11 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
+import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
+import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundDialogFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener {
 
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
+
+    private QrCodeFoundDialogFragment qrCodeFoundDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction()
                 .replace(R.id.main_activity_content_frame, new EventsFragment())
                 .commit();
+
+        qrCodeFoundDialogFragment = null;
     }
 
     @Override
@@ -121,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.main_activity_content_frame, fragment)//TODO use tags
+                .replace(R.id.main_activity_content_frame, fragment)
                 .commit();
 
         return true;
@@ -134,4 +140,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    public void onQrCodeFound(String value) {
+        //TODO Find a better solution
+        if(qrCodeFoundDialogFragment == null) {
+            qrCodeFoundDialogFragment = new QrCodeFoundDialogFragment();
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            qrCodeFoundDialogFragment.show(fragmentManager, "Sample Fragment");
+        }
+    }
 }
