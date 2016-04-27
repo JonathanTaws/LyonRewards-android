@@ -41,8 +41,6 @@ public class EventsFragmentGrandLyonTab extends Fragment {
 
     private RecyclerView.Adapter mAdapter;
 
-    private static final int ITEM_COUNT = 10;
-
     private List<Event> mContentEvents = new ArrayList<>();
 
     public static EventsFragmentGrandLyonTab newInstance() {
