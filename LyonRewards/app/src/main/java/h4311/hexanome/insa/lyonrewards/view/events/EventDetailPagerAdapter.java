@@ -13,7 +13,7 @@ import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
 public class EventDetailPagerAdapter  extends ScrolltabPagerAdapter {
 
     private static String[] tabsLabels = { "Description", "Points" };
-    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ EventsFragmentGrandLyonTab.class };
+    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ EventsFragmentGrandLyonTab.class, EventsFragmentGrandLyonTab.class };
     private Event mEvent;
 
     public EventDetailPagerAdapter(Event event, FragmentManager fm) {
@@ -23,12 +23,15 @@ public class EventDetailPagerAdapter  extends ScrolltabPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        int index = position % getTabsFragments().length;
+        int index = position % getTabsLabels().length;
         switch (index) {
-            case 0:
-                return EventDetailDescriptionFragment.newInstance(mEvent);
+            default:
+                // TODO : case 1
+
+               //return EventsFragmentGrandLyonTab.newInstance();
+                EventDetailDescriptionFragment fragment = EventDetailDescriptionFragment.newInstance(mEvent);
+                return fragment;
         }
-        return  null;
     }
 
     @Override

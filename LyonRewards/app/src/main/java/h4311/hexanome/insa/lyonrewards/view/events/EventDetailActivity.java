@@ -1,9 +1,12 @@
 package h4311.hexanome.insa.lyonrewards.view.events;
 
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
@@ -44,6 +47,7 @@ public class EventDetailActivity extends AppCompatActivity {
         toolbar.setTitle("Chargement...");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_18dp);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Get the event id
         Intent intent = getIntent();
@@ -62,4 +66,16 @@ public class EventDetailActivity extends AppCompatActivity {
         // TODO : check
         mViewPager.getToolbar().setVisibility(View.GONE);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
