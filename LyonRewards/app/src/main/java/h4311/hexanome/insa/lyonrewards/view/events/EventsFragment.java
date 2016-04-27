@@ -1,14 +1,21 @@
-package h4311.hexanome.insa.lyonrewards.view;
+package h4311.hexanome.insa.lyonrewards.view.events;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.github.florent37.materialviewpager.MaterialViewPager;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.R;
+import h4311.hexanome.insa.lyonrewards.view.scrolltab.EventsFragmentPagerListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +36,11 @@ public class EventsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    @BindView(R.id.scrolltab_material_view_pager)
+    protected MaterialViewPager mViewPager;
+
+    int[] photos={R.drawable.photo1};
 
     public EventsFragment() {
         // Required empty public constructor
@@ -65,8 +77,32 @@ public class EventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_events, container, false);
+        ButterKnife.bind(this, view);
+
+        // Todo : make a custom MaterialViewPager
+        mViewPager.getViewPager().setAdapter(new EventsFragmentPagerAdapter(getActivity().getSupportFragmentManager()));
+        mViewPager.setMaterialViewPagerListener(new EventsFragmentPagerListener());
+
+        mViewPager.getViewPager().setOffscreenPageLimit(mViewPager.getViewPager().getAdapter().getCount());
+        mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
+
+        View logo = view.findViewById(R.id.scrolltab_header_logo);
+        if (logo != null)
+            logo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mViewPager.notifyHeaderChanged();
+                    Toast.makeText(getActivity().getApplicationContext(), "Yes, the title is clickable", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        Toolbar toolbar = mViewPager.getToolbar();
+        toolbar.setVisibility(View.GONE);
+
+        return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
