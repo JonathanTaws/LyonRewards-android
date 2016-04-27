@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.events.EventDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".view.MainActivity"></activity>
     </application>
 
 </manifest>
