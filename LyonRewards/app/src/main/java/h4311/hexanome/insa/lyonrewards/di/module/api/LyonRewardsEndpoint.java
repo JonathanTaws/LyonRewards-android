@@ -2,6 +2,9 @@ package h4311.hexanome.insa.lyonrewards.di.module.api;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
+
+import h4311.hexanome.insa.lyonrewards.business.Event;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,4 +19,6 @@ public interface LyonRewardsEndpoint {
     @GET("hello")
     Call<JsonObject> getHello();
 
+    @GET("events")
+    Call<List<Event>> getAllEvents();
 }

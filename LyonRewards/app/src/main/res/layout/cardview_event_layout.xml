@@ -8,15 +8,181 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/cardMarginVertical"
         android:layout_marginLeft="@dimen/cardMarginHorizontal"
         android:layout_marginRight="@dimen/cardMarginHorizontal"
         android:layout_marginTop="@dimen/cardMarginVertical"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="2dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="4dp"
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp">
+
+            <ImageView
+                android:id="@+id/card_event_image"
+                android:layout_width="@dimen/card_event_image_size"
+                android:layout_height="@dimen/card_event_image_size"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:padding="10dp"
+                android:src="@drawable/header_thumbnail" />
+
+            <TextView
+                android:id="@+id/card_event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/card_event_image"
+                android:paddingLeft="@dimen/card_event_border_padding"
+                android:paddingTop="@dimen/card_event_border_padding"
+                android:text="MON TITRE"
+                android:textColor="#222"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/card_event_layout_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/card_event_title"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/card_event_border_padding"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:id="@+id/card_event_several_dates_prefix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Du "
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/card_event_one_date_prefix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Le "
+                    android:textSize="14dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/card_event_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="99/99/9999"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/card_event_end_date_prefix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" au "
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/card_event_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="99/99/9999"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/card_event_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/card_event_layout_date"
+                android:layout_toLeftOf="@id/card_event_image"
+                android:paddingLeft="@dimen/card_event_border_padding"
+                android:paddingTop="5dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna odio, viverra quis arcu eget,..."
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <LinearLayout
+                android:id="@+id/card_event_layout_publish_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/card_event_description"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/card_event_border_padding"
+                android:paddingLeft="@dimen/card_event_border_padding"
+                android:paddingTop="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Publié le "
+                    android:textColor="#666"
+                    android:textSize="10dp"
+                    android:textStyle="italic" />
+                <TextView
+                    android:id="@+id/card_event_publish_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="99/99/9999"
+                    android:textColor="#666"
+                    android:textSize="10dp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <!-- Progressbar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_progressbar_height"
+                android:layout_below="@id/card_event_layout_publish_date">
+
+                <View
+                    android:id="@+id/card_event_progressbar_done"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"
+                    android:background="@color/colorPrimary" />
+
+                <View
+                    android:id="@+id/card_event_progressbar_todo"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="70"
+                    android:background="#757575" />
+
+            </LinearLayout>
+
+            <!-- Text on progressbar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_progressbar_height"
+                android:layout_below="@id/card_event_layout_publish_date"
+                android:gravity="right"
+                android:padding="0dp">
+
+                <TextView
+                    android:id="@+id/card_progressbar_numeric_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="30"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:paddingRight="@dimen/card_event_border_padding"
+                    android:text=" % terminé"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

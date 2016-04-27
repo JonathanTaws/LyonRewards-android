@@ -1,5 +1,6 @@
 package h4311.hexanome.insa.lyonrewards.view.scrolltab;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.R;
 
 /**
@@ -62,6 +65,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         switch (getItemViewType(position)) {
             case TYPE_HEADER:
                 break;

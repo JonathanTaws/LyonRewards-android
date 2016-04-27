@@ -15,15 +15,25 @@ import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapte
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
-import h4311.hexanome.insa.lyonrewards.view.scrolltab.TestRecyclerViewAdapter;
+import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Pierre on 27/04/2016.
  */
 public class EventsFragmentGrandLyonTab extends Fragment {
+
+    @Inject
+    protected LyonRewardsApi lyonRewardsApi;
 
     @BindView(R.id.scrolltab_tab_recyclerview)
     protected RecyclerView mRecyclerView;
@@ -32,7 +42,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
 
     private static final int ITEM_COUNT = 10;
 
-    private List<Object> mContentItems = new ArrayList<>();
+    private List<Event> mContentEvents = new ArrayList<>();
 
     public static EventsFragmentGrandLyonTab newInstance() {
         return new EventsFragmentGrandLyonTab();
@@ -42,6 +52,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         ButterKnife.bind(this, view);
+        ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
         return view;
     }
 
@@ -53,15 +64,21 @@ public class EventsFragmentGrandLyonTab extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new EventsFragmentGrandLyonTabViewAdapter(mContentItems));
+        mAdapter = new RecyclerViewMaterialAdapter(new EventsFragmentGrandLyonTabViewAdapter(mContentEvents));
         mRecyclerView.setAdapter(mAdapter);
 
-        // TODO : call events from api
-        for (int i = 0; i < ITEM_COUNT; ++i) {
-            mContentItems.add(new Object());
-        }
+        lyonRewardsApi.getAllEvents(new Callback<List<Event>>() {
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                mContentEvents.addAll(response.body());
+                mAdapter.notifyDataSetChanged();
+            }
 
-        mAdapter.notifyDataSetChanged();
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+                // TODO : Error message
+            }
+        });
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
     }

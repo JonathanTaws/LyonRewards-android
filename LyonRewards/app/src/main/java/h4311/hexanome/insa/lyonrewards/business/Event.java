@@ -3,6 +3,7 @@ package h4311.hexanome.insa.lyonrewards.business;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,8 @@ public class Event {
     @SerializedName("tags")
     @Expose
     private List<Integer> tags = new ArrayList<>();
+
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * No args constructor for use in serialization
@@ -127,6 +130,13 @@ public class Event {
     }
 
     /**
+     * @return The publishDate as a String
+     */
+    public String getPublishDateString() {
+        return simpleDateFormat.format(publishDate);
+    }
+
+    /**
      * @param publishDate The publishDate
      */
     public void setPublishDate(Date publishDate) {
@@ -141,6 +151,13 @@ public class Event {
     }
 
     /**
+     * @return The startDate as a String
+     */
+    public String getStartDateString() {
+        return simpleDateFormat.format(startDate);
+    }
+
+    /**
      * @param startDate The start_date
      */
     public void setStartDate(Date startDate) {
@@ -152,6 +169,13 @@ public class Event {
      */
     public Date getEndDate() {
         return endDate;
+    }
+
+    /**
+     * @return The endDate as a String
+     */
+    public String getEndDateString() {
+        return simpleDateFormat.format(endDate);
     }
 
     /**
