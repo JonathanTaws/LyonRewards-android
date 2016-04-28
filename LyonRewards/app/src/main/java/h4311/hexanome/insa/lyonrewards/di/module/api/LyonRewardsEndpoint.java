@@ -27,5 +27,5 @@ public interface LyonRewardsEndpoint {
     Call<Event> getEventById(@Path("id") int eventId);
 
     @POST("users/{userId}/acts/{actId}")
-    Call<JsonObject> addOfferToUser(@Path("userId") int userId, @Path("actId") int actId);
+    Call<JsonObject> addActToUser(@Path("userId") int userId, @Path("actId") int actId);
 }
