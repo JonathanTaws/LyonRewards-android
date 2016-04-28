@@ -57,11 +57,19 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         public void setEvent(Event event) {
             mEvent = event;
 
+
+
             // RecyclerView binding
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mActivity);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setHasFixedSize(true);
 
+            // todo : remove
+            mContentSuccess.add(new String("aa"));
+            mContentSuccess.add(new String("aa"));
+            mContentSuccess.add(new String("aa"));
+            mContentSuccess.add(new String("aa"));
+            mContentSuccess.add(new String("aa"));
             mAdapter = new EventSuccessAdapter(mContentSuccess);
             mRecyclerView.setAdapter(mAdapter);
 

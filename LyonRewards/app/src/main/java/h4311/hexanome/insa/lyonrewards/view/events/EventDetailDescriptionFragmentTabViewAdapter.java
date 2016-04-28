@@ -105,7 +105,6 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
         public void onMapReady(GoogleMap map) {
             map.getUiSettings().setAllGesturesEnabled(false);
 
-
             LatLng centerLocation = new LatLng(mEvent.getLatitude(), mEvent.getLongitude());
             CameraUpdate center = CameraUpdateFactory.newLatLng(centerLocation);
             CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
