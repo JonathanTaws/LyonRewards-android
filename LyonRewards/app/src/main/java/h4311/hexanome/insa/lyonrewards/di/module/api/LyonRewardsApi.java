@@ -7,6 +7,7 @@ import java.util.List;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.User;
+import h4311.hexanome.insa.lyonrewards.business.act.CitizenAct;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,8 +39,8 @@ public class LyonRewardsApi {
         event.enqueue(callback);
     }
 
-    public void addOfferToUser(User user, Offer offer, Callback<JsonObject> callback) {
-        Call<JsonObject> call = mLyonRewardsEndpoint.addOfferToUser(user.getId(), offer.getId());
+    public void addActToUser(User user, CitizenAct act, Callback<JsonObject> callback) {
+        Call<JsonObject> call = mLyonRewardsEndpoint.addActToUser(user.getId(), act.getId());
         call.enqueue(callback);
     }
 
