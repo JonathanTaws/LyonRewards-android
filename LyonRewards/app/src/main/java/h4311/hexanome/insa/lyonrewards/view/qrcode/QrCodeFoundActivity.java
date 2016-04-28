@@ -46,11 +46,11 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         buttonReclaimPoints.setOnClickListener(this);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
+        // TODO Go back to QR scan
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
