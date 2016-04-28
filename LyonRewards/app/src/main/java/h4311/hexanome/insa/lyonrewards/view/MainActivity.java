@@ -28,6 +28,7 @@ import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
+import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener {
 
@@ -116,8 +117,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = null;
         Bundle bundle = new Bundle();
 
-        if(id == R.id.nav_scan_qrcode) {
+        if (id == R.id.nav_scan_qrcode) {
             fragment = QrReaderFragment.newInstance(bundle);
+        } else if (id == R.id.nav_rewards) {
+            fragment = RewardsFragment.newInstance();
         }
 
         drawer.closeDrawer(GravityCompat.START);

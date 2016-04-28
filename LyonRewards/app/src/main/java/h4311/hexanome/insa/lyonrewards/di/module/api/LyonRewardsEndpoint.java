@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.Offer;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,6 +20,9 @@ public interface LyonRewardsEndpoint {
 
     @GET("hello")
     Call<JsonObject> getHello();
+
+    @GET("offers")
+    Call<List<Offer>> getAllOffers();
 
     @GET("events")
     Call<List<Event>> getAllEvents();

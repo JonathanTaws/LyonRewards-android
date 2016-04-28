@@ -3,42 +3,100 @@ package h4311.hexanome.insa.lyonrewards.business;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Jonathan on 28/04/2016.
- */
-public class Offer implements Parcelable {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    int id;
+public class Offer {
 
-    public int getId() {
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+
+    @SerializedName("description")
+    @Expose
+    private String description;
+
+    @SerializedName("points")
+    @Expose
+    private Integer points;
+
+    @SerializedName("partner")
+    @Expose
+    private Integer partner;
+
+    /**
+     * No args constructor for use in serialization
+     */
+    public Offer() {
+    }
+
+    /**
+     * @param id
+     * @param description
+     * @param partner
+     * @param points
+     */
+    public Offer(Integer id, String description, Integer points, Integer partner) {
+        this.id = id;
+        this.description = description;
+        this.points = points;
+        this.partner = partner;
+    }
+
+    /**
+     * @return The id
+     */
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    /**
+     * @param id The id
+     */
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
-        public Offer createFromParcel(Parcel in) {
-            return new Offer(in);
-        }
-
-        public Offer[] newArray(int size) {
-            return new Offer[size];
-        }
-    };
-
-    public Offer(Parcel in) {
-
+    /**
+     * @return The description
+     */
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    /**
+     * @param description The description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
+    /**
+     * @return The points
+     */
+    public Integer getPoints() {
+        return points;
     }
+
+    /**
+     * @param points The points
+     */
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    /**
+     * @return The partner
+     */
+    public Integer getPartner() {
+        return partner;
+    }
+
+    /**
+     * @param partner The partner
+     */
+    public void setPartner(Integer partner) {
+        this.partner = partner;
+    }
+
 }

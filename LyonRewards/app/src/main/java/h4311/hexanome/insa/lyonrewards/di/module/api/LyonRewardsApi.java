@@ -13,9 +13,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Path;
 
-/**
- * Created by Pierre on 26/04/2016.
- */
 public class LyonRewardsApi {
 
     private LyonRewardsEndpoint mLyonRewardsEndpoint;
@@ -27,6 +24,11 @@ public class LyonRewardsApi {
     public void getHello(Callback<JsonObject> callback) {
         Call<JsonObject> call = mLyonRewardsEndpoint.getHello();
         call.enqueue(callback);
+    }
+
+    public void getAllOffers(Callback<List<Offer>> callback) {
+        Call<List<Offer>> allOffers = mLyonRewardsEndpoint.getAllOffers();
+        allOffers.enqueue(callback);
     }
 
     public void getAllEvents(Callback<List<Event>> callback) {

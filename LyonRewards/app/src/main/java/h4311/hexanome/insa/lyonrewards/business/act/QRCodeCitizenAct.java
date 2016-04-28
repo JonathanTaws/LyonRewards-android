@@ -30,7 +30,6 @@ public class QRCodeCitizenAct extends CitizenAct {
         this.treasureHunt = treasureHunt;
     }
 
-
     /**
      * @return The treasureHunt
      */
