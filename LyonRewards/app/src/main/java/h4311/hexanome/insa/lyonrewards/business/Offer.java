@@ -12,6 +12,10 @@ public class Offer {
     @Expose
     private Integer id;
 
+    @SerializedName("title")
+    @Expose
+    private String title;
+
     @SerializedName("description")
     @Expose
     private String description;
@@ -31,13 +35,16 @@ public class Offer {
     }
 
     /**
+     *
      * @param id
+     * @param title
      * @param description
-     * @param partner
      * @param points
+     * @param partner
      */
-    public Offer(Integer id, String description, Integer points, Integer partner) {
+    public Offer(Integer id, String title, String description, Integer points, Integer partner) {
         this.id = id;
+        this.title = title;
         this.description = description;
         this.points = points;
         this.partner = partner;
@@ -55,6 +62,20 @@ public class Offer {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * @return The title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title The title
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -98,5 +119,6 @@ public class Offer {
     public void setPartner(Integer partner) {
         this.partner = partner;
     }
+
 
 }

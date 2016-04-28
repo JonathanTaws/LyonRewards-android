@@ -1,11 +1,9 @@
 package h4311.hexanome.insa.lyonrewards.view.rewards;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -25,10 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
-import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
-import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTabViewAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,7 +74,7 @@ public class RewardsFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new RewardsFragmentOffertAdapter(mContentOffers));
+        mAdapter = new RecyclerViewMaterialAdapter(new RewardsFragmentOffersAdapter(mContentOffers));
         mRecyclerView.setAdapter(mAdapter);
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
