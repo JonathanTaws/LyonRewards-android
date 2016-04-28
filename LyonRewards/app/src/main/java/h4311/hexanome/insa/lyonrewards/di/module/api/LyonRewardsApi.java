@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.Offer;
+import h4311.hexanome.insa.lyonrewards.business.User;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +36,11 @@ public class LyonRewardsApi {
     public void getEventById(int eventId, Callback<Event> callback) {
         Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId);
         event.enqueue(callback);
+    }
+
+    public void addOfferToUser(User user, Offer offer, Callback<JsonObject> callback) {
+        Call<JsonObject> call = mLyonRewardsEndpoint.addOfferToUser(user.getId(), offer.getId());
+        call.enqueue(callback);
     }
 
 }

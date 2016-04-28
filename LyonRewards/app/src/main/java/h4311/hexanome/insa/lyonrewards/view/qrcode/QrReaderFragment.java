@@ -70,33 +70,13 @@ public class QrReaderFragment extends Fragment {
                 Log.d("QREader", "Value : " + data);
 
                 if(!processingQrCode && mCallback != null) {
-                    mCallback.onQrCodeFound(data);
                     processingQrCode = true;
+                    mCallback.onQrCodeFound(data);
                 }
             }
         });
 
         return view;
-    }
-
-    private void showQrCodeFoundDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-        //alertDialog.setTitle(R.string.sure);
-        alertDialog.setMessage(getString(R.string.scanner_qrcode_found));
-//        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm),
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
-//        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel),
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-
-        alertDialog.show();
     }
 
     @Override
