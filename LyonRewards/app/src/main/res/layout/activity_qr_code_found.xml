@@ -65,7 +65,12 @@
 
         </LinearLayout>
 
-        <include android:id="@+id/event_found_detail" layout="@layout/cardview_event_layout" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/qr_code_found_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!--<include android:id="@+id/event_found_detail" layout="@layout/cardview_event_layout" />-->
 
     </LinearLayout>
 
