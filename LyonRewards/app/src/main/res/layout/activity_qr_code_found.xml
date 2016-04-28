@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,6 +20,12 @@
             />
 
     </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/qr_code_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="WALA" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,16 +50,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="30dp" >
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button_reclaim_points"
                 android:text="@string/reclaim_points"
-                android:background="@color/blue" />
+                android:background="@color/blue"
+                android:textColor="@android:color/white"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
 
         </LinearLayout>
+
+        <include android:id="@+id/event_found_detail" layout="@layout/cardview_event_layout" />
 
     </LinearLayout>
 

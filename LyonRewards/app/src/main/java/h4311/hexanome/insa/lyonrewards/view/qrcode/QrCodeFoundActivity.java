@@ -8,11 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
+import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 
 /**
  * Created by Jonathan on 28/04/2016.
@@ -25,7 +29,13 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
     protected Toolbar toolbar;
 
     @BindView(R.id.button_reclaim_points)
-    Button buttonReclaimPoints;
+    protected Button buttonReclaimPoints;
+
+    @BindView(R.id.qr_code_value)
+    protected TextView qrCodeValueTextView;
+
+    @Inject
+    protected LyonRewardsApi lyonRewardsApi;
 
     public static Intent newIntent(Context context, String qrCodeValue){
         Intent intent = new Intent(context, QrCodeFoundActivity.class);
@@ -46,6 +56,9 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         buttonReclaimPoints.setOnClickListener(this);
+
+        String qrCodeValue = getIntent().getExtras().getString(ARG_QR_CODE_VALUE);
+        qrCodeValueTextView.setText(qrCodeValue);
     }
 
     @Override
@@ -65,5 +78,6 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         // TODO Link with API
+        //lyonRewardsApi.addActToUser();
     }
 }
