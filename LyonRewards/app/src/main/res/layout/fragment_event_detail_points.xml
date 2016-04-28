@@ -4,26 +4,23 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/card_event_border_padding">
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
+
                     android:src="@drawable/ic_vpn_key_green_600_18dp" />
 
                 <TextView
@@ -33,7 +30,7 @@
                     android:paddingLeft="5dp"
                     android:text="Déverrouillés : "
                     android:textColor="#222"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -42,7 +39,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="4"
                     android:textColor="#222"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -51,7 +48,7 @@
                     android:layout_gravity="center_vertical"
                     android:text=" sur "
                     android:textColor="#222"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -60,7 +57,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="10"
                     android:textColor="#222"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -75,7 +72,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:paddingBottom="2dp"
-                        android:text="10 %" />
+                        android:text="10 %"
+                        android:textSize="12dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -96,19 +94,19 @@
                             android:background="#757575" />
 
                     </LinearLayout>
-                </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/event_detail_success_recyclerview"
-                    android:scrollbars="none"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                </LinearLayout>
 
             </LinearLayout>
 
-        </ScrollView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/event_detail_success_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
 
 
-    </LinearLayout>
 
 </FrameLayout>

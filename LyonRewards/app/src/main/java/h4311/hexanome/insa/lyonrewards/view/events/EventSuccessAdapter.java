@@ -4,9 +4,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 
@@ -23,6 +26,21 @@ import h4311.hexanome.insa.lyonrewards.business.Event;
  */
 public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.card_qrcode_success_image)
+        protected ImageView mImage;
+
+        @BindView(R.id.card_qrcode_success_title)
+        protected TextView mTitle;
+
+        @BindView(R.id.card_qrcode_success_description)
+        protected TextView mDescription;
+
+        @BindView(R.id.card_qrcode_success_nbpoints)
+        protected TextView mNbPoints;
+
+        @BindView(R.id.card_qrcode_success_date)
+        protected TextView mDate;
 
         public ViewHolder(View view) {
             super(view);
@@ -55,6 +73,7 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
 
     @Override
     public int getItemCount() {
+        Log.d("COUNT", String.valueOf(success.size()));
         return success.size();
     }
 }

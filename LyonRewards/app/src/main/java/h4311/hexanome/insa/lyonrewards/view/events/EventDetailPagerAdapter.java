@@ -13,10 +13,10 @@ import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
  */
 public class EventDetailPagerAdapter  extends ScrolltabPagerAdapter {
 
+    private static String[] tabsLabels = { "Description", "Mes Succès" };
 
-
-    private static String[] tabsLabels = { "Description", "Points" };
     private static Class<? extends Fragment>[] tabsFragments = new Class[]{ EventDetailDescriptionFragment.class, EventDetailPointsFragment.class };
+
     private Event mEvent;
 
     public EventDetailPagerAdapter(Event event, FragmentManager fm) {
