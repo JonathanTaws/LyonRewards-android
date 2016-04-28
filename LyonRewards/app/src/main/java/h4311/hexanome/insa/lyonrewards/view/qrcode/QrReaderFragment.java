@@ -7,11 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+
+import com.google.android.gms.vision.CameraSource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +66,15 @@ public class QrReaderFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         processingQrCode = false;
+
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+//        wm.getDefaultDisplay().getMetrics(metrics);
+//
+//        mSurfaceView.setMinimumWidth(metrics.widthPixels);
+//        mSurfaceView.setMinimumHeight(metrics.heightPixels);
+//
+//        QREader.getInstance().setUpConfig(true, metrics.widthPixels, metrics.heightPixels, CameraSource.CAMERA_FACING_BACK);
 
         // Start QREader
         QREader.getInstance().start(getActivity().getApplicationContext(), mSurfaceView, new QRDataListener() {

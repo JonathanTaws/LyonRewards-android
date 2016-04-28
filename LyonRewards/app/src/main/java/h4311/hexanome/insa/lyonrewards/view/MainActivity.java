@@ -32,6 +32,10 @@ import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener {
 
+    private static final String QR_SCANNER_FRAGMENT = "QR_SCANNER_FRAGMENT";
+    private static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
+    private static final String REWARDS_FRAGMENT = "REWARDS_FRAGMENT";
+
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
 
@@ -115,22 +119,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         Fragment fragment = null;
+        String fragmentName = null;
+
         Bundle bundle = new Bundle();
 
-        if (id == R.id.nav_scan_qrcode) {
+        if(id == R.id.nav_scan_qrcode) {
+            //If fragment is already running, don't do anything
+            QrReaderFragment qrReaderFragment = (QrReaderFragment)getSupportFragmentManager().findFragmentByTag(MainActivity.QR_SCANNER_FRAGMENT);
+            if (qrReaderFragment != null && qrReaderFragment.isVisible()) {
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+
             fragment = QrReaderFragment.newInstance(bundle);
-        } else if (id == R.id.nav_rewards) {
-            fragment = RewardsFragment.newInstance();
+            fragmentName = MainActivity.QR_SCANNER_FRAGMENT;
         }
         else if(id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
+            fragmentName = MainActivity.EVENTS_FRAGMENT;
+        }
+        else if (id == R.id.nav_rewards) {
+            fragment = RewardsFragment.newInstance();
+            fragmentName = MainActivity.REWARDS_FRAGMENT;
         }
 
         drawer.closeDrawer(GravityCompat.START);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.main_activity_content_frame, fragment)
+                .replace(R.id.main_activity_content_frame, fragment, fragmentName)
                 .commit();
 
         return true;
