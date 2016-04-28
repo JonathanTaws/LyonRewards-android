@@ -25,6 +25,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,12 +70,11 @@ public class RewardsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new RewardsFragmentOffersAdapter(mContentOffers));
+        mAdapter = new RecyclerViewMaterialAdapter(new RewardsFragmentOffersAdapter(mContentOffers, (LyonRewardsApplication) getActivity().getApplication()));
         mRecyclerView.setAdapter(mAdapter);
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
@@ -82,9 +82,6 @@ public class RewardsFragment extends Fragment {
         lyonRewardsApi.getAllOffers(new Callback<List<Offer>>() {
             @Override
             public void onResponse(Call<List<Offer>> call, Response<List<Offer>> response) {
-                mContentOffers.addAll(response.body());
-                // TODO : remove
-                mContentOffers.addAll(response.body());
                 mContentOffers.addAll(response.body());
                 mAdapter.notifyDataSetChanged();
             }
