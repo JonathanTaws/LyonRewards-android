@@ -19,6 +19,7 @@
             android:src="@drawable/photo1"/>
 
         <TextView
+            android:id="@+id/event_detail_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -35,40 +36,124 @@
             android:layout_gravity="center_horizontal"
             android:background="@android:color/darker_gray" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center_horizontal"
-            android:paddingTop="5dp"
-            android:text="Publié le 99/99/9999"
-            android:textColor="#666"
-            android:textSize="10dp"
-            android:textStyle="italic" />
+            android:paddingTop="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Publié le "
+                android:textColor="#666"
+                android:textSize="10dp"
+                android:textStyle="italic" />
+            <TextView
+                android:id="@+id/event_detail_publish_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="99/99/9999"
+                android:textColor="#666"
+                android:textSize="10dp"
+                android:textStyle="italic" />
+        </LinearLayout>
 
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/card_event_layout_date"
-            android:layout_toLeftOf="@id/card_event_image"
+            android:layout_below="@+id/card_event_title"
+            android:orientation="horizontal"
             android:paddingLeft="@dimen/card_event_border_padding"
-            android:paddingTop="10dp"
-            android:text="Période : du 99/99/9999 au 99/99/9999"
-            android:textColor="#666"
-            android:textSize="14dp" />
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Période : "
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/event_detail_several_dates_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="du "
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/event_detail_one_date_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="le "
+                android:textSize="14dp"
+                android:textColor="#666"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/event_detail_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="99/99/9999"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/event_detail_end_date_prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" au "
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/event_detail_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="99/99/9999"
+                android:textColor="#666"
+                android:textSize="14dp" />
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/event_detail_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/card_event_layout_date"
-            android:layout_toLeftOf="@id/card_event_image"
             android:paddingLeft="@dimen/card_event_border_padding"
             android:padding="10dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna oLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna odio, viverra quis arcu eget,..."
+            android:text=""
             android:textColor="#666"
             android:textSize="14dp" />
+
+<!--
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/event_detail_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>-->
+<!--
+        <fragment
+            android:id="@+id/event_detail_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/card_event_border_padding"
+            android:paddingBottom="10dp"
+            android:text="Localisation : "
+            android:textColor="#666"
+            android:textSize="14dp" />
+
+        <FrameLayout
+            android:id="@+id/event_detail_mapview_container"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
 
     </LinearLayout>
 

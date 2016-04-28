@@ -24,6 +24,13 @@
         <activity android:name=".view.events.EventDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".view.MainActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAFa7I8350G1RQXyFXhfCsjgctV1epgq7k"/>
+
+        <uses-library android:name="com.google.android.maps"/>
+
     </application>
 
 </manifest>
