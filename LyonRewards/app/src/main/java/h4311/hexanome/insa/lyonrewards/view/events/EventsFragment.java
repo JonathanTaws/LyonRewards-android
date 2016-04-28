@@ -49,17 +49,12 @@ public class EventsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment EventsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static EventsFragment newInstance(String param1, String param2) {
+    public static EventsFragment newInstance(Bundle bundle) {
         EventsFragment fragment = new EventsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.setArguments(bundle);
+
         return fragment;
     }
 

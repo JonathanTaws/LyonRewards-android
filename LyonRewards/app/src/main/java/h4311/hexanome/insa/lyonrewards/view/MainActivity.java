@@ -119,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(id == R.id.nav_scan_qrcode) {
             fragment = QrReaderFragment.newInstance(bundle);
         }
+        else if(id == R.id.nav_events) {
+            fragment = EventsFragment.newInstance(bundle);
+        }
 
         drawer.closeDrawer(GravityCompat.START);
 
