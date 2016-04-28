@@ -28,7 +28,7 @@ public class Event implements Parcelable {
     @Expose
     private String description;
 
-    @SerializedName("publishDate")
+    @SerializedName("publish_date")
     @Expose
     private Date publishDate;
 
