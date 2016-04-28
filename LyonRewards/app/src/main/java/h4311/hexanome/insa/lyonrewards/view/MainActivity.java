@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
 
@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             fragment = QrReaderFragment.newInstance(bundle);
-            fragmentName = MainActivity.QR_SCANNER_FRAGMENT;
         }
         else if(id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
@@ -141,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_rewards) {
             fragment = RewardsFragment.newInstance();
             fragmentName = MainActivity.REWARDS_FRAGMENT;
+            toolbar.setTitle("Boutique");
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return true;
     }
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {
