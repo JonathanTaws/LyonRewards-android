@@ -79,8 +79,7 @@
                             android:id="@+id/event_detail_success_percentage_done"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="10"
-                            android:textSize="12dp" />
+                            android:text="10" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

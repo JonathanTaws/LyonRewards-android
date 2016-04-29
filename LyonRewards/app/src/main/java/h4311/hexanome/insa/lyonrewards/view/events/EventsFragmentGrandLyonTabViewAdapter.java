@@ -98,7 +98,7 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
             float todo = 100 - progress;
             mProgressBarDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
             mProgressBarTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, todo));
-            mProgressBarLabel.setText(String.format("%.2f", progress));
+            mProgressBarLabel.setText(String.format("%.0f", progress));
         }
 
         @OnClick(R.id.card_event_card_view)
