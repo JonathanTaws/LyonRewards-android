@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -68,7 +69,9 @@ public class RewardsFragmentOffersAdapter extends RecyclerView.Adapter<RewardsFr
 
                 OfferDetailFragment fragment = OfferDetailFragment.newInstance(mOffer);
                 String fragmentTitle = "Offre " + mOffer.getPartner().getName();
-                mActivity.setFragment(fragment, OfferDetailFragment.getFragmentTag(), fragmentTitle, true);
+                List<Object> args = new ArrayList<>();
+                args.add(mOffer);
+                mActivity.setFragment(fragment, OfferDetailFragment.getFragmentTag(), fragmentTitle, true, args);
 
                //mListener.onReplaceFragment(MainActivity.REWARDS_DETAIL_FRAGMENT, , fragment);
             }

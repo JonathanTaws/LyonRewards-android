@@ -13,11 +13,24 @@ import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
 public class EventsFragmentPagerAdapter extends ScrolltabPagerAdapter {
 
     private static String[] tabsLabels = { "Fil d'actualité", "Mes évènements" };
-    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ EventsFragmentGrandLyonTab.class };
+    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ EventsFragmentGrandLyonTab.class, EventsFragmentGrandLyonTab.class };
 
     public EventsFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
+
+    @Override
+    public Fragment getItem(int position) {
+        int index = position % getTabsLabels().length;
+        switch (index) {
+            case 0:
+                return EventsFragmentGrandLyonTab.newInstance(false);
+            case 1:
+                return EventsFragmentGrandLyonTab.newInstance(true);
+        }
+        return null;
+    }
+
 
     @Override
     protected String[] getTabsLabels() {

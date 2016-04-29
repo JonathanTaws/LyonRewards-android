@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
+import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
@@ -37,6 +38,7 @@ import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeContent;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
+import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener {
@@ -123,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     oldFragment = new EventsFragment();
                 } else if (previousTag.equals(REWARDS_FRAGMENT)) {
                     oldFragment = RewardsFragment.newInstance();
+                } else if (previousTag.equals(OfferDetailFragment.getFragmentTag())) {
+                    oldFragment = OfferDetailFragment.newInstance((Offer) previous.getArgs().get(0));
                 }
                 if (oldFragment != null) {
                     setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.isPreviousIcon(), previous.getArgs(), false);
@@ -178,10 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             historyFragments.push(historyFragment);
         }
 
-
         if (previousIcon) {
-
-            //toggle.setDrawerIndicatorEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             toggle.setDrawerIndicatorEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -191,14 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     onBackPressed();
                 }
             });
-            //drawer.removeDrawerListener(toggle);
-
-           // getSupportActionBar().setDisplayShowHomeEnabled(true);
-           // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
-          //  getSupportActionBar().setDisplayShowHomeEnabled(false);
-           // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            //toggle.setDrawerIndicatorEnabled(true);
             toggle.setDrawerIndicatorEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toggle.syncState();

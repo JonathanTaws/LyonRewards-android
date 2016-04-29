@@ -135,4 +135,6 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
     public int getItemCount() {
         return events.size();
     }
+
+
 }

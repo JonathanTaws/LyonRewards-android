@@ -45,13 +45,17 @@ public class LyonRewardsApi {
     }
 
     public void getAllEventsWithUserProgression(int userId, Callback<List<Event>> callback) {
-        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEventsWithUserProgression(userId);
-        allEvents.enqueue(callback);
+        getAllEvents(userId, false, callback);
     }
 
     public void getEventById(int eventId, int userId, Callback<Event> callback) {
         Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId, userId);
         event.enqueue(callback);
+    }
+
+    public void getAllEvents(int userId, boolean userParticipatedOnly, Callback<List<Event>> callback) {
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents(userId, userParticipatedOnly);
+        allEvents.enqueue(callback);
     }
 
     public void getQrCodesFromEvent(int eventId, Callback<List<QRCodeCitizenAct>> callback) {

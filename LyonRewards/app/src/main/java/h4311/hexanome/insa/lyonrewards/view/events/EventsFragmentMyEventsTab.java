@@ -2,7 +2,6 @@ package h4311.hexanome.insa.lyonrewards.view.events;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
@@ -32,11 +30,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Pierre on 27/04/2016.
+ * Created by Pierre on 29/04/2016.
  */
-public class EventsFragmentGrandLyonTab extends Fragment {
-
-    private static final String INTENT_USER_PARTICIPATED_ONLY = "userParticipatedOnly";
+public class EventsFragmentMyEventsTab  extends Fragment {
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
@@ -47,21 +43,12 @@ public class EventsFragmentGrandLyonTab extends Fragment {
     @BindView(R.id.scrolltab_tab_recyclerview)
     protected RecyclerView mRecyclerView;
 
-    @BindView(R.id.scrolltab_tab_no_data_text)
-    protected TextView mNoDataText;
-
     private RecyclerView.Adapter mAdapter;
 
     private List<Event> mContentEvents = new ArrayList<>();
 
-    private boolean mShowOnlyEventsWithUserParticipation = false;
-
-    public static EventsFragmentGrandLyonTab newInstance(boolean userParticipationOnly) {
-        EventsFragmentGrandLyonTab fragment = new EventsFragmentGrandLyonTab();
-        Bundle args = new Bundle();
-        args.putBoolean(INTENT_USER_PARTICIPATED_ONLY, userParticipationOnly);
-        fragment.setArguments(args);
-        return fragment;
+    public static EventsFragmentGrandLyonTab newInstance() {
+        return new EventsFragmentGrandLyonTab();
     }
 
     @Override
@@ -69,11 +56,6 @@ public class EventsFragmentGrandLyonTab extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
         ButterKnife.bind(this, view);
         ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
-
-        if (getArguments() != null) {
-            mShowOnlyEventsWithUserParticipation = getArguments().getBoolean(INTENT_USER_PARTICIPATED_ONLY);
-        }
-
         return view;
     }
 
@@ -90,21 +72,12 @@ public class EventsFragmentGrandLyonTab extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getAllEvents(mConnectionManager.getConnectedUser().getId(), mShowOnlyEventsWithUserParticipation, new Callback<List<Event>>() {
+        lyonRewardsApi.getAllEventsWithUserProgression(mConnectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                List<Event> eventList = response.body();
-                if (eventList.isEmpty()) {
-                    if (mShowOnlyEventsWithUserParticipation) {
-                        mNoDataText.setText("Vous n'avez participé à aucun évènement.");
-                    } else {
-                        mNoDataText.setText("Il n'existe aucun évènement en cours ou à venir.");
-                    }
-                    mNoDataText.setVisibility(View.VISIBLE);
-                } else {
-                    mContentEvents.addAll(eventList);
-                    mAdapter.notifyDataSetChanged();
-                }
+                mContentEvents.addAll(response.body());
+                mAdapter.notifyDataSetChanged();
+                Log.d("API", "events received");
             }
 
             @Override
