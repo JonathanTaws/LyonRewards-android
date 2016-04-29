@@ -84,7 +84,7 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         qrCodeFoundEvent.setLayoutManager(layoutManager);
 
-        mAdapter = new EventsFragmentGrandLyonTabViewAdapter(mEvents, getApplicationContext());
+        mAdapter = new EventsFragmentGrandLyonTabViewAdapter(mEvents, this);
         qrCodeFoundEvent.setAdapter(mAdapter);
 
         String qrCodeValue = getIntent().getExtras().getString(ARG_QR_CODE_VALUE);
