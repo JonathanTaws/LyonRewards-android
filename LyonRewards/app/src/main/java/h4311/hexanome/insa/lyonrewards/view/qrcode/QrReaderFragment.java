@@ -1,44 +1,37 @@
 package h4311.hexanome.insa.lyonrewards.view.qrcode;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
-import com.google.android.gms.vision.CameraSource;
+import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
+import com.google.zxing.client.android.camera.open.ReflectionUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import github.nisrulz.qreader.QRDataListener;
-import github.nisrulz.qreader.QREader;
 import h4311.hexanome.insa.lyonrewards.R;
 
 /**
  * Created by Jonathan on 27/04/2016.
  */
-public class QrReaderFragment extends Fragment {
+public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRCodeReadListener {
 
     private static final String QR_CODE_NOT_RECOGNIZED = "Ce QR code n'est pas reconnu par l'application";
 
     private OnQrCodeFoundListener mCallback;
 
-    @BindView(R.id.camera_view)
-    protected SurfaceView mSurfaceView;
+    @BindView(R.id.qrdecoderview)
+    protected QRCodeReaderView myDecoderView;
 
     private boolean processingQrCode;
 
@@ -48,7 +41,7 @@ public class QrReaderFragment extends Fragment {
         QrReaderFragment fragment = new QrReaderFragment();
         fragment.setArguments(bundle);
 
-        QREader.getInstance().setUpConfig();
+        ReflectionUtils.performInjection();
 
         return fragment;
     }
@@ -76,41 +69,31 @@ public class QrReaderFragment extends Fragment {
 
         processingQrCode = false;
 
-//        DisplayMetrics metrics = new DisplayMetrics();
-//        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-//        wm.getDefaultDisplay().getMetrics(metrics);
-//
-//        mSurfaceView.setMinimumWidth(metrics.widthPixels);
-//        mSurfaceView.setMinimumHeight(metrics.heightPixels);
-//
-//        QREader.getInstance().setUpConfig(true, metrics.widthPixels, metrics.heightPixels, CameraSource.CAMERA_FACING_BACK);
+       myDecoderView.setOnQRCodeReadListener(this);
 
-        // Start QREader
-        QREader.getInstance().start(getActivity().getApplicationContext(), mSurfaceView, new QRDataListener() {
-            @Override
-            public void onDetected(final String data) {
-                if(data.equals(lastValue)) {
-                    return;
-                }
-
-                Log.d("QREader", "Value : " + data);
-
-                if (!processingQrCode && mCallback != null) {
-                    QrCodeContent qrCodeContent = getQrCodeContent(data);
-                    if (qrCodeContent != null) {
-                        processingQrCode = true;
-                        mCallback.onQrCodeFound(qrCodeContent);
-                    }
-                    else {
-                        Snackbar.make(getView(), QR_CODE_NOT_RECOGNIZED, Snackbar.LENGTH_SHORT)
-                                .setAction("Action", null).show();
-                    }
-                }
-                lastValue = data;
-            }
-        });
 
         return view;
+    }
+
+    private void processQrCode(String data) {
+        if(data.equals(lastValue)) {
+            return;
+        }
+
+        Log.d("QREader", "Value : " + data);
+
+        if (!processingQrCode && mCallback != null) {
+            QrCodeContent qrCodeContent = getQrCodeContent(data);
+            if (qrCodeContent != null) {
+                processingQrCode = true;
+                mCallback.onQrCodeFound(qrCodeContent);
+            }
+            else {
+                Snackbar.make(getView(), QR_CODE_NOT_RECOGNIZED, Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
+        }
+        lastValue = data;
     }
 
     private QrCodeContent getQrCodeContent(String qrCodeValue) {
@@ -131,5 +114,39 @@ public class QrReaderFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onQRCodeRead(String text, PointF[] points) {
+        processQrCode(text);
+    }
+
+    @Override
+    public void cameraNotFound() {
+        // TODO
+        return;
+    }
+
+    @Override
+    public void QRCodeNotFoundOnCamImage() {
+        return;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        myDecoderView.getCameraManager().startPreview();
+        lastValue = null;
+        processingQrCode = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        myDecoderView.getCameraManager().stopPreview();
+        lastValue = null;
+        processingQrCode = false;
     }
 }

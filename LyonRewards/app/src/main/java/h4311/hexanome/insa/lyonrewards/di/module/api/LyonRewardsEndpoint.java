@@ -34,10 +34,10 @@ public interface LyonRewardsEndpoint {
     Call<List<Event>> getAllEvents();
 
     @GET("events")
-    Call<List<Event>> getAllEventsWithUserProgression(@Query("userId") String userId);
+    Call<List<Event>> getAllEventsWithUserProgression(@Query("userId") int userId);
 
     @GET("events/{id}")
-    Call<Event> getEventById(@Path("id") int eventId);
+    Call<Event> getEventById(@Path("id") int eventId, @Query("userId") int userId);
 
     @GET("events/{id}/qrcodes")
     Call<List<QRCodeCitizenAct>> getQrCodeFromEvent(@Path("id") int eventId);

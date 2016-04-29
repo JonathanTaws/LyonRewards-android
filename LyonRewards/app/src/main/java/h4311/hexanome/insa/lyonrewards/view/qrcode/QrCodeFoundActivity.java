@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +127,17 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         // TODO Link with API
-        //lyonRewardsApi.addActToUser();
+        QrCodeContent qrCodeContent = getIntent().getExtras().getParcelable(ARG_QR_CODE_VALUE);
+        lyonRewardsApi.addActToUser(connectionManager.getConnectedUser(), qrCodeContent.getActId(), new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 }
