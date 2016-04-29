@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
         drawerUserEmail.setText(mConnectionManager.getConnectedUser().getEmail());
 
-        toggle = new ActionBarDrawerToggle(this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -178,16 +178,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-
         if (previousIcon) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toggle.setDrawerIndicatorEnabled(false);
+            
         } else {
-            getSupportActionBar().setDisplayShowHomeEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            toggle.setDrawerIndicatorEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
+          //  getSupportActionBar().setDisplayShowHomeEnabled(false);
+           // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            //toggle.setDrawerIndicatorEnabled(true);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
