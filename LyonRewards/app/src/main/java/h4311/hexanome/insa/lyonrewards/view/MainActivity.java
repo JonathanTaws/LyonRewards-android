@@ -31,6 +31,7 @@ import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
+import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeContent;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected LyonRewardsApi lyonRewardsApi;
 
     protected Stack<HistoryFragment> historyFragments = new Stack<>();
-    protected String currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,28 +230,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
-
     @Override
     public void onFragmentInteraction(Uri uri) {
         // TODO : Action ?
 
     }
 
-
     @Override
-    public void onQrCodeFound(String value) {
-        Intent intent = QrCodeFoundActivity.newIntent(this, value);
+    public void onQrCodeFound(QrCodeContent qrCodeContent) {
+        Intent intent = QrCodeFoundActivity.newIntent(this, qrCodeContent);
 
         startActivity(intent);
-//        Fragment fragment = QrCodeFoundActivity.newInstance(value);
-//
-//        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.main_activity_content_frame, fragment)
-//                .commit();
     }
-
-
 
 }

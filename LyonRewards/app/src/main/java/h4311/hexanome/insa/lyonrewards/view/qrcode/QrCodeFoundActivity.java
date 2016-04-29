@@ -39,7 +39,7 @@ import retrofit2.Response;
  */
 public class QrCodeFoundActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String ARG_QR_CODE_VALUE = "qrCodeValue";
+    private static final String ARG_QR_CODE_VALUE = "qrCodeContent";
 
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
@@ -60,9 +60,9 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
 
     private List<Event> mEvents;
 
-    public static Intent newIntent(Context context, String qrCodeValue){
+    public static Intent newIntent(Context context, QrCodeContent qrCodeContent){
         Intent intent = new Intent(context, QrCodeFoundActivity.class);
-        intent.putExtra(ARG_QR_CODE_VALUE, qrCodeValue);
+        intent.putExtra(ARG_QR_CODE_VALUE, qrCodeContent);
 
         return intent;
     }
@@ -87,42 +87,26 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
         mAdapter = new EventsFragmentGrandLyonTabViewAdapter(mEvents, this);
         qrCodeFoundEvent.setAdapter(mAdapter);
 
-        String qrCodeValue = getIntent().getExtras().getString(ARG_QR_CODE_VALUE);
-        parseQrCode(qrCodeValue);
+        QrCodeContent qrCodeContent = getIntent().getExtras().getParcelable(ARG_QR_CODE_VALUE);
 
-        qrCodeValueTextView.setText(qrCodeValue);
-    }
+        qrCodeValueTextView.setText(qrCodeContent.getValue());
 
-    private void parseQrCode(String qrCodeValue) {
-        Pattern qrCodePattern = Pattern.compile("(\\d+)&(\\d+)");
-        Matcher m = qrCodePattern.matcher(qrCodeValue);
-        if(m.matches()) {
-            int actId = Integer.parseInt(m.group(1));
-            int eventId = Integer.parseInt(m.group(2));
-
-            Log.d("QR_CODE_PARSER", "ActId : " + actId);
-            Log.d("QR_CODE_PARSER", "EventId : " + eventId);
-
-            lyonRewardsApi.getEventById(eventId, new Callback<Event>() {
-                @Override
-                public void onResponse(Call<Event> call, Response<Event> response) {
-                    // TODO Check if necessary
-                    if(response.code() == 200) {
-                        Event event = response.body();
-                        mEvents.add(event);
-                        mAdapter.notifyDataSetChanged();
-                    }
+        lyonRewardsApi.getEventById(qrCodeContent.getEventId(), new Callback<Event>() {
+            @Override
+            public void onResponse(Call<Event> call, Response<Event> response) {
+                // TODO Check if necessary
+                if(response.code() == 200) {
+                    Event event = response.body();
+                    mEvents.add(event);
+                    mAdapter.notifyDataSetChanged();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<Event> call, Throwable t) {
-                    // TODO Handle error
-                }
-            });
-        }
-    }
-
-    private void displayEvent(Event event) {
+            @Override
+            public void onFailure(Call<Event> call, Throwable t) {
+                // TODO Handle error
+            }
+        });
 
     }
 
