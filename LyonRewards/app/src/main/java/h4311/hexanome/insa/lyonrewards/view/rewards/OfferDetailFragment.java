@@ -108,6 +108,10 @@ public class OfferDetailFragment extends Fragment {
         return fragment;
     }
 
+    public static String getFragmentTag() {
+        return "OfferDetailFragment";
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

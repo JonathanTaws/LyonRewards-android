@@ -67,8 +67,10 @@ public class RewardsFragmentOffersAdapter extends RecyclerView.Adapter<RewardsFr
             if (mOffer != null) {
 
                 OfferDetailFragment fragment = OfferDetailFragment.newInstance(mOffer);
+                String fragmentTitle = "Offre " + mOffer.getPartner().getName();
+                mActivity.setFragment(fragment, OfferDetailFragment.getFragmentTag(), fragmentTitle, true);
 
-               mListener.onReplaceFragment(MainActivity.REWARDS_DETAIL_FRAGMENT, "Offre " + mOffer.getPartner().getName(), fragment);
+               //mListener.onReplaceFragment(MainActivity.REWARDS_DETAIL_FRAGMENT, , fragment);
             }
         }
     }

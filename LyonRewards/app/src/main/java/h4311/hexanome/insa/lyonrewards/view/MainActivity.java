@@ -8,11 +8,13 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,12 +68,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected ConnectionManager mConnectionManager;
 
     protected Stack<HistoryFragment> historyFragments = new Stack<>();
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
@@ -91,15 +95,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
         drawerUserEmail.setText(mConnectionManager.getConnectedUser().getEmail());
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+
 
         navigationView.setNavigationItemSelectedListener(this);
 
         // Default fragment
         Fragment initialFragment = new EventsFragment();
-        setFragment(initialFragment, EventsFragment.getFragmentTag(), EventsFragment.getFragmentTitle());
+        setFragment(initialFragment, EventsFragment.getFragmentTag(), EventsFragment.getFragmentTitle(), false);
     }
 
     @Override
@@ -118,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     oldFragment = RewardsFragment.newInstance();
                 }
                 if (oldFragment != null) {
-                    setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.getArgs(), false);
+                    setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.isPreviousIcon(), previous.getArgs(), false);
                 }
             } else {
                 super.onBackPressed();
@@ -145,30 +151,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_settings:
                 return true;
 
-            // Respond to the action bar's Up/Home button
-            /*case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;*/
+            case android.R.id.home:
+                if (historyFragments.peek().isPreviousIcon()) {
+                    onBackPressed();
+                    return true;
+                }
+                break;
         }
-
-
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onReplaceFragment(String newFragmentTag, String newFragmentName, Fragment newFragment) {
-        setFragment(newFragment, newFragmentTag, newFragmentName);
+        setFragment(newFragment, newFragmentTag, newFragmentName, false);
     }
 
-    private void setFragment(Fragment fragment, String tag, String title, List<Object> args) {
-        setFragment(fragment, tag, title, args, true);
+    public void setFragment(Fragment fragment, String tag, String title, boolean previousIcon, List<Object> args) {
+        setFragment(fragment, tag, title, previousIcon, args, true);
     }
 
-    private void setFragment(Fragment fragment, String tag, String title, List<Object> args, boolean history) {
+    public void setFragment(Fragment fragment, String tag, String title, boolean previousIcon, List<Object> args, boolean history) {
         if (history) {
-            HistoryFragment historyFragment = new HistoryFragment(tag, title, args);
+            HistoryFragment historyFragment = new HistoryFragment(tag, title, previousIcon, args);
             historyFragments.push(historyFragment);
+        }
+
+
+
+        if (previousIcon) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toggle.setDrawerIndicatorEnabled(false);
+        } else {
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            toggle.setDrawerIndicatorEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -176,17 +195,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.main_activity_content_frame, fragment, tag)
                 .commit();
 
-        if (toolbar != null) {
-            toolbar.setTitle(title);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
         }
     }
 
-    private void setFragment(Fragment fragment, String tag, String title) {
-        setFragment(fragment, tag, title, null, true);
+    public void setFragment(Fragment fragment, String tag, String title, boolean previousIcon) {
+        setFragment(fragment, tag, title, previousIcon, null, true);
     }
 
-    private void setFragment(Fragment fragment, String tag, String title, boolean history) {
-        setFragment(fragment, tag, title, null, history);
+    public void setFragment(Fragment fragment, String tag, String title, boolean previousIcon, boolean history) {
+        setFragment(fragment, tag, title, previousIcon, null, history);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -214,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if(id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
-            fragmentName = MainActivity.EVENTS_FRAGMENT;
+            fragmentName = EventsFragment.getFragmentTag();
+            fragmentTitle = EventsFragment.getFragmentTitle();
         }
         else if (id == R.id.nav_rewards) {
             fragment = RewardsFragment.newInstance();
@@ -224,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
 
-        setFragment(fragment, fragmentName, fragmentTitle);
+        setFragment(fragment, fragmentName, fragmentTitle, false);
 
         return true;
     }
