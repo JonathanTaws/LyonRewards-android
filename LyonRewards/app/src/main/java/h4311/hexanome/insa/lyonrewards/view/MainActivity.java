@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
         navigationView.setNavigationItemSelectedListener(this);
 
         // Default fragment
@@ -179,14 +180,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         if (previousIcon) {
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            //toggle.setDrawerIndicatorEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             toggle.setDrawerIndicatorEnabled(false);
-            
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            //drawer.removeDrawerListener(toggle);
+
+           // getSupportActionBar().setDisplayShowHomeEnabled(true);
+           // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
           //  getSupportActionBar().setDisplayShowHomeEnabled(false);
            // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             //toggle.setDrawerIndicatorEnabled(true);
+            toggle.setDrawerIndicatorEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toggle.syncState();
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
