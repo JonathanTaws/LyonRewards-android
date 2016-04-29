@@ -45,12 +45,12 @@ public class LyonRewardsApi {
     }
 
     public void getAllEventsWithUserProgression(int userId, Callback<List<Event>> callback) {
-        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEventsWithUserProgression(String.valueOf(userId));
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEventsWithUserProgression(userId);
         allEvents.enqueue(callback);
     }
 
-    public void getEventById(int eventId, Callback<Event> callback) {
-        Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId);
+    public void getEventById(int eventId, int userId, Callback<Event> callback) {
+        Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId, userId);
         event.enqueue(callback);
     }
 
@@ -60,8 +60,8 @@ public class LyonRewardsApi {
     }
 
 
-    public void addActToUser(User user, CitizenAct act, Callback<JsonObject> callback) {
-        Call<JsonObject> call = mLyonRewardsEndpoint.addActToUser(user.getId(), act.getId());
+    public void addActToUser(User user, int actId, Callback<JsonObject> callback) {
+        Call<JsonObject> call = mLyonRewardsEndpoint.addActToUser(user.getId(), actId);
         call.enqueue(callback);
     }
 

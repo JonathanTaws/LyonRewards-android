@@ -79,7 +79,12 @@ public class LoginActivity extends AppCompatActivity {
 
         // Hide keyboard
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
+        View currentFocus = getCurrentFocus();
+        if(currentFocus != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+        }
+
 
         mLogin.setError(null);
         mPassword.setError(null);
