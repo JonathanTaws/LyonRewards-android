@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
@@ -42,6 +44,21 @@ import retrofit2.Response;
 public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapter<EventDetailPointsFragmentTabViewAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.event_detail_success_nb_done)
+        protected TextView mSuccessNbDone;
+
+        @BindView(R.id.event_detail_success_nb_total)
+        protected TextView mSuccessNbTotal;
+
+        @BindView(R.id.event_detail_success_percentage_done)
+        protected TextView mSuccessPercentageDone;
+
+        @BindView(R.id.event_detail_success_progressbar_done)
+        protected View mViewSuccessProgressDone;
+
+        @BindView(R.id.event_detail_success_progressbar_todo)
+        protected View mViewSuccessProgressTodo;
 
         private Event mEvent = null;
         private FragmentActivity mActivity;
@@ -63,10 +80,14 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
             mActivity = activity;
             this.mChildFragmentManager = childFragmentManager;
             ButterKnife.bind(this, view);
+            ((LyonRewardsApplication) mActivity.getApplication()).getAppComponent().inject(this);
         }
 
         public void setEvent(Event event) {
             mEvent = event;
+
+            // Update components
+
 
             // RecyclerView binding
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mActivity);
@@ -83,7 +104,17 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
                 public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
                     mContentSuccess.addAll(response.body());
                     mAdapter.notifyDataSetChanged();
-                    Log.d("API", "events received");
+
+                    // Update ui in main fragment
+                    int nbSuccess = mContentSuccess.size();
+                    int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
+                    float progress = mEvent.getUserProgression() * 100.0f;
+                    float progressTodo = 100 - progress;
+                    mSuccessNbTotal.setText(String.valueOf(nbSuccess));
+                    mSuccessNbDone.setText(String.valueOf(nbDone));
+                    mSuccessPercentageDone.setText(String.format("%.2f", mEvent.getUserProgression()));
+                    mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
+                    mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
                 }
 
                 @Override

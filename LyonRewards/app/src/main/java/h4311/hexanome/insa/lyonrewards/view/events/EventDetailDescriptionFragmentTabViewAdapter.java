@@ -70,7 +70,6 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
             mActivity = activity;
             this.mChildFragmentManager = childFragmentManager;
             ButterKnife.bind(this, view);
-            ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
         }
 
         public void setEvent(Event event) {

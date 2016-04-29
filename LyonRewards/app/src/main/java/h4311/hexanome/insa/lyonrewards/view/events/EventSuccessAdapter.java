@@ -41,11 +41,11 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
             ButterKnife.bind(this, view);
         }
 
-        // todo : business object
-        public void setSuccess(Object success) {
-
+        public void setSuccess(QRCodeCitizenAct qrCodeCitizenAct) {
+            mTitle.setText(qrCodeCitizenAct.getTitle());
+            mDescription.setText(qrCodeCitizenAct.getDescription());
+            mNbPoints.setText(String.valueOf(qrCodeCitizenAct.getPoints()));
         }
-
     }
 
     protected List<QRCodeCitizenAct> successList;
