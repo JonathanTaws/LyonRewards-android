@@ -5,12 +5,13 @@ import android.util.Log;
 import java.lang.reflect.Field;
 
 /**
+ * Class used to inject a custom value for the autofocus interval used in the QR scanner
  * Created by Jonathan on 29/04/2016.
  */
 public class ReflectionUtils {
 
     public static void performInjection() {
-        injectClassField(AutoFocusManager.class, "AUTO_FOCUS_INTERVAL_MS", 2000L);
+        injectClassField(AutoFocusManager.class, "AUTO_FOCUS_INTERVAL_MS", 1000L);
     }
 
     private static void injectClassField(Class clazz, String fieldStr, long newValue) {

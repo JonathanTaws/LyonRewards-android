@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,8 +25,10 @@ import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
+import h4311.hexanome.insa.lyonrewards.view.events.EventDetailActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTabViewAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,6 +82,7 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         buttonReclaimPoints.setOnClickListener(this);
+
         mEvents = new ArrayList<>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -126,17 +130,26 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        // TODO Link with API
-        QrCodeContent qrCodeContent = getIntent().getExtras().getParcelable(ARG_QR_CODE_VALUE);
-        lyonRewardsApi.addActToUser(connectionManager.getConnectedUser(), qrCodeContent.getActId(), new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
+        QrCodeContent qrCodeContent = getIntent().getExtras().getParcelable(ARG_QR_CODE_VALUE);
+        lyonRewardsApi.addActToUser(connectionManager.getConnectedUser(), qrCodeContent.getActId(), new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.code() == 200) {
+                    Event event = mEvents.get(0);
+
+                    User user = response.body();
+                    connectionManager.setConnectedUser(user);
+
+                    Intent intent = new Intent(getApplicationContext(), EventDetailActivity.class);
+                    intent.putExtra(EventDetailActivity.INTENT_EVENT, event);
+                    startActivity(intent);
+                }
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
+            public void onFailure(Call<User> call, Throwable t) {
+                // TODO
             }
         });
     }
