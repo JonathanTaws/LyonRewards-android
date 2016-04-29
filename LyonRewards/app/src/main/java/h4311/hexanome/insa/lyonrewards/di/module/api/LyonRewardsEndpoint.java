@@ -42,8 +42,8 @@ public interface LyonRewardsEndpoint {
     @GET("events/{id}/qrcodes")
     Call<List<QRCodeCitizenAct>> getQrCodeFromEvent(@Path("id") int eventId);
 
-    @POST("users/{userId}/acts/{actId}")
-    Call<JsonObject> addActToUser(@Path("userId") int userId, @Path("actId") int actId);
+    @POST("users/{userId}/acts/{actId}/credit")
+    Call<User> addActToUser(@Path("userId") int userId, @Path("actId") int actId);
 
     @GET("users/{username}")
     Call<User> getUserByUserName(@Path("username") String username);

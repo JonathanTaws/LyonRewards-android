@@ -64,8 +64,8 @@ public class LyonRewardsApi {
     }
 
 
-    public void addActToUser(User user, int actId, Callback<JsonObject> callback) {
-        Call<JsonObject> call = mLyonRewardsEndpoint.addActToUser(user.getId(), actId);
+    public void addActToUser(User user, int actId, Callback<User> callback) {
+        Call<User> call = mLyonRewardsEndpoint.addActToUser(user.getId(), actId);
         call.enqueue(callback);
     }
 

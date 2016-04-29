@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.google.zxing.client.android.camera.open.ReflectionUtils;
@@ -36,6 +37,8 @@ public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRC
     private boolean processingQrCode;
 
     private String lastValue;
+
+    private static Toast currentToast = null;
 
     public static QrReaderFragment newInstance(Bundle bundle) {
         QrReaderFragment fragment = new QrReaderFragment();
@@ -69,8 +72,7 @@ public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRC
 
         processingQrCode = false;
 
-       myDecoderView.setOnQRCodeReadListener(this);
-
+        myDecoderView.setOnQRCodeReadListener(this);
 
         return view;
     }
@@ -89,8 +91,12 @@ public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRC
                 mCallback.onQrCodeFound(qrCodeContent);
             }
             else {
-                Snackbar.make(getView(), QR_CODE_NOT_RECOGNIZED, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                if(currentToast != null) {
+                    currentToast.cancel();
+                }
+
+                currentToast = Toast.makeText(getContext(), QR_CODE_NOT_RECOGNIZED, Toast.LENGTH_SHORT);
+                currentToast.show();
             }
         }
         lastValue = data;
