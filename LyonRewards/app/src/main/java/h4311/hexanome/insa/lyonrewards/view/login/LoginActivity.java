@@ -26,6 +26,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 
 /**
@@ -47,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.login_progress)
     protected View mProgressView;
+
+    @Inject
+    protected ConnectionManager mConnectionManager;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -175,17 +179,11 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                String token = mLyonRewardsApi.loginUser(mLoginString, mPasswordString);
-                if (token == null) {
+                User user = mLyonRewardsApi.loginUser(mLoginString, mPasswordString);
+                if (user == null) {
                     return false;
                 } else {
-                    User user = mLyonRewardsApi.getUserByUserName(mLoginString);
-                    if (user == null) {
-                        return false;
-                    } else {
-                        mUser = user;
-                        mUser.setCurrentToken(token);
-                    }
+                    mUser = user;
                 }
             } catch (IOException e) {
                 return false;
@@ -199,8 +197,8 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
 
             if (success) {
+                mConnectionManager.setConnectedUser(mUser);
                 Intent intent = new Intent(mActivity, MainActivity.class);
-                intent.putExtra(MainActivity.INTENT_USER_CONNECTED, mUser);
                 mActivity.startActivity(intent);
             } else {
                 showProgress(false);

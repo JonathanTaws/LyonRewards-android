@@ -25,6 +25,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +37,9 @@ public class EventsFragmentGrandLyonTab extends Fragment {
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
+
+    @Inject
+    protected ConnectionManager mConnectionManager;
 
     @BindView(R.id.scrolltab_tab_recyclerview)
     protected RecyclerView mRecyclerView;
@@ -69,7 +73,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getAllEvents(new Callback<List<Event>>() {
+        lyonRewardsApi.getAllEventsWithUserProgression(mConnectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 mContentEvents.addAll(response.body());

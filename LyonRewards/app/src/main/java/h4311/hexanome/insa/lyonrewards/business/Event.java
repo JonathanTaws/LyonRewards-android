@@ -52,6 +52,10 @@ public class Event implements Parcelable {
     @Expose
     private List<Integer> tags = new ArrayList<>();
 
+    @SerializedName("progress")
+    @Expose
+    private Float userProgression;
+
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
@@ -70,8 +74,9 @@ public class Event implements Parcelable {
      * @param latitude
      * @param longitude
      * @param tags
+     * @param userProgression
      */
-    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, List<Integer> tags) {
+    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, List<Integer> tags, Float userProgression) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -81,6 +86,7 @@ public class Event implements Parcelable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.tags = tags;
+        this.userProgression = userProgression;
     }
 
     /**
@@ -230,6 +236,14 @@ public class Event implements Parcelable {
         this.tags = tags;
     }
 
+    public Float getUserProgression() {
+        return userProgression;
+    }
+
+    public void setUserProgression(Float userProgression) {
+        this.userProgression = userProgression;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -246,6 +260,7 @@ public class Event implements Parcelable {
         out.writeDouble(latitude);
         out.writeDouble(longitude);
         out.writeList(tags);
+        out.writeFloat(userProgression);
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -268,5 +283,8 @@ public class Event implements Parcelable {
         this.latitude = in.readDouble();
         this.longitude = in.readDouble();
         in.readList(this.tags, Integer.class.getClassLoader());
+        this.userProgression = in.readFloat();
     }
+
+
 }

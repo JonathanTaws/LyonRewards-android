@@ -1,8 +1,5 @@
 package h4311.hexanome.insa.lyonrewards.view.events;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,15 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.R;
-import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 
 /**
  * Created by Pierre on 28/04/2016.
@@ -54,10 +48,10 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
 
     }
 
-    protected List<Object> success;
+    protected List<QRCodeCitizenAct> successList;
 
-    public EventSuccessAdapter(List<Object> success) {
-        this.success = success;
+    public EventSuccessAdapter(List<QRCodeCitizenAct> success) {
+        this.successList = success;
     }
 
     @Override
@@ -68,12 +62,12 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
 
     @Override
     public void onBindViewHolder(EventSuccessAdapter.ViewHolder holder, int position) {
-        holder.setSuccess(success.get(position));
+        holder.setSuccess(successList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        Log.d("COUNT", String.valueOf(success.size()));
-        return success.size();
+        Log.d("COUNT", String.valueOf(successList.size()));
+        return successList.size();
     }
 }

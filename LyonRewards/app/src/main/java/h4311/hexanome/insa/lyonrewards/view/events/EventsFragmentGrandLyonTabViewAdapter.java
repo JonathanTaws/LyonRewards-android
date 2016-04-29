@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -48,6 +49,15 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
         @BindView(R.id.card_event_publish_date)
         protected TextView mPublishDate;
 
+        @BindView(R.id.card_event_progressbar_done)
+        protected View mProgressBarDone;
+
+        @BindView(R.id.card_event_progressbar_todo)
+        protected View mProgressBarTodo;
+
+        @BindView(R.id.card_progressbar_numeric_label)
+        protected TextView mProgressBarLabel;
+
         private Event mEvent = null;
 
         public ViewHolder(View view, Context context) {
@@ -57,6 +67,8 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
         }
 
         public void setEvent(Event event) {
+            mEvent = event;
+
             mTitle.setText(event.getTitle());
 
             mStartDate.setText(event.getStartDateString());
@@ -81,7 +93,12 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
 
             mPublishDate.setText(event.getPublishDateString());
 
-            mEvent = event;
+            // Progress bar
+            float progress = mEvent.getUserProgression() * 100.0f;
+            float todo = 100 - progress;
+            mProgressBarDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
+            mProgressBarTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, todo));
+            mProgressBarLabel.setText(String.format("%.2f", progress));
         }
 
         @OnClick(R.id.card_event_card_view)

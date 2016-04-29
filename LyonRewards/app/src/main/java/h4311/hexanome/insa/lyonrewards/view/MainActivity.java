@@ -29,6 +29,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
@@ -45,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Intent arg
     public static final String INTENT_USER_CONNECTED = "usertoken";
 
-    private User mConnectedUser;
-
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
 
@@ -62,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
+    @Inject
+    protected ConnectionManager mConnectionManager;
+
     protected Stack<HistoryFragment> historyFragments = new Stack<>();
     protected String currentFragment;
 
@@ -74,9 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
 
-        Intent intent = getIntent();
-        mConnectedUser = intent.getParcelableExtra(INTENT_USER_CONNECTED);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Update nav header
         View hView =  navigationView.getHeaderView(0);
         TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
-        drawerUserTitle.setText(mConnectedUser.getFirstName() + " " + mConnectedUser.getLastName());
+        drawerUserTitle.setText(mConnectionManager.getConnectedUser().getFirstName() + " " + mConnectionManager.getConnectedUser().getLastName());
         TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
-        drawerUserEmail.setText(mConnectedUser.getEmail());
+        drawerUserEmail.setText(mConnectionManager.getConnectedUser().getEmail());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);

@@ -11,11 +11,14 @@ import java.util.List;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.User;
+import h4311.hexanome.insa.lyonrewards.business.UserConnection;
 import h4311.hexanome.insa.lyonrewards.business.act.CitizenAct;
+import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public class LyonRewardsApi {
@@ -41,10 +44,21 @@ public class LyonRewardsApi {
         allEvents.enqueue(callback);
     }
 
+    public void getAllEventsWithUserProgression(int userId, Callback<List<Event>> callback) {
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEventsWithUserProgression(String.valueOf(userId));
+        allEvents.enqueue(callback);
+    }
+
     public void getEventById(int eventId, Callback<Event> callback) {
         Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId);
         event.enqueue(callback);
     }
+
+    public void getQrCodesFromEvent(int eventId, Callback<List<QRCodeCitizenAct>> callback) {
+        Call<List<QRCodeCitizenAct>> event = mLyonRewardsEndpoint.getQrCodeFromEvent(eventId);
+        event.enqueue(callback);
+    }
+
 
     public void addActToUser(User user, CitizenAct act, Callback<JsonObject> callback) {
         Call<JsonObject> call = mLyonRewardsEndpoint.addActToUser(user.getId(), act.getId());
@@ -62,28 +76,17 @@ public class LyonRewardsApi {
         return execute.body();
     }
 
-    public String loginUser(String username, String password) throws IOException {
-        Call<JsonObject> call = mLyonRewardsEndpoint.login(username, password);
-        Response<JsonObject> execute = call.execute();
-        JsonObject body = execute.body();
-        if (body == null) {
-            return null;
-        }
-        JsonElement element = body.get("token");
-        if (element == null) {
-            return null;
-        } else {
-            return element.getAsString();
-        }
-        /*
-        Call<JsonObject> call = mLyonRewardsEndpoint.login(username, password);
-        Response<JsonObject> execute = call.execute();
-        JsonElement jsonElement = execute.body().get("token");
-        if (jsonElement == null) {
-            return null;
-        } else {
-            return jsonElement.getAsString();
-        }*/
-    }
+    public User loginUser(String username, String password) throws IOException {
+        Call<UserConnection> call = mLyonRewardsEndpoint.login(username, password);
+        Response<UserConnection> execute = call.execute();
 
+        UserConnection userConnection = execute.body();
+        if (userConnection == null) {
+            return null;
+        } else {
+            User user = userConnection.getUser();
+            user.setCurrentToken(userConnection.getToken());
+            return user;
+        }
+    }
 }

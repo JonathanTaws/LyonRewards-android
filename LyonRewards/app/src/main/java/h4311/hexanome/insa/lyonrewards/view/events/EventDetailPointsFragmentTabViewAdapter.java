@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
+import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Pierre on 28/04/2016.
@@ -45,7 +53,10 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         private RecyclerView.Adapter mAdapter;
 
         // Todo business class
-        private List<Object> mContentSuccess = new ArrayList<>();
+        private List<QRCodeCitizenAct> mContentSuccess = new ArrayList<>();
+
+        @Inject
+        protected LyonRewardsApi mLyonRewardsApi;
 
         public ViewHolder(View view, FragmentActivity activity, FragmentManager childFragmentManager) {
             super(view);
@@ -57,27 +68,31 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         public void setEvent(Event event) {
             mEvent = event;
 
-
-
             // RecyclerView binding
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mActivity);
             mRecyclerView.setLayoutManager(layoutManager);
             mRecyclerView.setHasFixedSize(true);
 
-            // todo : remove
-            mContentSuccess.add(new String("aa"));
-            mContentSuccess.add(new String("aa"));
-            mContentSuccess.add(new String("aa"));
-            mContentSuccess.add(new String("aa"));
-            mContentSuccess.add(new String("aa"));
             mAdapter = new EventSuccessAdapter(mContentSuccess);
             mRecyclerView.setAdapter(mAdapter);
 
             MaterialViewPagerHelper.registerRecyclerView(mActivity, mRecyclerView, null);
 
-            mAdapter.notifyDataSetChanged();
-        }
+            mLyonRewardsApi.getQrCodesFromEvent(mEvent.getId(), new Callback<List<QRCodeCitizenAct>>() {
+                @Override
+                public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
+                    mContentSuccess.addAll(response.body());
+                    mAdapter.notifyDataSetChanged();
+                    Log.d("API", "events received");
+                }
 
+                @Override
+                public void onFailure(Call<List<QRCodeCitizenAct>> call, Throwable t) {
+                    // TODO : Error message
+                    Log.d("API", "error : " + t.getMessage());
+                }
+            });
+        }
     }
 
     protected List<Event> events;

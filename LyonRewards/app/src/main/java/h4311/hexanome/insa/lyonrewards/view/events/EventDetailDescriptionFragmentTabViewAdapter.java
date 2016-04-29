@@ -25,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 
@@ -69,6 +70,7 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
             mActivity = activity;
             this.mChildFragmentManager = childFragmentManager;
             ButterKnife.bind(this, view);
+            ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
         }
 
         public void setEvent(Event event) {
