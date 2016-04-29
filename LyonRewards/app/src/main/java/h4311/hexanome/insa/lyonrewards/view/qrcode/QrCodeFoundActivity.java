@@ -7,19 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -29,6 +23,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTabViewAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +52,9 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
+
+    @Inject
+    protected ConnectionManager connectionManager;
 
     private List<Event> mEvents;
 
@@ -91,7 +89,7 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
 
         qrCodeValueTextView.setText(qrCodeContent.getValue());
 
-        lyonRewardsApi.getEventById(qrCodeContent.getEventId(), new Callback<Event>() {
+        lyonRewardsApi.getEventById(qrCodeContent.getEventId(), connectionManager.getConnectedUser().getId(), new Callback<Event>() {
             @Override
             public void onResponse(Call<Event> call, Response<Event> response) {
                 // TODO Check if necessary
