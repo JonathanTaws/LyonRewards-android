@@ -26,7 +26,7 @@
         </activity>
 
         <activity
-            android:name=".view.qrcode.QrCodeFoundActivity"
+            android:name=".view.qrcode.QrCodeFoundFragment"
             android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 

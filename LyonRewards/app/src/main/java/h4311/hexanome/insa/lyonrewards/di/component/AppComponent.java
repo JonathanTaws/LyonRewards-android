@@ -15,7 +15,7 @@ import h4311.hexanome.insa.lyonrewards.view.events.EventDetailPointsFragmentTabV
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTab;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentMyEventsTab;
 import h4311.hexanome.insa.lyonrewards.view.login.LoginActivity;
-import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
+import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragmentOffersAdapter;
@@ -32,7 +32,7 @@ public interface AppComponent {
 
     void inject(EventDetailFragment activity);
 
-    void inject(QrCodeFoundActivity activity);
+    void inject(QrCodeFoundFragment activity);
 
     void inject(RewardsFragment rewardsFragment);
 

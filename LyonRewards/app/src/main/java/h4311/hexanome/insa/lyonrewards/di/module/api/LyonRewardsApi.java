@@ -63,6 +63,11 @@ public class LyonRewardsApi {
         event.enqueue(callback);
     }
 
+    public void getQrCodeById(int qrCodeId, Callback<QRCodeCitizenAct> callback) {
+        Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId);
+        call.enqueue(callback);
+    }
+
 
     public void addActToUser(User user, int actId, Callback<User> callback) {
         Call<User> call = mLyonRewardsEndpoint.addActToUser(user.getId(), actId);

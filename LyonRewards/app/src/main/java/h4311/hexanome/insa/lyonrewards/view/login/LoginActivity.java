@@ -205,6 +205,8 @@ public class LoginActivity extends AppCompatActivity {
                 mConnectionManager.setConnectedUser(mUser);
                 Intent intent = new Intent(mActivity, MainActivity.class);
                 mActivity.startActivity(intent);
+                mActivity.finish();
+                finish();
             } else {
                 showProgress(false);
                 mPassword.setError(getString(R.string.error_incorrect_password));

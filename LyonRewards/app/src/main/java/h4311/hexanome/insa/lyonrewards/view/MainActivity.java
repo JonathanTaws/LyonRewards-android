@@ -8,7 +8,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -31,14 +31,13 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
-import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeContent;
-import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
+import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
@@ -131,7 +130,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     oldFragment = OfferDetailFragment.newInstance((Offer) previous.getArgs().get(0));
                 } else if (previousTag.equals(EventDetailFragment.getFragmentTag())) {
                     oldFragment = EventDetailFragment.newInstance((Event) previous.getArgs().get(0));
+                } else if (previousTag.equals(QrCodeFoundFragment.getFragmentTag())) {
+                    oldFragment = QrCodeFoundFragment.newInstance((QrCodeContent) previous.getArgs().get(0));
                 }
+                // todo : previous scan qr code
                 if (oldFragment != null) {
                     setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.isPreviousIcon(), previous.getArgs(), false);
                 }
@@ -269,9 +271,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onQrCodeFound(QrCodeContent qrCodeContent) {
-        Intent intent = QrCodeFoundActivity.newIntent(this, qrCodeContent);
-
-        startActivity(intent);
+        Fragment fragment = QrCodeFoundFragment.newInstance(qrCodeContent);
+        List<Object> args = new ArrayList<>();
+        args.add(qrCodeContent);
+        setFragment(fragment, QrCodeFoundFragment.getFragmentTag(), QrCodeFoundFragment.getFragmentTitle(), true, args, true);
     }
 
 }

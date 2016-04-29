@@ -1,78 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/maintoolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <TextView
-        android:id="@+id/qr_code_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="WALA" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        <!--    <TextView
+                android:id="@+id/qr_code_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="WALA" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/scanner_qrcode_found"
+                android:textSize="20dp"/>
+
+
+            <LinearLayout
+                android:id="@+id/cardview_qrcode_success_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_reclaim_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reclaim_points"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:textSize="18dp"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/darker_gray" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/scanner_qrcode_found" />
+                android:text="Évènement associé"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:textSize="18dp"
+                android:textColor="#222"
+                android:textAllCaps="true"/>
 
-        </LinearLayout>
+            <!--<include layout="@layout/cardview_event_layout" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="30dp" >
-
-            <Button
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/cardview_event_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button_reclaim_points"
-                android:text="@string/reclaim_points"
-                android:background="@color/blue"
-                android:textColor="@android:color/white"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
+                android:orientation="vertical">
+            </LinearLayout>
+
+
+
+
+            <!--<android.support.v7.widget.RecyclerView
+                android:id="@+id/qr_code_found_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>-->
+
+            <!--<include android:id="@+id/event_found_detail" layout="@layout/cardview_event_layout" />-->
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/qr_code_found_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
-        <!--<include android:id="@+id/event_found_detail" layout="@layout/cardview_event_layout" />-->
+    </ScrollView>
 
-    </LinearLayout>
-
-
-</LinearLayout>
+</FrameLayout>
