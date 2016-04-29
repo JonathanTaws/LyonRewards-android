@@ -123,7 +123,8 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textColor="#222222"
-                android:textColorHint="#999999" />
+                android:textColorHint="#999999"
+                android:text="antoine"/>
 
             <EditText
                 android:id="@+id/login_password"
@@ -136,7 +137,8 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textColor="#222222"
-                android:textColorHint="#999999" />
+                android:textColorHint="#999999"
+                android:text="azertyuiop"/>
 
             <!-- Login Button -->
 
