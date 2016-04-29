@@ -29,10 +29,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
+import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
+import h4311.hexanome.insa.lyonrewards.view.events.EventDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeContent;
@@ -127,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     oldFragment = RewardsFragment.newInstance();
                 } else if (previousTag.equals(OfferDetailFragment.getFragmentTag())) {
                     oldFragment = OfferDetailFragment.newInstance((Offer) previous.getArgs().get(0));
+                } else if (previousTag.equals(EventDetailFragment.getFragmentTag())) {
+                    oldFragment = EventDetailFragment.newInstance((Event) previous.getArgs().get(0));
                 }
                 if (oldFragment != null) {
                     setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.isPreviousIcon(), previous.getArgs(), false);

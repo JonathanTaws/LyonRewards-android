@@ -84,6 +84,7 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         qrCodeFoundEvent.setLayoutManager(layoutManager);
 
+        /*
         mAdapter = new EventsFragmentGrandLyonTabViewAdapter(mEvents, this);
         qrCodeFoundEvent.setAdapter(mAdapter);
 
@@ -106,7 +107,7 @@ public class QrCodeFoundActivity extends AppCompatActivity implements View.OnCli
             public void onFailure(Call<Event> call, Throwable t) {
                 // TODO Handle error
             }
-        });
+        });*/
 
     }
 

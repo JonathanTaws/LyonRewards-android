@@ -24,10 +24,7 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity
-            android:name=".view.events.EventDetailActivity"
-            android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".view.qrcode.QrCodeFoundActivity"
             android:parentActivityName=".view.MainActivity"

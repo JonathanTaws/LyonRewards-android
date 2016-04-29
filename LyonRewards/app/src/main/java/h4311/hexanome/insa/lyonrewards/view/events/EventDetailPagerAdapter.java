@@ -25,8 +25,6 @@ public class EventDetailPagerAdapter  extends ScrolltabPagerAdapter {
         mEvent = event;
     }
 
-
-
     @Override
     public Fragment getItem(int position) {
         int index = position % getTabsLabels().length;

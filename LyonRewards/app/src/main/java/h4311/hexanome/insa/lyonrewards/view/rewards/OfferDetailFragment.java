@@ -1,20 +1,12 @@
 package h4311.hexanome.insa.lyonrewards.view.rewards;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,14 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.florent37.materialviewpager.MaterialViewPager;
-import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.glxn.qrgen.android.QRCode;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,14 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
-import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
-import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
-import h4311.hexanome.insa.lyonrewards.view.events.EventDetailActivity;
-import h4311.hexanome.insa.lyonrewards.view.events.EventDetailPagerAdapter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Pierre on 28/04/2016.
