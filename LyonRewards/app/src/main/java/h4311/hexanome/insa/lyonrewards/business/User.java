@@ -43,6 +43,8 @@ public class User implements Parcelable {
     @Expose
     private int currentPoints;
 
+    private String currentToken;
+
     /**
      * No args constructor for use in serialization
      */
@@ -144,6 +146,7 @@ public class User implements Parcelable {
         this.email = in.readString();
         this.globalPoints = in.readInt();
         this.currentPoints = in.readInt();
+        this.currentToken = in.readString();
     }
 
     @Override
@@ -161,5 +164,14 @@ public class User implements Parcelable {
         dest.writeString(email);
         dest.writeInt(globalPoints);
         dest.writeInt(currentPoints);
+        dest.writeString(currentToken);
+    }
+
+    public String getCurrentToken() {
+        return currentToken;
+    }
+
+    public void setCurrentToken(String currentToken) {
+        this.currentToken = currentToken;
     }
 }

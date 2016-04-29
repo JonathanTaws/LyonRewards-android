@@ -8,16 +8,15 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 import java.util.Stack;
@@ -28,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
+import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
     public static final String REWARDS_FRAGMENT = "REWARDS_FRAGMENT";
     public static final String REWARDS_DETAIL_FRAGMENT = "REWARDS_DETAIL_FRAGMENT";
+
+    // Intent arg
+    public static final String INTENT_USER_CONNECTED = "usertoken";
+
+    private User mConnectedUser;
 
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
@@ -66,9 +71,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
+
+        Intent intent = getIntent();
+        mConnectedUser = intent.getParcelableExtra(INTENT_USER_CONNECTED);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setAction("Action", null).show();
             }
         });
+
+        // Update nav header
+        View hView =  navigationView.getHeaderView(0);
+        TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
+        drawerUserTitle.setText(mConnectedUser.getFirstName() + " " + mConnectedUser.getLastName());
+        TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
+        drawerUserEmail.setText(mConnectedUser.getEmail());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);

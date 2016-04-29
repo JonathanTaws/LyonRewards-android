@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".LyonRewardsApplication"
         android:allowBackup="true"
@@ -15,33 +20,39 @@
         <activity
             android:name=".view.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+        <activity
+            android:name=".view.events.EventDetailActivity"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.qrcode.QrCodeFoundActivity"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".view.events.EventDetailActivity"
+        <!--
+            <activity android:name=".view.rewards.OfferDetailFragment"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".view.MainActivity"></activity>
-
-        <activity android:name=".view.qrcode.QrCodeFoundActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".view.MainActivity"></activity>
-
-        <!--<activity android:name=".view.rewards.OfferDetailFragment"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".view.MainActivity"></activity>-->
-
+        -->
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAFa7I8350G1RQXyFXhfCsjgctV1epgq7k"/>
+            android:value="AIzaSyAFa7I8350G1RQXyFXhfCsjgctV1epgq7k" />
 
-        <uses-library android:name="com.google.android.maps"/>
+        <uses-library android:name="com.google.android.maps" />
+
+        <activity
+            android:name=".view.login.LoginActivity"
+            android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -9,6 +9,7 @@ import h4311.hexanome.insa.lyonrewards.di.module.image.ImageModule;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTab;
+import h4311.hexanome.insa.lyonrewards.view.login.LoginActivity;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
@@ -33,4 +34,7 @@ public interface AppComponent {
     void inject(OfferDetailFragment offerDetailActivity);
 
     void inject(RewardsFragmentOffersAdapter.ViewHolder viewHolder);
+
+    void inject(LoginActivity loginActivity);
+
 }
