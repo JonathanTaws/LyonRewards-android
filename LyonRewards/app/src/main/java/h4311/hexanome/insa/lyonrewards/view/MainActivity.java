@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.main_activity_content_frame, fragment)
+                .replace(R.id.main_activity_content_frame, fragment, tag)
                 .commit();
 
         if (toolbar != null) {
@@ -211,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             fragment = QrReaderFragment.newInstance(bundle);
+            fragmentName = MainActivity.QR_SCANNER_FRAGMENT;
         }
         else if(id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
