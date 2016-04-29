@@ -112,7 +112,7 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
                     float progressTodo = 100 - progress;
                     mSuccessNbTotal.setText(String.valueOf(nbSuccess));
                     mSuccessNbDone.setText(String.valueOf(nbDone));
-                    mSuccessPercentageDone.setText(String.format("%.2f", mEvent.getUserProgression()));
+                    mSuccessPercentageDone.setText(String.format("%.0f", progress));
                     mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
                     mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
                 }
