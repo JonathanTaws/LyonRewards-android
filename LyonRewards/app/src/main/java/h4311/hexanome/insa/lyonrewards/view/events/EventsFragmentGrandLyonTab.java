@@ -27,6 +27,7 @@ import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
+import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,7 +86,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new EventsFragmentGrandLyonTabViewAdapter(mContentEvents, getContext()));
+        mAdapter = new RecyclerViewMaterialAdapter(new EventsFragmentGrandLyonTabViewAdapter(mContentEvents, (MainActivity) getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);

@@ -36,7 +36,6 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
 
-
         @BindView(R.id.event_detail_title)
         protected TextView mTitle;
 
