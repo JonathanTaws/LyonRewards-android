@@ -8,14 +8,19 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.List;
+import java.util.Stack;
 
 import javax.inject.Inject;
 
@@ -30,11 +35,12 @@ import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundActivity;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener {
 
-    private static final String QR_SCANNER_FRAGMENT = "QR_SCANNER_FRAGMENT";
-    private static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
-    private static final String REWARDS_FRAGMENT = "REWARDS_FRAGMENT";
+    public static final String QR_SCANNER_FRAGMENT = "QR_SCANNER_FRAGMENT";
+    public static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
+    public static final String REWARDS_FRAGMENT = "REWARDS_FRAGMENT";
+    public static final String REWARDS_DETAIL_FRAGMENT = "REWARDS_DETAIL_FRAGMENT";
 
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
@@ -51,12 +57,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
+    protected Stack<HistoryFragment> historyFragments = new Stack<>();
+    protected String currentFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
 
@@ -75,10 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         // Default fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.main_activity_content_frame, new EventsFragment())
-                .commit();
+        Fragment initialFragment = new EventsFragment();
+        setFragment(initialFragment, EventsFragment.getFragmentTag(), EventsFragment.getFragmentTitle());
     }
 
     @Override
@@ -86,9 +94,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (historyFragments.size() > 1) {
+                historyFragments.pop();
+                Fragment oldFragment = null;
+                HistoryFragment previous = historyFragments.peek();
+                String previousTag = previous.getTag();
+                if (previousTag.equals(EventsFragment.getFragmentTag())) {
+                    oldFragment = new EventsFragment();
+                } else if (previousTag.equals(REWARDS_FRAGMENT)) {
+                    oldFragment = RewardsFragment.newInstance();
+                }
+                if (oldFragment != null) {
+                    setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.getArgs(), false);
+                }
+            } else {
+                super.onBackPressed();
+            }
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,12 +128,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+
+            // Respond to the action bar's Up/Home button
+            /*case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;*/
         }
 
+
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onReplaceFragment(String newFragmentTag, String newFragmentName, Fragment newFragment) {
+        setFragment(newFragment, newFragmentTag, newFragmentName);
+    }
+
+    private void setFragment(Fragment fragment, String tag, String title, List<Object> args) {
+        setFragment(fragment, tag, title, args, true);
+    }
+
+    private void setFragment(Fragment fragment, String tag, String title, List<Object> args, boolean history) {
+        if (history) {
+            HistoryFragment historyFragment = new HistoryFragment(tag, title, args);
+            historyFragments.push(historyFragment);
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_activity_content_frame, fragment)
+                .commit();
+
+        if (toolbar != null) {
+            toolbar.setTitle(title);
+        }
+    }
+
+    private void setFragment(Fragment fragment, String tag, String title) {
+        setFragment(fragment, tag, title, null, true);
+    }
+
+    private void setFragment(Fragment fragment, String tag, String title, boolean history) {
+        setFragment(fragment, tag, title, null, history);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -120,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Fragment fragment = null;
         String fragmentName = null;
+        String fragmentTitle = "todo";
 
         Bundle bundle = new Bundle();
 
@@ -140,18 +205,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_rewards) {
             fragment = RewardsFragment.newInstance();
             fragmentName = MainActivity.REWARDS_FRAGMENT;
-            toolbar.setTitle("Boutique");
+            fragmentTitle = "Boutique";
         }
 
         drawer.closeDrawer(GravityCompat.START);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.main_activity_content_frame, fragment, fragmentName)
-                .commit();
+        setFragment(fragment, fragmentName, fragmentTitle);
 
         return true;
     }
+
 
 
     @Override
@@ -168,9 +231,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
 //        Fragment fragment = QrCodeFoundActivity.newInstance(value);
 //
-//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentManager fragmentManager = getFragmentManager();
 //        fragmentManager.beginTransaction()
 //                .replace(R.id.main_activity_content_frame, fragment)
 //                .commit();
     }
+
+
+
 }

@@ -1,7 +1,7 @@
 package h4311.hexanome.insa.lyonrewards.view.rewards;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.List;
 
@@ -24,6 +22,7 @@ import butterknife.OnClick;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
+import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 
 public class RewardsFragmentOffersAdapter extends RecyclerView.Adapter<RewardsFragmentOffersAdapter.ViewHolder> {
 
@@ -37,29 +36,28 @@ public class RewardsFragmentOffersAdapter extends RecyclerView.Adapter<RewardsFr
         @BindView(R.id.card_reward_partner_img)
         protected ImageView mPartnerImage;
 
-        @Inject
-        protected ImageLoader mImageLoader;
-
         private Offer mOffer;
-        private LyonRewardsApplication mApplication;
+        private MainActivity mActivity;
 
-        public ViewHolder(View view, LyonRewardsApplication application) {
+        @Inject
+        ImageLoader mImageLoader;
+
+        private RewardsFragment.OnFragmentInteractionListener mListener;
+
+        public ViewHolder(View view, MainActivity activity, RewardsFragment.OnFragmentInteractionListener listener) {
             super(view);
+            mListener = listener;
             ButterKnife.bind(this, view);
-            mApplication = application;
-            mApplication.getAppComponent().inject(this);
-            mApplication = application;
+            mActivity = activity;
+
+            ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
         }
 
         public void setOffer(Offer offer) {
             mTitle.setText(offer.getTitle());
             mPrice.setText(offer.getPoints().toString());
 
-            mImageLoader.loadImage(offer.getPartner().getImageUrl(), new SimpleImageLoadingListener() {
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    mPartnerImage.setImageBitmap(loadedImage);
-                }
-            });
+            mImageLoader.displayImage(offer.getPartner().getImageUrl(), mPartnerImage);
 
             mOffer = offer;
         }
@@ -67,25 +65,28 @@ public class RewardsFragmentOffersAdapter extends RecyclerView.Adapter<RewardsFr
         @OnClick(R.id.card_reward_cardview)
         public void cardviewOnClick() {
             if (mOffer != null) {
-                Intent intent = new Intent(mApplication, OfferDetailActivity.class);
-                intent.putExtra(OfferDetailActivity.INTENT_OFFER, mOffer);
-                mApplication.startActivity(intent);
+
+                OfferDetailFragment fragment = OfferDetailFragment.newInstance(mOffer);
+
+               mListener.onReplaceFragment(MainActivity.REWARDS_DETAIL_FRAGMENT, "Offre " + mOffer.getPartner().getName(), fragment);
             }
         }
     }
 
     protected List<Offer> offers;
-    private LyonRewardsApplication mApplication;
+    private MainActivity mActivity;
+    private RewardsFragment.OnFragmentInteractionListener mListener;
 
-    public RewardsFragmentOffersAdapter(List<Offer> offers, LyonRewardsApplication application) {
+    public RewardsFragmentOffersAdapter(List<Offer> offers, MainActivity activity) {
         this.offers = offers;
-        mApplication = application;
+        this.mActivity = activity;
+        mListener = activity;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_reward_offer, parent, false);
-        return new ViewHolder(view, mApplication);
+        return new ViewHolder(view, mActivity, mListener);
     }
 
     @Override

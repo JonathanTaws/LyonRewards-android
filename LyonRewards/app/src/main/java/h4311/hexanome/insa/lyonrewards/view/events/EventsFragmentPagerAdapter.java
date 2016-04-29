@@ -1,8 +1,8 @@
 package h4311.hexanome.insa.lyonrewards.view.events;
 
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTab;
 import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;

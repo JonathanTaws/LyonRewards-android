@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_reward_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/cardMarginVertical"
+            android:layout_marginLeft="@dimen/cardMarginHorizontal"
+            android:layout_marginRight="@dimen/cardMarginHorizontal"
+            android:layout_marginTop="@dimen/cardMarginVertical"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp">
+
+                    <ImageView
+                        android:id="@+id/offer_detail_partner_image"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/header_thumbnail" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_toLeftOf="@id/offer_detail_partner_image">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="PARTENAIRE"
+                            android:textColor="#222"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/offer_detail_partner_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="Nom........"
+                            android:textColor="#666"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/offer_detail_partner_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="Description........"
+                            android:textColor="#666"
+                            android:textSize="14dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Adresse : "
+                                android:textColor="#666"
+                                android:textSize="14dp" />
+                            <TextView
+                                android:id="@+id/offer_detail_partner_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8 rue ...."
+                                android:textColor="#666"
+                                android:textSize="14dp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/offer_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Titre de l'offre"
+                    android:textColor="#222"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="5dp"
+                    >
+                    <TextView
+                        android:id="@+id/offer_detail_nbPoints_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="999"
+                        android:textColor="#666"
+                        android:textSize="14dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" points"
+                        android:textColor="#666"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="Description"
+                    android:textColor="#222"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/offer_detail_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="Description de l'offre........................."
+                    android:textColor="#666"
+                    android:textSize="14dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@android:color/darker_gray" />
+
+                <Button
+                    android:id="@+id/offer_detail_pay_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Obtenir pour 999 points"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/offer_detail_qrcode_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vous serez débités de vos points lorsque le partenaire aura scanné ce QR Code."
+                        android:textColor="#666"
+                        android:textSize="10dp"
+                        android:textStyle="italic" />
+
+                    <ImageView
+                        android:id="@+id/offer_detail_qrcode_image"
+                        android:layout_width="@dimen/partner_qrcode_size"
+                        android:layout_height="@dimen/partner_qrcode_size"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        <!---->
+
+    </ScrollView>
+
+
+
+
+</FrameLayout>

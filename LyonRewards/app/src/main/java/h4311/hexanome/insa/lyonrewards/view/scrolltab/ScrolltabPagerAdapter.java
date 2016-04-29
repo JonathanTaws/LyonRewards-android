@@ -1,5 +1,7 @@
 package h4311.hexanome.insa.lyonrewards.view.scrolltab;
 
+
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;

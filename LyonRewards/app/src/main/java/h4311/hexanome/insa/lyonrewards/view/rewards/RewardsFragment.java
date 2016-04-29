@@ -1,8 +1,10 @@
 package h4311.hexanome.insa.lyonrewards.view.rewards;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -43,6 +45,8 @@ public class RewardsFragment extends Fragment {
 
     private List<Offer> mContentOffers = new ArrayList<>();
 
+    private OnFragmentInteractionListener mListener;
+
     public RewardsFragment() {
         // Required empty public constructor
     }
@@ -60,6 +64,7 @@ public class RewardsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("FRAGMENT", "RewardsFragment onCreateView");
         View view = inflater.inflate(R.layout.fragment_rewards, container, false);
         ButterKnife.bind(this, view);
         ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
@@ -74,7 +79,7 @@ public class RewardsFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new RewardsFragmentOffersAdapter(mContentOffers, (LyonRewardsApplication) getActivity().getApplication()));
+        mAdapter = new RecyclerViewMaterialAdapter(new RewardsFragmentOffersAdapter(mContentOffers, (MainActivity) getActivity()));
         mRecyclerView.setAdapter(mAdapter);
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
@@ -98,11 +103,39 @@ public class RewardsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
+    public void updateCustom() {
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("FRAGMENT", "RewardsFragment on resume");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("FRAGMENT", "RewardsFragment onSaveInstanceState");
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onReplaceFragment(String newFragmentTag, String newFragmentName, Fragment newFragment);
+    }
 }

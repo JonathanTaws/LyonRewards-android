@@ -32,9 +32,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".view.MainActivity"></activity>
 
-        <activity android:name=".view.rewards.OfferDetailActivity"
+        <!--<activity android:name=".view.rewards.OfferDetailFragment"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".view.MainActivity"></activity>
+            android:parentActivityName=".view.MainActivity"></activity>-->
 
 
         <meta-data

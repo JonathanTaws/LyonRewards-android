@@ -77,6 +77,7 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
             // Map
             SupportMapFragment mMapFragment = SupportMapFragment.newInstance();
             mMapFragment.getMapAsync(this);
+
             FragmentTransaction fragmentTransaction = mChildFragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.event_detail_mapview_container, mMapFragment);
             fragmentTransaction.commit();

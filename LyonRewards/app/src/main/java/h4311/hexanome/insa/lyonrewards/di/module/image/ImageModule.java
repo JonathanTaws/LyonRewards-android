@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -21,6 +22,8 @@ public class ImageModule {
 
     private Context mContext;
 
+    private boolean loaderInit = false;
+
     public ImageModule(Context context) {
         this.mContext = context;
     }
@@ -28,14 +31,17 @@ public class ImageModule {
     @Provides
     @Singleton
     ImageLoaderConfiguration provideImageLoaderConfiguration() {
-        Log.d("DAGGER", "provideImageLoaderConfiguration");
         return new ImageLoaderConfiguration.Builder(mContext).build();
     }
 
     @Provides
     @Singleton
     ImageLoader provideImageLoader(ImageLoaderConfiguration config) {
-        ImageLoader.getInstance().init(config);
+        if (!loaderInit) {
+            ImageLoader.getInstance().init(config);
+            loaderInit = true;
+        }
+
         return ImageLoader.getInstance();
     }
 
