@@ -56,7 +56,7 @@ public class EventSuccessCardView extends LinearLayout {
         mDescription.setText(qrCodeCitizenAct.getDescription());
         mNbPoints.setText(String.valueOf(qrCodeCitizenAct.getPoints()));
 
-        if (qrCodeCitizenAct.isCompleted().booleanValue()) {
+        if (qrCodeCitizenAct.isCompleted()) {
             mImage.setImageResource(R.drawable.icon_success_key_finished);
             mDate.setText(qrCodeCitizenAct.getCompletedDateString());
         } else {

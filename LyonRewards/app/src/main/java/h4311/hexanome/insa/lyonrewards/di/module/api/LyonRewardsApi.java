@@ -39,6 +39,11 @@ public class LyonRewardsApi {
         allOffers.enqueue(callback);
     }
 
+    public void getOfferById(int offerId, Callback<Offer> callback) {
+        Call<Offer> call = mLyonRewardsEndpoint.getOfferById(offerId);
+        call.enqueue(callback);
+    }
+
     public void getAllEvents(Callback<List<Event>> callback) {
         Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents();
         allEvents.enqueue(callback);

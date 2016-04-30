@@ -33,10 +33,14 @@ import h4311.hexanome.insa.lyonrewards.business.Offer;
  */
 public class OfferDetailFragment extends Fragment {
 
-    public static final String INTENT_OFFER = "h4311.hexanome.insa.lyonrewards.view.rewards.offer";
+    public static final String INTENT_OFFER = "arg_offer";
+    public static final String INTENT_IS_PAID = "arg_is_paid";
 
     //@Inject
 //    protected LyonRewardsApi lyonRewardsApi;
+
+    @BindView(R.id.card_offer_used)
+    protected View mCardOfferIsUsed;
 
     @BindView(R.id.offer_detail_partner_name)
     protected TextView mPartnerName;
@@ -75,15 +79,21 @@ public class OfferDetailFragment extends Fragment {
     ImageLoader mImageLoader;
 
     private Offer mOffer;
+    private boolean isPaid;
 
     public OfferDetailFragment() {
         // Required empty public constructor
     }
 
     public static OfferDetailFragment newInstance(Offer offer) {
+        return newInstance(offer, false);
+    }
+
+    public static OfferDetailFragment newInstance(Offer offer, boolean isPaid) {
         OfferDetailFragment fragment = new OfferDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(INTENT_OFFER, offer);
+        args.putBoolean(INTENT_IS_PAID, isPaid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,6 +111,11 @@ public class OfferDetailFragment extends Fragment {
 
         if (getArguments() != null) {
             mOffer = getArguments().getParcelable(INTENT_OFFER);
+            isPaid = getArguments().getBoolean(INTENT_IS_PAID);
+
+            if (isPaid) {
+                mCardOfferIsUsed.setVisibility(View.VISIBLE);
+            }
 
             mPartnerName.setText(mOffer.getPartner().getName());
             mPartnerDescription.setText(mOffer.getPartner().getDescription());
@@ -121,6 +136,7 @@ public class OfferDetailFragment extends Fragment {
         if (mOffer != null) {
             Bitmap myBitmap = QRCode.from("www.example.org").withSize(mQrCodeSize, mQrCodeSize).bitmap();
             mQrCodeImage.setImageBitmap(myBitmap);
+            mCardOfferIsUsed.setVisibility(View.GONE);
             mPayButton.setVisibility(View.GONE);
             mQrCodeLayout.setVisibility(View.VISIBLE);
         }
@@ -141,4 +157,17 @@ public class OfferDetailFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+
+    public boolean hasSameOffer(int idOffer) {
+        return (mOffer != null && mOffer.getId() == idOffer);
+    }
+
+    public void setOfferAsPaid() {
+        mCardOfferIsUsed.setVisibility(View.VISIBLE);
+        mPayButton.setVisibility(View.VISIBLE);
+        mQrCodeLayout.setVisibility(View.GONE);
+    }
+
+
 }

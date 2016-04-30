@@ -30,6 +30,9 @@ public interface LyonRewardsEndpoint {
     @GET("offers")
     Call<List<Offer>> getAllOffers();
 
+    @GET("offers/{id}")
+    Call<Offer> getOfferById(@Path("id") int offerId);
+
     @GET("events")
     Call<List<Event>> getAllEvents();
 

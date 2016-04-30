@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "988055759912",
+    "project_id": "android-lyonrewards"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988055759912:android:8957c0e2ed072d81",
+        "android_client_info": {
+          "package_name": "h4311.hexanome.insa.lyonrewards"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQPjP8Dz9DukdimS_RPAm6x960K2bh898"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

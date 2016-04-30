@@ -1,13 +1,19 @@
 package h4311.hexanome.insa.lyonrewards.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,6 +39,8 @@ import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
+import h4311.hexanome.insa.lyonrewards.di.module.gcm.QuickstartPreferences;
+import h4311.hexanome.insa.lyonrewards.di.module.gcm.RegistrationIntentService;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
@@ -41,6 +49,9 @@ import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener {
 
@@ -51,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Intent arg
     public static final String INTENT_USER_CONNECTED = "usertoken";
+
 
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
@@ -70,8 +82,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Inject
     protected ConnectionManager mConnectionManager;
 
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private boolean isReceiverRegistered;
+
+    private BroadcastReceiver mGcmMessageBroadcastReceiver;
+    private boolean isGcmMessageReceiverRegistered;
+
     protected Stack<HistoryFragment> historyFragments = new Stack<>();
     private ActionBarDrawerToggle toggle;
+
+    public static final String ARG_ID_OFFER_READ = "idOfferRead";
+
+    private Fragment currentFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +114,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
         // Update nav header
-        View hView =  navigationView.getHeaderView(0);
+        View hView = navigationView.getHeaderView(0);
         TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
         drawerUserTitle.setText(mConnectionManager.getConnectedUser().getFirstName() + " " + mConnectionManager.getConnectedUser().getLastName());
         TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
@@ -102,14 +126,91 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                Log.d("GCM", "sentToken : " + sentToken);
+            }
+        };
 
+        mGcmMessageBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // // TODO: 30/04/2016
+                Log.d("GCM", "Message received and notify !");
 
+                String idOfferRead = intent.getStringExtra(ARG_ID_OFFER_READ);
+                int idOffer = Integer.parseInt(idOfferRead);
+
+                HistoryFragment lastHistory = historyFragments.peek();
+
+                if (currentFragment instanceof OfferDetailFragment) {
+                    OfferDetailFragment offerDetailFragment = (OfferDetailFragment) currentFragment;
+                    if (offerDetailFragment.hasSameOffer(idOffer)) {
+                        offerDetailFragment.setOfferAsPaid();
+                    } else {
+                        displayPaidOfferFragment(idOffer);
+                    }
+                } else {
+                    displayPaidOfferFragment(idOffer);
+                }
+            }
+        };
+
+        // Registering BroadcastReceiver
+        registerReceiver();
+
+        // todo check play services ?
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Default fragment
-        Fragment initialFragment = new EventsFragment();
-        setFragment(initialFragment, EventsFragment.getFragmentTag(), EventsFragment.getFragmentTitle(), false);
+        String extraOfferIdString = getIntent().getStringExtra(ARG_ID_OFFER_READ);
+        if (extraOfferIdString != null) {
+            displayPaidOfferFragment(Integer.parseInt(extraOfferIdString));
+        } else {
+            // Default fragment
+            Fragment initialFragment = new EventsFragment();
+            setFragment(initialFragment, EventsFragment.getFragmentTag(), EventsFragment.getFragmentTitle(), false);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
+        /*String extraOfferIdString = getIntent().getStringExtra(ARG_ID_OFFER_READ);
+        if (extraOfferIdString != null) {
+            displayPaidOfferFragment(Integer.parseInt(extraOfferIdString));
+        }*/
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmMessageBroadcastReceiver);
+        isReceiverRegistered = false;
+        isGcmMessageReceiverRegistered = false;
+        super.onPause();
+    }
+
+    private void registerReceiver() {
+        if (!isReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                    new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+            isReceiverRegistered = true;
+        }
+        if (!isGcmMessageReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mGcmMessageBroadcastReceiver,
+                    new IntentFilter(QuickstartPreferences.GCM_MESSAGE_RECEIVED));
+            isGcmMessageReceiverRegistered = true;
+        }
     }
 
     @Override
@@ -141,6 +242,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 super.onBackPressed();
             }
         }
+    }
+
+    private void displayPaidOfferFragment(int idOffer) {
+
+        lyonRewardsApi.getOfferById(idOffer, new Callback<Offer>() {
+            @Override
+            public void onResponse(Call<Offer> call, Response<Offer> response) {
+                if (response.isSuccessful()) {
+                    Offer offer = response.body();
+                    Fragment fragment = OfferDetailFragment.newInstance(offer, true);
+                    String fragmentTitle = "Offre " + offer.getPartner().getName();
+                    List<Object> args = new ArrayList<>();
+                    args.add(offer);
+                    setFragment(fragment, OfferDetailFragment.getFragmentTag(), fragmentTitle, true, args, true);
+                } else {
+                    // todo handle error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Offer> call, Throwable t) {
+                // todo handle error
+            }
+        });
+
+        //oldFragment = OfferDetailFragment.newInstance((Offer) previous.getArgs().get(0));
+
+
     }
 
 
@@ -212,6 +341,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
+
+        currentFragment = fragment;
     }
 
     public void setFragment(Fragment fragment, String tag, String title, boolean previousIcon) {
@@ -234,9 +365,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Bundle bundle = new Bundle();
 
-        if(id == R.id.nav_scan_qrcode) {
+        if (id == R.id.nav_scan_qrcode) {
             //If fragment is already running, don't do anything
-            QrReaderFragment qrReaderFragment = (QrReaderFragment)getSupportFragmentManager().findFragmentByTag(MainActivity.QR_SCANNER_FRAGMENT);
+            QrReaderFragment qrReaderFragment = (QrReaderFragment) getSupportFragmentManager().findFragmentByTag(MainActivity.QR_SCANNER_FRAGMENT);
             if (qrReaderFragment != null && qrReaderFragment.isVisible()) {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
@@ -244,13 +375,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             fragment = QrReaderFragment.newInstance(bundle);
             fragmentName = MainActivity.QR_SCANNER_FRAGMENT;
-        }
-        else if(id == R.id.nav_events) {
+        } else if (id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
             fragmentName = EventsFragment.getFragmentTag();
             fragmentTitle = EventsFragment.getFragmentTitle();
-        }
-        else if (id == R.id.nav_rewards) {
+        } else if (id == R.id.nav_rewards) {
             fragment = RewardsFragment.newInstance();
             fragmentName = MainActivity.REWARDS_FRAGMENT;
             fragmentTitle = "Boutique";
