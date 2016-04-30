@@ -2,7 +2,6 @@ package h4311.hexanome.insa.lyonrewards.view.events;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,14 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +57,16 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         private FragmentManager mChildFragmentManager;
 
         @BindView(R.id.event_detail_success_recyclerview)
-        protected RecyclerView mRecyclerView;
+        protected RecyclerView mRecyclerViewDone;
 
-        private RecyclerView.Adapter mAdapter;
+        @BindView(R.id.event_detail_success_recyclerview_unknown)
+        protected RecyclerView mRecyclerViewUnknown;
 
-        private List<QRCodeCitizenAct> mContentSuccess = new ArrayList<>();
+        private RecyclerView.Adapter mAdapterDone;
+        private RecyclerView.Adapter mAdapterUnknown;
+
+        private List<QRCodeCitizenAct> mContentSuccessDone = new ArrayList<>();
+        private List<QRCodeCitizenAct> mContentSuccessUnknown = new ArrayList<>();
 
         @Inject
         protected LyonRewardsApi mLyonRewardsApi;
@@ -89,35 +85,54 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         public void setEvent(Event event) {
             mEvent = event;
 
-            // Update components
-
-
             // RecyclerView binding
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mActivity);
-            mRecyclerView.setLayoutManager(layoutManager);
-            mRecyclerView.setHasFixedSize(true);
+            mRecyclerViewDone.setLayoutManager(layoutManager);
+            mRecyclerViewDone.setHasFixedSize(true);
+            mRecyclerViewDone.setNestedScrollingEnabled(false);
 
-            mAdapter = new EventSuccessAdapter(mContentSuccess);
-            mRecyclerView.setAdapter(mAdapter);
+            mAdapterDone = new EventSuccessAdapter(mContentSuccessDone);
+            mRecyclerViewDone.setAdapter(mAdapterDone);
 
-            MaterialViewPagerHelper.registerRecyclerView(mActivity, mRecyclerView, null);
+            MaterialViewPagerHelper.registerRecyclerView(mActivity, mRecyclerViewDone, null);
+
+            RecyclerView.LayoutManager layoutManagerUnknown = new LinearLayoutManager(mActivity);
+            mRecyclerViewUnknown.setLayoutManager(layoutManagerUnknown);
+            mRecyclerViewUnknown.setHasFixedSize(true);
+            mRecyclerViewUnknown.setNestedScrollingEnabled(false);
+
+            mAdapterUnknown = new EventSuccessAdapter(mContentSuccessUnknown);
+            mRecyclerViewUnknown.setAdapter(mAdapterUnknown);
+
+            MaterialViewPagerHelper.registerRecyclerView(mActivity, mRecyclerViewUnknown, null);
 
             mLyonRewardsApi.getQrCodesFromEvent(mEvent.getId(), mConnectionManager.getConnectedUser().getId(), new Callback<List<QRCodeCitizenAct>>() {
                 @Override
                 public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
-                    mContentSuccess.addAll(response.body());
-                    mAdapter.notifyDataSetChanged();
+                    if (response.isSuccessful()) {
+                        for (QRCodeCitizenAct qrCodeCitizenAct : response.body()) {
+                            if (qrCodeCitizenAct.isCompleted()) {
+                                mContentSuccessDone.add(qrCodeCitizenAct);
+                            } else {
+                                mContentSuccessUnknown.add(qrCodeCitizenAct);
+                            }
+                            mAdapterDone.notifyDataSetChanged();
+                            mAdapterUnknown.notifyDataSetChanged();
 
-                    // Update ui in main fragment
-                    int nbSuccess = mContentSuccess.size();
-                    int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
-                    float progress = mEvent.getUserProgression() * 100.0f;
-                    float progressTodo = 100 - progress;
-                    mSuccessNbTotal.setText(String.valueOf(nbSuccess));
-                    mSuccessNbDone.setText(String.valueOf(nbDone));
-                    mSuccessPercentageDone.setText(String.format("%.0f", progress));
-                    mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
-                    mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
+                            // Update ui in main fragment
+                            int nbSuccess = mContentSuccessDone.size();
+                            int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
+                            float progress = mEvent.getUserProgression() * 100.0f;
+                            float progressTodo = 100 - progress;
+                            mSuccessNbTotal.setText(String.valueOf(nbSuccess));
+                            mSuccessNbDone.setText(String.valueOf(nbDone));
+                            mSuccessPercentageDone.setText(String.format("%.0f", progress));
+                            mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
+                            mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
+                        }
+                    } else {
+                        // todo : handle error
+                    }
                 }
 
                 @Override
