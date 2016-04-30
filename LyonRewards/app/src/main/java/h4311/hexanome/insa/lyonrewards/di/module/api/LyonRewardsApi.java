@@ -135,4 +135,9 @@ public class LyonRewardsApi {
             return user;
         }
     }
+
+    public void getRankings(Callback<List<User>> callback) {
+        Call<List<User>> call = mLyonRewardsEndpoint.getRankings();
+        call.enqueue(callback);
+    }
 }
