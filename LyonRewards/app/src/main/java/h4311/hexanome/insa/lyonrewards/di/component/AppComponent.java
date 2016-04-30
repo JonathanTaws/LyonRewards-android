@@ -8,6 +8,7 @@ import h4311.hexanome.insa.lyonrewards.di.module.api.NetModule;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.AuthModule;
 import h4311.hexanome.insa.lyonrewards.di.module.image.ImageModule;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
+import h4311.hexanome.insa.lyonrewards.view.events.EventCardView;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailDescriptionFragmentTabViewAdapter;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailPointsFragment;
@@ -49,4 +50,6 @@ public interface AppComponent {
     void inject(EventDetailPointsFragmentTabViewAdapter.ViewHolder viewHolder);
 
     void inject(EventsFragmentMyEventsTab eventsFragmentMyEventsTab);
+
+    void inject(EventCardView eventCardView);
 }

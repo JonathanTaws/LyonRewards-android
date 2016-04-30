@@ -4,10 +4,29 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/event_detail_success_no_success_container"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:textColor="@color/text_color_normal"
+            android:padding="10dp"
+            android:textSize="@dimen/default_text_size"
+            android:text="Il n'existe actuellement aucun succès pour cet évènement."/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/event_detail_success_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"

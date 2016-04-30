@@ -25,6 +25,7 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
 
         protected MainActivity mMainActivity;
 
+        /*
         @BindView(R.id.card_event_title)
         protected TextView mTitle;
 
@@ -56,17 +57,23 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
         protected View mProgressBarTodo;
 
         @BindView(R.id.card_progressbar_numeric_label)
-        protected TextView mProgressBarLabel;
+        protected TextView mProgressBarLabel;*/
 
         private Event mEvent = null;
 
-        public ViewHolder(View view, MainActivity activity) {
+        private EventCardView eventCardView;
+
+        public ViewHolder(EventCardView view, MainActivity activity) {
             super(view);
+            this.eventCardView = view;
             ButterKnife.bind(this, view);
             mMainActivity = activity;
         }
 
         public void setEvent(Event event) {
+            mEvent = event;
+            eventCardView.setEvent(mEvent);
+            /*
             mEvent = event;
 
             mTitle.setText(event.getTitle());
@@ -99,6 +106,7 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
             mProgressBarDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
             mProgressBarTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, todo));
             mProgressBarLabel.setText(String.format("%.0f", progress));
+            */
         }
 
         @OnClick(R.id.card_event_card_view)
@@ -124,8 +132,7 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_event_layout, parent, false);
-        return new ViewHolder(view, mActivity);
+        return new ViewHolder(new EventCardView(mActivity), mActivity);
     }
 
     @Override

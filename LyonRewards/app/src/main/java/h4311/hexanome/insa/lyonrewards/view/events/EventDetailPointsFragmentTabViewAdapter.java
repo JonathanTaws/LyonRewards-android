@@ -62,6 +62,12 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         @BindView(R.id.event_detail_success_recyclerview_unknown)
         protected RecyclerView mRecyclerViewUnknown;
 
+        @BindView(R.id.event_detail_success_no_success_container)
+        protected View mNoSuccessContainer;
+
+        @BindView(R.id.event_detail_success_container)
+        protected View mSuccessContainer;
+
         private RecyclerView.Adapter mAdapterDone;
         private RecyclerView.Adapter mAdapterUnknown;
 
@@ -110,26 +116,37 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
                 @Override
                 public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
                     if (response.isSuccessful()) {
-                        for (QRCodeCitizenAct qrCodeCitizenAct : response.body()) {
-                            if (qrCodeCitizenAct.isCompleted()) {
-                                mContentSuccessDone.add(qrCodeCitizenAct);
-                            } else {
-                                mContentSuccessUnknown.add(qrCodeCitizenAct);
-                            }
-                            mAdapterDone.notifyDataSetChanged();
-                            mAdapterUnknown.notifyDataSetChanged();
 
-                            // Update ui in main fragment
-                            int nbSuccess = mContentSuccessDone.size();
-                            int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
-                            float progress = mEvent.getUserProgression() * 100.0f;
-                            float progressTodo = 100 - progress;
-                            mSuccessNbTotal.setText(String.valueOf(nbSuccess));
-                            mSuccessNbDone.setText(String.valueOf(nbDone));
-                            mSuccessPercentageDone.setText(String.format("%.0f", progress));
-                            mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
-                            mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
+                        List<QRCodeCitizenAct> listQrCode = response.body();
+
+                        if (listQrCode.isEmpty()) {
+                            mNoSuccessContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            mSuccessContainer.setVisibility(View.VISIBLE);
+                            for (QRCodeCitizenAct qrCodeCitizenAct : listQrCode) {
+                                if (qrCodeCitizenAct.isCompleted()) {
+                                    mContentSuccessDone.add(qrCodeCitizenAct);
+                                } else {
+                                    mContentSuccessUnknown.add(qrCodeCitizenAct);
+                                }
+                                mAdapterDone.notifyDataSetChanged();
+                                mAdapterUnknown.notifyDataSetChanged();
+
+                                // Update ui in main fragment
+                                int nbSuccess = mContentSuccessDone.size();
+                                int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
+                                float progress = mEvent.getUserProgression() * 100.0f;
+                                float progressTodo = 100 - progress;
+                                mSuccessNbTotal.setText(String.valueOf(nbSuccess));
+                                mSuccessNbDone.setText(String.valueOf(nbDone));
+                                mSuccessPercentageDone.setText(String.format("%.0f", progress));
+                                mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
+                                mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
+                            }
                         }
+
+
+
                     } else {
                         // todo : handle error
                     }

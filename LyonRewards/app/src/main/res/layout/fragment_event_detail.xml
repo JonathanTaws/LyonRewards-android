@@ -28,7 +28,7 @@
             app:viewpager_transparentToolbar="false"
             app:viewpager_animatedHeaderImage="false"
             app:viewpager_disableToolbar="true"
-            app:viewpager_pagerTitleStrip="@layout/scrolltab_tab_layout"
+            app:viewpager_pagerTitleStrip="@layout/scrolltab_tab_layout_without_alpha"
 
             />
 

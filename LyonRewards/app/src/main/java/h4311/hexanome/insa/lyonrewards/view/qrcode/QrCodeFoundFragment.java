@@ -199,7 +199,7 @@ public class QrCodeFoundFragment extends Fragment {
             return;
         }
 
-        mCardViewEventContainer.addView(new EventCardView(getContext(), eventReceived));
+        mCardViewEventContainer.addView(new EventCardView(getActivity(), eventReceived));
         mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeReceived));
 
         // Set the content view to 0% opacity but visible, so that it is visible

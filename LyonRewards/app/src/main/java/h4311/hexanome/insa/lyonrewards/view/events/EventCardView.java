@@ -1,14 +1,22 @@
 package h4311.hexanome.insa.lyonrewards.view.events;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 
@@ -18,8 +26,6 @@ import h4311.hexanome.insa.lyonrewards.business.Event;
 public class EventCardView extends LinearLayout {
 
     private static int MAX_LENGTH_DESCRIPTION = 100;
-
-    private Event mEvent;
 
     @BindView(R.id.card_event_title)
     protected TextView mTitle;
@@ -54,19 +60,33 @@ public class EventCardView extends LinearLayout {
     @BindView(R.id.card_progressbar_numeric_label)
     protected TextView mProgressBarLabel;
 
-    public EventCardView(Context context, Event event) {
-        super(context);
-        mEvent = event;
+    @BindView(R.id.card_event_image)
+    protected ImageView mEventImage;
+
+    @Inject
+    ImageLoader mImageLoader;
+
+    public EventCardView(Activity activity) {
+        super(activity);
+
+        ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
 
         setOrientation(LinearLayout.VERTICAL);
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View child = inflater.inflate(R.layout.cardview_event_layout, null);
         ButterKnife.bind(this, child);
 
         addView(child);
+    }
 
+    public EventCardView(Activity activity, Event event) {
+        this(activity);
+        setEvent(event);
+    }
+
+    public void setEvent(Event event) {
         mTitle.setText(event.getTitle());
 
         mStartDate.setText(event.getStartDateString());
@@ -92,11 +112,14 @@ public class EventCardView extends LinearLayout {
         mPublishDate.setText(event.getPublishDateString());
 
         // Progress bar
-        float progress = mEvent.getUserProgression() * 100.0f;
+        float progress = event.getUserProgression() * 100.0f;
         float todo = 100 - progress;
         mProgressBarDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
         mProgressBarTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, todo));
         mProgressBarLabel.setText(String.valueOf((int) progress));
+
+        // Image
+        mImageLoader.displayImage(event.getImageUrl(), mEventImage);
     }
 
 }

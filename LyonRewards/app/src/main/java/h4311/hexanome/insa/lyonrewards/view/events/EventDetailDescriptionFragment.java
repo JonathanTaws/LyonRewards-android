@@ -85,6 +85,8 @@ public class EventDetailDescriptionFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
 
+
+
         mAdapter = new RecyclerViewMaterialAdapter(new EventDetailDescriptionFragmentTabViewAdapter(mContentEvents, getActivity(), getChildFragmentManager()));
         mRecyclerView.setAdapter(mAdapter);
 

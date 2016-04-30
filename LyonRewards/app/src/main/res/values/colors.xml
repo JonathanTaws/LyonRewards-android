@@ -3,4 +3,11 @@
     <color name="colorPrimary">#c42127</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorBackground">#222222</color>
+    <color name="scrolltab_tab_bg_color">#96000000</color>
+    <color name="colorBackgroundLight">#3a3a3a</color>
+    <color name="white">#ffffff</color>
+
+    <color name="text_color_normal">#000000</color>
 </resources>
+

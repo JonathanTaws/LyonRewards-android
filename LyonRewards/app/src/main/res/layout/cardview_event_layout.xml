@@ -29,8 +29,9 @@
                 android:layout_height="@dimen/card_event_image_size"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:padding="10dp"
-                android:src="@drawable/header_thumbnail" />
+                android:layout_margin="10dp"
+                android:src="@mipmap/lyon_rewards_logo"
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/card_event_title"
@@ -150,7 +151,7 @@
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="70"
-                    android:background="#757575" />
+                    android:background="@color/colorBackgroundLight" />
 
             </LinearLayout>
 

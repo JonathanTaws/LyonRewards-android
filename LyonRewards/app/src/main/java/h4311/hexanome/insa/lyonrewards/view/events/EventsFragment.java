@@ -74,7 +74,8 @@ public class EventsFragment extends Fragment {
 
         // Todo : make a custom MaterialViewPager ?
         mViewPager.getViewPager().setAdapter(new EventsFragmentPagerAdapter(getActivity().getSupportFragmentManager()));
-        mViewPager.setMaterialViewPagerListener(new EventsFragmentPagerListener());
+
+        mViewPager.setMaterialViewPagerListener(new EventsFragmentPagerListener(getActivity()));
 
         mViewPager.getViewPager().setOffscreenPageLimit(mViewPager.getViewPager().getAdapter().getCount());
         mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());

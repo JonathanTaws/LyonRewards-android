@@ -48,6 +48,10 @@ public class Event implements Parcelable {
     @Expose
     private Double longitude;
 
+    @SerializedName("image_url")
+    @Expose
+    private String imageUrl;
+
     @SerializedName("tags")
     @Expose
     private List<Integer> tags = new ArrayList<>();
@@ -76,7 +80,7 @@ public class Event implements Parcelable {
      * @param tags
      * @param userProgression
      */
-    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, List<Integer> tags, Float userProgression) {
+    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, String imageUrl, List<Integer> tags, Float userProgression) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -85,6 +89,7 @@ public class Event implements Parcelable {
         this.endDate = endDate;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.imageUrl = imageUrl;
         this.tags = tags;
         this.userProgression = userProgression;
     }
@@ -222,6 +227,14 @@ public class Event implements Parcelable {
         this.longitude = longitude;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     /**
      * @return The tags
      */
@@ -259,6 +272,7 @@ public class Event implements Parcelable {
         out.writeLong(endDate.getTime());
         out.writeDouble(latitude);
         out.writeDouble(longitude);
+        out.writeString(imageUrl);
         out.writeList(tags);
         out.writeFloat(userProgression);
     }
@@ -282,9 +296,11 @@ public class Event implements Parcelable {
         this.endDate = new Date(in.readLong());
         this.latitude = in.readDouble();
         this.longitude = in.readDouble();
+        this.imageUrl = in.readString();
         in.readList(this.tags, Integer.class.getClassLoader());
         this.userProgression = in.readFloat();
     }
+
 
 
 }

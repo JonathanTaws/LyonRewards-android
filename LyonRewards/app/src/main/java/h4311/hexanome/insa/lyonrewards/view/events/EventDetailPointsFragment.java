@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
@@ -75,16 +77,20 @@ public class EventDetailPointsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
+        if (mRecyclerView != null) {
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new RecyclerViewMaterialAdapter(new EventDetailPointsFragmentTabViewAdapter(mContentEvents, getActivity(), getChildFragmentManager()));
-        mRecyclerView.setAdapter(mAdapter);
+            mAdapter = new RecyclerViewMaterialAdapter(new EventDetailPointsFragmentTabViewAdapter(mContentEvents, getActivity(), getChildFragmentManager()));
+            mRecyclerView.setAdapter(mAdapter);
 
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
+            MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
+        }
+
+
     }
 
     @Override
