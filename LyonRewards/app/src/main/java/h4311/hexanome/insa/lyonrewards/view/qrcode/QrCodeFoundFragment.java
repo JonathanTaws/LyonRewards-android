@@ -126,7 +126,7 @@ public class QrCodeFoundFragment extends Fragment {
                         return false;
                     }
                     eventReceived = event;
-                    QRCodeCitizenAct qrCodeCitizenAct = lyonRewardsApi.getQrCodeById(mQrCodeContent.getActId());
+                    QRCodeCitizenAct qrCodeCitizenAct = lyonRewardsApi.getQrCodeById(mQrCodeContent.getActId(), connectionManager.getConnectedUser().getId());
                     if (qrCodeCitizenAct == null) {
                         return false;
                     }

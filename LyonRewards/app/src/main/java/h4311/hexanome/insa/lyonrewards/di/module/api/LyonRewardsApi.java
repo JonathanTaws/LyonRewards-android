@@ -84,13 +84,13 @@ public class LyonRewardsApi {
         event.enqueue(callback);
     }
 
-    public void getQrCodeById(int qrCodeId, Callback<QRCodeCitizenAct> callback) {
-        Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId);
+    public void getQrCodeById(int qrCodeId, int userId, Callback<QRCodeCitizenAct> callback) {
+        Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId, userId, "qrcode");
         call.enqueue(callback);
     }
 
-    public QRCodeCitizenAct getQrCodeById(int qrCodeId) {
-        Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId);
+    public QRCodeCitizenAct getQrCodeById(int qrCodeId, int userId) {
+        Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId, userId, "qrcode");
         try {
             Response<QRCodeCitizenAct> execute = call.execute();
             if (execute.isSuccessful()) {
