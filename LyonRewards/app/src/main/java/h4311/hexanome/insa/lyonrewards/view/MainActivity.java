@@ -47,6 +47,7 @@ import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeContent;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
+import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 import retrofit2.Call;
@@ -383,6 +384,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = RewardsFragment.newInstance();
             fragmentName = MainActivity.REWARDS_FRAGMENT;
             fragmentTitle = "Boutique";
+        }
+        else if(id == R.id.nav_rankings) {
+            fragment = RankingsFragment.newInstance(bundle);
+            fragmentName = RankingsFragment.getFragmentTag();
+            fragmentTitle = RankingsFragment.getFragmentTitle();
         }
 
         drawer.closeDrawer(GravityCompat.START);
