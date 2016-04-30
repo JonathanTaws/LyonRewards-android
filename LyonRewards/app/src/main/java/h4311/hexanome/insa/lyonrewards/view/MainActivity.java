@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.maintoolbar)
     protected Toolbar toolbar;
 
-    @BindView(R.id.fab)
-    protected FloatingActionButton fab;
-
     @BindView(R.id.drawer_layout)
     protected DrawerLayout drawer;
 
@@ -106,15 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
 
         // Update nav header
         View hView = navigationView.getHeaderView(0);
@@ -179,17 +167,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Fragment initialFragment = new EventsFragment();
             setFragment(initialFragment, EventsFragment.getFragmentTag(), EventsFragment.getFragmentTitle(), false);
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver();
-        /*String extraOfferIdString = getIntent().getStringExtra(ARG_ID_OFFER_READ);
-        if (extraOfferIdString != null) {
-            displayPaidOfferFragment(Integer.parseInt(extraOfferIdString));
-        }*/
     }
 
     @Override
@@ -298,9 +281,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return true;
                 }
                 break;
+
+            case R.id.action_scan_qrcode:
+                showScanQrCodeFragment();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showScanQrCodeFragment() {
+        // If fragment is already running, don't do anything
+        QrReaderFragment qrReaderFragment = (QrReaderFragment) getSupportFragmentManager().findFragmentByTag(MainActivity.QR_SCANNER_FRAGMENT);
+        if (qrReaderFragment != null && qrReaderFragment.isVisible()) {
+            return;
+        }
+
+        QrReaderFragment fragment = QrReaderFragment.newInstance(new Bundle());
+        setFragment(fragment, MainActivity.QR_SCANNER_FRAGMENT, "Scanner un QR Code", false);
     }
 
     @Override

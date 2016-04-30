@@ -45,4 +45,5 @@
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>
     <string name="gcm_defaultSenderId">988055759912</string>
+    <string name="action_scan_qrcode">Scanner un QR Code</string>
 </resources>
