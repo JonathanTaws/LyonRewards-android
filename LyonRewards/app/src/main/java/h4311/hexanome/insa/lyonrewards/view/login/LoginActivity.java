@@ -65,7 +65,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
+        getSupportActionBar().setTitle("Connexion");
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
