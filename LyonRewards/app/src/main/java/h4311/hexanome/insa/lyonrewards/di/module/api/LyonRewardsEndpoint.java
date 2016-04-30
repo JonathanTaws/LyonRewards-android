@@ -57,4 +57,7 @@ public interface LyonRewardsEndpoint {
     @FormUrlEncoded
     @POST("login/")
     Call<UserConnection> login(@Field("username") String username, @Field("password") String password);
+
+    @GET("users/ranking")
+    Call<List<User>> getRankings();
 }

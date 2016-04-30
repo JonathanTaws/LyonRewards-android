@@ -35,11 +35,11 @@ public class User implements Parcelable {
     @Expose
     private String email;
 
-    @SerializedName("globalPoints")
+    @SerializedName("global_points")
     @Expose
     private int globalPoints;
 
-    @SerializedName("currentPoints")
+    @SerializedName("current_points")
     @Expose
     private int currentPoints;
 
