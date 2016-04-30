@@ -1,7 +1,14 @@
 package h4311.hexanome.insa.lyonrewards.view.qrcode;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.transition.Scene;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,6 +33,7 @@ import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
+import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventCardView;
 import h4311.hexanome.insa.lyonrewards.view.events.EventSuccessCardView;
 import retrofit2.Call;
@@ -38,6 +47,18 @@ public class QrCodeFoundFragment extends Fragment {
 
     private static final String ARG_QR_CODE_VALUE = "qrCodeContent";
 
+    @BindView(R.id.content)
+    protected View mContentView;
+
+    @BindView(R.id.loading_spinner)
+    protected View mLoadingView;
+
+    @BindInt(R.integer.anim_duration_short)
+    protected int mShortAnimationDuration;
+
+    @BindView(R.id.qrcode_found_first_view_container)
+    protected LinearLayout mFirstViewContainer;
+
     @BindView(R.id.button_reclaim_points)
     protected Button buttonReclaimPoints;
 
@@ -47,6 +68,8 @@ public class QrCodeFoundFragment extends Fragment {
     @BindView(R.id.cardview_qrcode_success_container)
     protected LinearLayout mCardViewQrCodeContainer;
 
+
+
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
@@ -54,6 +77,11 @@ public class QrCodeFoundFragment extends Fragment {
     protected ConnectionManager connectionManager;
 
     private QrCodeContent mQrCodeContent;
+
+    private Scene mSceneClaimButtonClicked;
+
+    private Event eventReceived;
+    private QRCodeCitizenAct qrCodeReceived;
 
     public QrCodeFoundFragment() {
         // Required empty public constructor
@@ -84,8 +112,39 @@ public class QrCodeFoundFragment extends Fragment {
         if (getArguments() != null) {
             mQrCodeContent = getArguments().getParcelable(ARG_QR_CODE_VALUE);
 
-            // Event card view
+            // Initially hide the content view.
+            mContentView.setVisibility(View.GONE);
 
+            mSceneClaimButtonClicked = Scene.getSceneForLayout(mCardViewQrCodeContainer, R.layout.cardview_qrcode_success, getContext());
+
+            // Event card view
+            new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    Event event = lyonRewardsApi.getEventById(mQrCodeContent.getEventId(), connectionManager.getConnectedUser().getId());
+                    if (event == null) {
+                        return false;
+                    }
+                    eventReceived = event;
+                    QRCodeCitizenAct qrCodeCitizenAct = lyonRewardsApi.getQrCodeById(mQrCodeContent.getActId());
+                    if (qrCodeCitizenAct == null) {
+                        return false;
+                    }
+                    qrCodeReceived = qrCodeCitizenAct;
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(final Boolean success) {
+                    if (success) {
+                        crossfadeViews();
+                    } else {
+                        // todo handle error
+                    }
+                }
+            }.execute();
+
+            /*
             lyonRewardsApi.getEventById(mQrCodeContent.getEventId(), connectionManager.getConnectedUser().getId(), new Callback<Event>() {
                 @Override
                 public void onResponse(Call<Event> call, Response<Event> response) {
@@ -93,6 +152,8 @@ public class QrCodeFoundFragment extends Fragment {
                         Event event = response.body();
                         EventCardView eventCardView = new EventCardView(getContext(), event);
                         mCardViewEventContainer.addView(eventCardView);
+                        eventReceived = true;
+                        crossfadeViews();
                     } else {
                         // Todo error
                     }
@@ -110,6 +171,8 @@ public class QrCodeFoundFragment extends Fragment {
                     if (response.isSuccessful()) {
                         QRCodeCitizenAct qrCodeCitizenAct = response.body();
                         mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeCitizenAct));
+                        qrCodeReceived = true;
+                        crossfadeViews();
                     }
                     else {
                         // TODO Handle error
@@ -122,13 +185,47 @@ public class QrCodeFoundFragment extends Fragment {
                     // TODO Handle error
                     Log.d("API", "getQrCodeById " + t.getMessage());
                 }
-            });
+            });*/
 
         }
 
 
 
         return view;
+    }
+
+    private void crossfadeViews() {
+        if (eventReceived == null || qrCodeReceived == null) {
+            return;
+        }
+
+        mCardViewEventContainer.addView(new EventCardView(getContext(), eventReceived));
+        mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeReceived));
+
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        mContentView.setAlpha(0f);
+        mContentView.setVisibility(View.VISIBLE);
+
+        // Animate the content view to 100% opacity, and clear any animation
+        // listener set on the view.
+        mContentView.animate()
+                .alpha(1f)
+                .setDuration(mShortAnimationDuration)
+                .setListener(null);
+
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step (it won't
+        // participate in layout passes, etc.)
+        mLoadingView.animate()
+                .alpha(0f)
+                .setDuration(mShortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mLoadingView.setVisibility(View.GONE);
+                    }
+                });
     }
 
    /* @Override
@@ -180,6 +277,9 @@ public class QrCodeFoundFragment extends Fragment {
     @OnClick(R.id.button_reclaim_points)
     public void buttonReclaimPointsOnClick() {
 
+        TransitionManager.go(mSceneClaimButtonClicked, TransitionInflater.from(getContext()).inflateTransition(R.transition.slide_left));
+
+        /*
         lyonRewardsApi.addActToUser(connectionManager.getConnectedUser(), mQrCodeContent.getActId(), new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -188,10 +288,10 @@ public class QrCodeFoundFragment extends Fragment {
                     User user = response.body();
                     connectionManager.setConnectedUser(user);
 
-/*
-                    Intent intent = new Intent(getApplicationContext(), EventDetailActivity.class);
-                    intent.putExtra(EventDetailActivity.INTENT_EVENT, event);
-                    startActivity(intent);*/
+
+//                    Intent intent = new Intent(getApplicationContext(), EventDetailActivity.class);
+  //                  intent.putExtra(EventDetailActivity.INTENT_EVENT, event);
+    //                startActivity(intent);
                 }
             }
 
@@ -199,6 +299,6 @@ public class QrCodeFoundFragment extends Fragment {
             public void onFailure(Call<User> call, Throwable t) {
                 // TODO
             }
-        });
+        });*/
     }
 }

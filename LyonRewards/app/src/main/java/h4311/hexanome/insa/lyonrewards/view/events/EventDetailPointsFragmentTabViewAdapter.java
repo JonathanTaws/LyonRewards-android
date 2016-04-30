@@ -34,6 +34,7 @@ import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,11 +70,13 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
 
         private RecyclerView.Adapter mAdapter;
 
-        // Todo business class
         private List<QRCodeCitizenAct> mContentSuccess = new ArrayList<>();
 
         @Inject
         protected LyonRewardsApi mLyonRewardsApi;
+
+        @Inject
+        protected ConnectionManager mConnectionManager;
 
         public ViewHolder(View view, FragmentActivity activity, FragmentManager childFragmentManager) {
             super(view);
@@ -99,7 +102,7 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
 
             MaterialViewPagerHelper.registerRecyclerView(mActivity, mRecyclerView, null);
 
-            mLyonRewardsApi.getQrCodesFromEvent(mEvent.getId(), new Callback<List<QRCodeCitizenAct>>() {
+            mLyonRewardsApi.getQrCodesFromEvent(mEvent.getId(), mConnectionManager.getConnectedUser().getId(), new Callback<List<QRCodeCitizenAct>>() {
                 @Override
                 public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
                     mContentSuccess.addAll(response.body());

@@ -30,7 +30,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:padding="18dp"
-                android:src="@drawable/icon_success_key_finished" />
+                android:src="@drawable/icon_success_key_unknown" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -33,23 +33,34 @@ public class EventSuccessCardView extends LinearLayout {
     @BindView(R.id.card_qrcode_success_date)
     protected TextView mDate;
 
-    private QRCodeCitizenAct mQrCodeCitizenAct;
-
-    public EventSuccessCardView(Context context, QRCodeCitizenAct qrCodeCitizenAct) {
+    public EventSuccessCardView(Context context) {
         super(context);
-        mQrCodeCitizenAct = qrCodeCitizenAct;
 
         setOrientation(LinearLayout.VERTICAL);
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = inflater.inflate(R.layout.cardview_qrcode_success, null);
         ButterKnife.bind(this, child);
 
         addView(child);
+    }
 
+    public EventSuccessCardView(Context context, QRCodeCitizenAct qrCodeReceived) {
+        this(context);
+        setQrCodeCitizenAct(qrCodeReceived);
+    }
+
+    public void setQrCodeCitizenAct(QRCodeCitizenAct qrCodeCitizenAct) {
         mTitle.setText(qrCodeCitizenAct.getTitle());
         mDescription.setText(qrCodeCitizenAct.getDescription());
         mNbPoints.setText(String.valueOf(qrCodeCitizenAct.getPoints()));
+
+        if (qrCodeCitizenAct.isCompleted().booleanValue()) {
+            mImage.setImageResource(R.drawable.icon_success_key_finished);
+            mDate.setText(qrCodeCitizenAct.getCompletedDateString());
+        } else {
+            mDate.setVisibility(GONE);
+        }
     }
 }

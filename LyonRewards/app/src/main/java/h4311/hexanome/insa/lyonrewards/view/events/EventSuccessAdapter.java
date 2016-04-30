@@ -20,7 +20,9 @@ import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
  */
 public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private EventSuccessCardView view;
 
+        /*
         @BindView(R.id.card_qrcode_success_image)
         protected ImageView mImage;
 
@@ -34,17 +36,20 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
         protected TextView mNbPoints;
 
         @BindView(R.id.card_qrcode_success_date)
-        protected TextView mDate;
+        protected TextView mDate;*/
 
-        public ViewHolder(View view) {
+        public ViewHolder(EventSuccessCardView view) {
             super(view);
+            this.view = view;
             ButterKnife.bind(this, view);
         }
 
         public void setSuccess(QRCodeCitizenAct qrCodeCitizenAct) {
+            /*
             mTitle.setText(qrCodeCitizenAct.getTitle());
             mDescription.setText(qrCodeCitizenAct.getDescription());
-            mNbPoints.setText(String.valueOf(qrCodeCitizenAct.getPoints()));
+            mNbPoints.setText(String.valueOf(qrCodeCitizenAct.getPoints()));*/
+            view.setQrCodeCitizenAct(qrCodeCitizenAct);
         }
     }
 
@@ -56,8 +61,8 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
 
     @Override
     public EventSuccessAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_qrcode_success, parent, false);
-        return new ViewHolder(view);
+        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_qrcode_success, parent, false);
+        return new ViewHolder(new EventSuccessCardView(parent.getContext()));
     }
 
     @Override
@@ -67,7 +72,6 @@ public class EventSuccessAdapter extends RecyclerView.Adapter<EventSuccessAdapte
 
     @Override
     public int getItemCount() {
-        Log.d("COUNT", String.valueOf(successList.size()));
         return successList.size();
     }
 }

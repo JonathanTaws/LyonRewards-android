@@ -53,19 +53,51 @@ public class LyonRewardsApi {
         event.enqueue(callback);
     }
 
+    public Event getEventById(int eventId, int userId) {
+        Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId, userId);
+        try {
+            Response<Event> execute = event.execute();
+            if (execute.isSuccessful()) {
+                return execute.body();
+            } else {
+                // todo handle error
+                return null;
+            }
+        } catch (IOException e) {
+            // todo handle error
+            return null;
+        }
+    }
+
     public void getAllEvents(int userId, boolean userParticipatedOnly, Callback<List<Event>> callback) {
         Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents(userId, userParticipatedOnly);
         allEvents.enqueue(callback);
     }
 
-    public void getQrCodesFromEvent(int eventId, Callback<List<QRCodeCitizenAct>> callback) {
-        Call<List<QRCodeCitizenAct>> event = mLyonRewardsEndpoint.getQrCodeFromEvent(eventId);
+    public void getQrCodesFromEvent(int eventId, int userId, Callback<List<QRCodeCitizenAct>> callback) {
+        Call<List<QRCodeCitizenAct>> event = mLyonRewardsEndpoint.getQrCodeFromEvent(eventId, userId);
         event.enqueue(callback);
     }
 
     public void getQrCodeById(int qrCodeId, Callback<QRCodeCitizenAct> callback) {
         Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId);
         call.enqueue(callback);
+    }
+
+    public QRCodeCitizenAct getQrCodeById(int qrCodeId) {
+        Call<QRCodeCitizenAct> call = mLyonRewardsEndpoint.getQrCodeById(qrCodeId);
+        try {
+            Response<QRCodeCitizenAct> execute = call.execute();
+            if (execute.isSuccessful()) {
+                return execute.body();
+            } else {
+                // todo handle error
+                return null;
+            }
+        } catch (IOException e) {
+            // todo handle error
+            return null;
+        }
     }
 
 
