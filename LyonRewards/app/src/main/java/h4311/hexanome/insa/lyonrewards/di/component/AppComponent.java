@@ -51,7 +51,7 @@ public interface AppComponent {
     void inject(EventDetailPointsFragmentTabViewAdapter.ViewHolder viewHolder);
 
     void inject(EventsFragmentMyEventsTab eventsFragmentMyEventsTab);
-    
+
     void inject(EventCardView eventCardView);
 
     void inject(RankingsFragment rankingsFragment);
