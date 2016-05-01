@@ -99,7 +99,7 @@ public class OfferDetailFragment extends Fragment {
     }
 
     public static String getFragmentTag() {
-        return "OfferDetailFragment";
+        return "QR_SCANNER_FRAGMENT";
     }
 
     @Override

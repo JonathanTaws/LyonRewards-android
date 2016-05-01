@@ -57,7 +57,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener, ConnectionManager.ConnectedUserChangedListener {
 
-    public static final String QR_SCANNER_FRAGMENT = "QR_SCANNER_FRAGMENT";
     public static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
     public static final String REWARDS_FRAGMENT = "REWARDS_FRAGMENT";
     public static final String REWARDS_DETAIL_FRAGMENT = "REWARDS_DETAIL_FRAGMENT";
@@ -217,10 +216,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     oldFragment = OfferDetailFragment.newInstance((Offer) previous.getArgs().get(0));
                 } else if (previousTag.equals(EventDetailFragment.getFragmentTag())) {
                     oldFragment = EventDetailFragment.newInstance((Event) previous.getArgs().get(0));
+                } else if (previousTag.equals(QrReaderFragment.getFragmentTag())) {
+                    oldFragment = QrReaderFragment.newInstance(new Bundle());
                 } else if (previousTag.equals(QrCodeFoundFragment.getFragmentTag())) {
                     oldFragment = QrCodeFoundFragment.newInstance((QrCodeContent) previous.getArgs().get(0));
                 }
-                // todo : previous scan qr code
                 if (oldFragment != null) {
                     setFragment(oldFragment, previous.getTag(), previous.getTitle(), previous.isPreviousIcon(), previous.getArgs(), false);
                 }
@@ -285,8 +285,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.action_scan_qrcode:
+                drawer.closeDrawer(GravityCompat.START);
                 showScanQrCodeFragment();
-                break;
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -294,13 +295,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void showScanQrCodeFragment() {
         // If fragment is already running, don't do anything
-        QrReaderFragment qrReaderFragment = (QrReaderFragment) getSupportFragmentManager().findFragmentByTag(MainActivity.QR_SCANNER_FRAGMENT);
+        QrReaderFragment qrReaderFragment = (QrReaderFragment) getSupportFragmentManager().findFragmentByTag(QrReaderFragment.getFragmentTag());
         if (qrReaderFragment != null && qrReaderFragment.isVisible()) {
             return;
         }
 
         QrReaderFragment fragment = QrReaderFragment.newInstance(new Bundle());
-        setFragment(fragment, MainActivity.QR_SCANNER_FRAGMENT, "Scanner un QR Code", false);
+        setFragment(fragment, QrReaderFragment.getFragmentTag(), "Scanner un QR code", false);
     }
 
     @Override
@@ -368,14 +369,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_scan_qrcode) {
             //If fragment is already running, don't do anything
-            QrReaderFragment qrReaderFragment = (QrReaderFragment) getSupportFragmentManager().findFragmentByTag(MainActivity.QR_SCANNER_FRAGMENT);
+            QrReaderFragment qrReaderFragment = (QrReaderFragment) getSupportFragmentManager().findFragmentByTag(QrReaderFragment.getFragmentTag());
             if (qrReaderFragment != null && qrReaderFragment.isVisible()) {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
 
             fragment = QrReaderFragment.newInstance(bundle);
-            fragmentName = MainActivity.QR_SCANNER_FRAGMENT;
+            fragmentName = QrReaderFragment.getFragmentTag();
         } else if (id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
             fragmentName = EventsFragment.getFragmentTag();

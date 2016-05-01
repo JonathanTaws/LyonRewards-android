@@ -40,6 +40,7 @@ public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRC
 
     private static Toast currentToast = null;
 
+    // todo : remove bundle if not used
     public static QrReaderFragment newInstance(Bundle bundle) {
         QrReaderFragment fragment = new QrReaderFragment();
         fragment.setArguments(bundle);
@@ -47,6 +48,10 @@ public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRC
         ReflectionUtils.performInjection();
 
         return fragment;
+    }
+
+    public static String getFragmentTag() {
+        return "OfferDetailFragment";
     }
 
     @Override
