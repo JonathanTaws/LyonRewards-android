@@ -407,6 +407,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentName = RankingsFragment.getFragmentTag();
             fragmentTitle = RankingsFragment.getFragmentTitle();
         }
+        else {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_activity_content_frame);
+            fragment = currentFragment;
+        }
 
         drawer.closeDrawer(GravityCompat.START);
 
