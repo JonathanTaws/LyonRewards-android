@@ -68,6 +68,12 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
         @BindView(R.id.event_detail_success_container)
         protected View mSuccessContainer;
 
+        @BindView(R.id.event_detail_success_unlocked_empty)
+        protected View mSuccessDoneEmpty;
+
+        @BindView(R.id.event_detail_success_locked_empty)
+        protected View mSuccessUnknownEmpty;
+
         private RecyclerView.Adapter mAdapterDone;
         private RecyclerView.Adapter mAdapterUnknown;
 
@@ -129,24 +135,33 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
                                 } else {
                                     mContentSuccessUnknown.add(qrCodeCitizenAct);
                                 }
-                                mAdapterDone.notifyDataSetChanged();
-                                mAdapterUnknown.notifyDataSetChanged();
-
-                                // Update ui in main fragment
-                                int nbSuccess = mContentSuccessDone.size();
-                                int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
-                                float progress = mEvent.getUserProgression() * 100.0f;
-                                float progressTodo = 100 - progress;
-                                mSuccessNbTotal.setText(String.valueOf(nbSuccess));
-                                mSuccessNbDone.setText(String.valueOf(nbDone));
-                                mSuccessPercentageDone.setText(String.format("%.0f", progress));
-                                mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
-                                mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
                             }
+
+                            if (mContentSuccessDone.isEmpty()) {
+                                mRecyclerViewDone.setVisibility(View.GONE);
+                                mSuccessDoneEmpty.setVisibility(View.VISIBLE);
+                            } else {
+                                mAdapterDone.notifyDataSetChanged();
+                            }
+
+                            if (mContentSuccessUnknown.isEmpty()) {
+                                mRecyclerViewUnknown.setVisibility(View.GONE);
+                                mSuccessUnknownEmpty.setVisibility(View.VISIBLE);
+                            } else {
+                                mAdapterUnknown.notifyDataSetChanged();
+                            }
+
+                            // Update ui in main fragment
+                            int nbSuccess = mContentSuccessDone.size();
+                            int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
+                            float progress = mEvent.getUserProgression() * 100.0f;
+                            float progressTodo = 100 - progress;
+                            mSuccessNbTotal.setText(String.valueOf(nbSuccess));
+                            mSuccessNbDone.setText(String.valueOf(nbDone));
+                            mSuccessPercentageDone.setText(String.format("%.0f", progress));
+                            mViewSuccessProgressDone.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progress));
+                            mViewSuccessProgressTodo.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, progressTodo));
                         }
-
-
-
                     } else {
                         // todo : handle error
                     }
