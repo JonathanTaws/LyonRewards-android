@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
@@ -27,6 +28,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,8 +40,14 @@ public class RewardsFragment extends Fragment {
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
+    @Inject
+    protected ConnectionManager mConnectionManager;
+
     @BindView(R.id.rewards_offers_recyclerview)
     protected RecyclerView mRecyclerView;
+
+    @BindView(R.id.rewards_nb_points)
+    protected TextView mNbPoints;
 
     private RecyclerView.Adapter mAdapter;
 
@@ -77,6 +85,8 @@ public class RewardsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mNbPoints.setText(String.valueOf(mConnectionManager.getConnectedUser().getCurrentPoints()));
 
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);

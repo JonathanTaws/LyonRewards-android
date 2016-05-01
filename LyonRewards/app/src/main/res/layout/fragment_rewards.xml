@@ -24,6 +24,7 @@
                 android:text="Points restants : " />
 
             <TextView
+                android:id="@+id/rewards_nb_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#222"
