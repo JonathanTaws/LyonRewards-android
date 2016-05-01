@@ -1,15 +1,11 @@
 package h4311.hexanome.insa.lyonrewards.view.events;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.RectF;
-import android.media.ThumbnailUtils;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +15,16 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import org.apmem.tools.layouts.FlowLayout;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -75,6 +70,12 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
         @BindView(R.id.event_detail_image)
         protected ImageView mImage;
 
+        @BindView(R.id.event_detail_address)
+        protected TextView mAddress;
+
+        @BindView(R.id.event_detail_tags_container)
+        protected FlowLayout mTagsContainer;
+
         private Event mEvent = null;
         private FragmentActivity mActivity;
         private FragmentManager mChildFragmentManager;
@@ -93,39 +94,6 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
             ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
         }
 
-        public Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {
-            int sourceWidth = source.getWidth();
-            int sourceHeight = source.getHeight();
-
-            // Compute the scaling factors to fit the new height and width, respectively.
-            // To cover the final image, the final scaling will be the bigger
-            // of these two.
-            float xScale = (float) newWidth / sourceWidth;
-            float yScale = (float) newHeight / sourceHeight;
-            float scale = Math.max(xScale, yScale);
-
-            // Now get the size of the source bitmap when scaled
-            float scaledWidth = scale * sourceWidth;
-            float scaledHeight = scale * sourceHeight;
-
-            // Let's find out the upper left coordinates if the scaled bitmap
-            // should be centered in the new size give by the parameters
-            float left = (newWidth - scaledWidth) / 2;
-            float top = (newHeight - scaledHeight) / 2;
-
-            // The target rectangle for the new, scaled version of the source bitmap will now
-            // be
-            RectF targetRect = new RectF(left, top, left + scaledWidth, top + scaledHeight);
-
-            // Finally, we create a new bitmap of the specified size and draw our new,
-            // scaled bitmap onto it.
-            Bitmap dest = Bitmap.createBitmap(newWidth, newHeight, source.getConfig());
-            Canvas canvas = new Canvas(dest);
-            canvas.drawBitmap(source, null, targetRect, null);
-
-            return dest;
-        }
-
         public void setEvent(Event event) {
             mEvent = event;
 
@@ -139,6 +107,13 @@ public class EventDetailDescriptionFragmentTabViewAdapter extends RecyclerView.A
                     }
                 });
             }
+
+            for (String tag : event.getTags()) {
+                mTagsContainer.addView(new TagCardView(mActivity, tag));
+            }
+
+
+            mAddress.setText("Localisation : " + event.getAddress());
 
             // Map
             SupportMapFragment mMapFragment = SupportMapFragment.newInstance();

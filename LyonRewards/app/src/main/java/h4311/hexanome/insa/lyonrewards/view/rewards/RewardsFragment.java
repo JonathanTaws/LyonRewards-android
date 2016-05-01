@@ -62,8 +62,7 @@ public class RewardsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("FRAGMENT", "RewardsFragment onCreateView");
         View view = inflater.inflate(R.layout.fragment_rewards, container, false);
         ButterKnife.bind(this, view);

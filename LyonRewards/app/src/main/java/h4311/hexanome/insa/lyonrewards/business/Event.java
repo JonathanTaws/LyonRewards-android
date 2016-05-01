@@ -56,6 +56,10 @@ public class Event implements Parcelable {
     @Expose
     private List<String> tags = new ArrayList<>();
 
+    @SerializedName("address")
+    @Expose
+    private String address;
+
     @SerializedName("progress")
     @Expose
     private Float userProgression;
@@ -78,9 +82,10 @@ public class Event implements Parcelable {
      * @param latitude
      * @param longitude
      * @param tags
+     * @param address
      * @param userProgression
      */
-    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, String imageUrl, List<String> tags, Float userProgression) {
+    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, String imageUrl, List<String> tags, String address, Float userProgression) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -91,6 +96,7 @@ public class Event implements Parcelable {
         this.longitude = longitude;
         this.imageUrl = imageUrl;
         this.tags = tags;
+        this.address = address;
         this.userProgression = userProgression;
     }
 
@@ -249,6 +255,14 @@ public class Event implements Parcelable {
         this.tags = tags;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Float getUserProgression() {
         return userProgression;
     }
@@ -274,6 +288,7 @@ public class Event implements Parcelable {
         out.writeDouble(longitude);
         out.writeString(imageUrl);
         out.writeList(tags);
+        out.writeString(address);
         out.writeFloat(userProgression);
     }
 
@@ -298,6 +313,7 @@ public class Event implements Parcelable {
         this.longitude = in.readDouble();
         this.imageUrl = in.readString();
         in.readList(this.tags, String.class.getClassLoader());
+        this.address = in.readString();
         this.userProgression = in.readFloat();
     }
 
