@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="Période : "
                 android:textColor="#666"
-                android:textSize="14dp" />
+                android:textSize="@dimen/default_text_size" />
 
             <TextView
                 android:id="@+id/event_detail_several_dates_prefix"
@@ -83,14 +83,14 @@
                 android:layout_height="wrap_content"
                 android:text="du "
                 android:textColor="#666"
-                android:textSize="14dp" />
+                android:textSize="@dimen/default_text_size" />
 
             <TextView
                 android:id="@+id/event_detail_one_date_prefix"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="le "
-                android:textSize="14dp"
+                android:textSize="@dimen/default_text_size"
                 android:textColor="#666"
                 android:visibility="gone" />
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:text="99/99/9999"
                 android:textColor="#666"
-                android:textSize="14dp" />
+                android:textSize="@dimen/default_text_size" />
 
             <TextView
                 android:id="@+id/event_detail_end_date_prefix"
@@ -142,11 +142,57 @@
             android:layout_width="match_parent"
             android:layout_height="100dp" />-->
 
-        <TextView
+
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:paddingLeft="@dimen/card_event_border_padding"
+            android:paddingBottom="10dp"
+            android:text="Tags"
+            android:textColor="#666"
+            android:textSize="14dp" />-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/darker_gray" />
+
+        <org.apmem.tools.layouts.FlowLayout
+            android:id="@+id/event_detail_tags_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tags : "
+                android:textSize="@dimen/default_text_size"/>
+        </org.apmem.tools.layouts.FlowLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/event_detail_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/card_event_border_padding"
+            android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="Localisation : "
             android:textColor="#666"

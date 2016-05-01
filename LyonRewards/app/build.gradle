@@ -76,4 +76,6 @@ dependencies {
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:1.0.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.github.kenglxn:QRGen:2.2.0'
+
+    compile 'org.apmem.tools:layouts:1.10@aar'
 }
