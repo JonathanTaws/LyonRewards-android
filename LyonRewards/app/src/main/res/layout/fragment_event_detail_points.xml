@@ -6,172 +6,209 @@
 
     <LinearLayout
         android:id="@+id/event_detail_success_no_success_container"
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
             android:padding="10dp"
-            android:textSize="@dimen/default_text_size"
-            android:text="Il n'existe actuellement aucun succès pour cet évènement."/>
+            android:text="Il n'existe actuellement aucun succès pour cet évènement."
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/default_text_size" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/event_detail_success_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <LinearLayout
-            android:id="@+id/event_detail_success_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/card_event_border_padding">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+
+                android:src="@drawable/ic_vpn_key_yellow_50_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="Succès déverrouillés : "
+                android:textColor="#222"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/event_detail_success_nb_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="4"
+                android:textColor="#222"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text=" sur "
+                android:textColor="#222"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/event_detail_success_nb_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="10"
+                android:textColor="#222"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="@dimen/card_event_border_padding">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-
-                    android:src="@drawable/ic_vpn_key_yellow_50_24dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Succès déverrouillés : "
-                    android:textColor="#222"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/event_detail_success_nb_done"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="4"
-                    android:textColor="#222"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text=" sur "
-                    android:textColor="#222"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/event_detail_success_nb_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="10"
-                    android:textColor="#222"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                android:orientation="vertical"
+                android:paddingLeft="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingLeft="15dp">
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:paddingBottom="2dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/event_detail_success_percentage_done"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="right"
-                        android:paddingBottom="2dp">
-                        <TextView
-                            android:id="@+id/event_detail_success_percentage_done"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="10" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" %"
-                            android:textSize="12dp" />
-                        </LinearLayout>
+                        android:text="10" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" %"
+                        android:textSize="12dp" />
+                </LinearLayout>
 
-                        <View
-                            android:id="@+id/event_detail_success_progressbar_done"
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="10"
-                            android:background="@color/colorPrimary" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp">
 
-                        <View
-                            android:id="@+id/event_detail_success_progressbar_todo"
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="90"
-                            android:background="#757575" />
+                    <View
+                        android:id="@+id/event_detail_success_progressbar_done"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="10"
+                        android:background="@color/colorPrimary" />
 
-                    </LinearLayout>
+                    <View
+                        android:id="@+id/event_detail_success_progressbar_todo"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="90"
+                        android:background="#757575" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/event_detail_success_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+        </LinearLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/event_detail_success_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
 
+        <LinearLayout
+            android:id="@+id/event_detail_success_unlocked_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="@dimen/card_event_border_padding">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-
-                    android:src="@drawable/ic_vpn_key_black_24dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Succès restants"
-                    android:textColor="#222"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/event_detail_success_recyclerview_unknown"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:padding="10dp"
+                android:text="Vous n'avez pas déverouillé de succès pour l'instant."
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/default_text_size" />
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/card_event_border_padding">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+
+                android:src="@drawable/ic_vpn_key_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="Succès restants"
+                android:textColor="#222"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/event_detail_success_recyclerview_unknown"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:id="@+id/event_detail_success_locked_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Il ne vous reste aucun succès à déverouiller."
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/default_text_size" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </FrameLayout>
