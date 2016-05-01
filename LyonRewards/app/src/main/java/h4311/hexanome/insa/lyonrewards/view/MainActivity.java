@@ -408,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTitle = RankingsFragment.getFragmentTitle();
         }
         else {
+            // Stay on currentFragment if option is not yet implemented
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_activity_content_frame);
             fragment = currentFragment;
         }
