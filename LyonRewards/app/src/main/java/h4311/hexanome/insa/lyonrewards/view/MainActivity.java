@@ -54,12 +54,14 @@ import h4311.hexanome.insa.lyonrewards.view.qrcode.QrReaderFragment;
 import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
+import h4311.hexanome.insa.lyonrewards.view.tracker.TrackerFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener, ConnectionManager.ConnectedUserChangedListener {
 
+    public static final String TRACKER_FRAGMENT = "TRACKER_FRAGMENT";
     public static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
     public static final String REWARDS_DETAIL_FRAGMENT = "REWARDS_DETAIL_FRAGMENT";
 
@@ -408,7 +410,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             fragment = QrReaderFragment.newInstance(bundle);
             fragmentName = QrReaderFragment.getFragmentTag();
-        } else if (id == R.id.nav_events) {
+        } else if (id == R.id.nav_tracker) {
+            fragment = TrackerFragment.newInstance();
+            fragmentName = MainActivity.TRACKER_FRAGMENT;
+            fragmentTitle = "Mes déplacements";
+        }
+        else if (id == R.id.nav_events) {
             fragment = EventsFragment.newInstance(bundle);
             fragmentName = EventsFragment.getFragmentTag();
             fragmentTitle = EventsFragment.getFragmentTitle();
@@ -421,6 +428,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = RankingsFragment.newInstance(bundle);
             fragmentName = RankingsFragment.getFragmentTag();
             fragmentTitle = RankingsFragment.getFragmentTitle();
+        }
+        else {
+            // Stay on currentFragment if option is not yet implemented
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_activity_content_frame);
+            fragment = currentFragment;
         }
 
         drawer.closeDrawer(GravityCompat.START);

@@ -6,10 +6,14 @@
             android:id="@+id/nav_scan_qrcode"
             android:icon="@drawable/icon_qrcode_grey"
             android:title="@string/menu_scan_qrcode" />
-
+        <item
+            android:id="@+id/nav_tracker"
+            android:icon="@drawable/ic_menu_tracker"
+            android:title="@string/menu_tracker" />
     </group>
 
     <group android:checkableBehavior="single" android:id="@+id/menu_group_middle">
+
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_event_black_24dp"
@@ -26,7 +30,6 @@
             android:id="@+id/nav_rankings"
             android:icon="@drawable/ic_ranking"
             android:title="@string/menu_rankings" />
-
     </group>
 
     <group android:checkableBehavior="single" android:id="@+id/menu_group_bottom">
