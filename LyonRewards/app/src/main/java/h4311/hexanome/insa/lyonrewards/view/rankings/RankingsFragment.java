@@ -7,9 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,12 @@ public class RankingsFragment extends Fragment {
 
     @BindView(R.id.ranking_nb_points)
     protected TextView mRankingNbPointsHeader;
+
+    @BindView(R.id.ranking_nb_points_last_24h)
+    protected TextView mRankingNbPointsLast24h;
+
+    @BindView(R.id.ranking_layout)
+    protected RelativeLayout mRankingLayoutHeader;
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
@@ -98,15 +106,22 @@ public class RankingsFragment extends Fragment {
 
         ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
 
-        mRankingPositionHeader.setText("#");
-        mRankingUsernameHeader.setText("Utilisateur");
-        mRankingNbPointsHeader.setText("Total de points");
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        // Set special size for table header
+        ViewGroup.LayoutParams layoutParams = mRankingLayoutHeader.getLayoutParams();
+        layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+        mRankingLayoutHeader.setLayoutParams(layoutParams);
+
+        mRankingPositionHeader.setText(R.string.ranking_header_position);
+        mRankingUsernameHeader.setText(R.string.ranking_header_username);
+        mRankingNbPointsHeader.setText(R.string.ranking_header_nb_points);
+        mRankingNbPointsLast24h.setText(R.string.ranking_header_nb_points_last_24h);
+
+        // Set RecyclerView (table) configuration
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -114,7 +129,7 @@ public class RankingsFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-
+        // Retrieve rankings from API
         lyonRewardsApi.getRankings(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {

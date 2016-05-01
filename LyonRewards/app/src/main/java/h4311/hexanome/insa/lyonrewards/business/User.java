@@ -39,6 +39,14 @@ public class User implements Parcelable {
     @Expose
     private int globalPoints;
 
+    @SerializedName("last_tfh_points")
+    @Expose
+    private int last24hPoints;
+
+    @SerializedName("last_month_points")
+    @Expose
+    private int lastMonthPoints;
+
     @SerializedName("current_points")
     @Expose
     private int currentPoints;
@@ -52,7 +60,7 @@ public class User implements Parcelable {
 
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -61,6 +69,8 @@ public class User implements Parcelable {
         this.email = email;
         this.globalPoints = globalPoints;
         this.currentPoints = currentPoints;
+        this.last24hPoints = last24hPoints;
+        this.lastMonthPoints = lastMonthPoints;
     }
 
     public int getId() {
@@ -135,6 +145,22 @@ public class User implements Parcelable {
         this.currentToken = currentToken;
     }
 
+    public int getLast24hPoints() {
+        return last24hPoints;
+    }
+
+    public void setLast24hPoints(int last24hPoints) {
+        this.last24hPoints = last24hPoints;
+    }
+
+    public int getLastMonthPoints() {
+        return lastMonthPoints;
+    }
+
+    public void setLastMonthPoints(int lastMonthPoints) {
+        this.lastMonthPoints = lastMonthPoints;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof User) {
@@ -142,7 +168,7 @@ public class User implements Parcelable {
             // Check equality without taking into account the token
             return email.equals(user.email) && firstName.equals(user.firstName) && lastName.equals(user.lastName)
                     && password.equals(user.password) && username.equals(user.username) && currentPoints == user.currentPoints
-                    && globalPoints == user.globalPoints;
+                    && globalPoints == user.globalPoints && last24hPoints == user.last24hPoints && lastMonthPoints == user.lastMonthPoints;
         }
         return false;
     }
@@ -167,6 +193,8 @@ public class User implements Parcelable {
         this.globalPoints = in.readInt();
         this.currentPoints = in.readInt();
         this.currentToken = in.readString();
+        this.last24hPoints = in.readInt();
+        this.lastMonthPoints = in.readInt();
     }
 
     @Override
@@ -185,5 +213,7 @@ public class User implements Parcelable {
         dest.writeInt(globalPoints);
         dest.writeInt(currentPoints);
         dest.writeString(currentToken);
+        dest.writeInt(last24hPoints);
+        dest.writeInt(lastMonthPoints);
     }
 }

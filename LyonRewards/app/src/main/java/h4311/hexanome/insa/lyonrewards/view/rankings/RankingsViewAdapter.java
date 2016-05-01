@@ -37,6 +37,9 @@ public class RankingsViewAdapter extends RecyclerView.Adapter<RankingsViewAdapte
         @BindView(R.id.ranking_nb_points)
         protected TextView mRankingNbPoints;
 
+        @BindView(R.id.ranking_nb_points_last_24h)
+        protected TextView mRankingNbPointsLast24h;
+
         private User user;
 
         private User currentUser;
@@ -62,10 +65,12 @@ public class RankingsViewAdapter extends RecyclerView.Adapter<RankingsViewAdapte
                 mRankingPosition.setTypeface(null, Typeface.BOLD);
                 mRankingUsername.setTypeface(null, Typeface.BOLD);
                 mRankingNbPoints.setTypeface(null, Typeface.BOLD);
+                mRankingNbPointsLast24h.setTypeface(null, Typeface.BOLD);
             }
             mRankingPosition.setText(String.valueOf(ranking));
             mRankingUsername.setText(user.getUsername());
             mRankingNbPoints.setText(String.valueOf(user.getGlobalPoints()));
+            mRankingNbPointsLast24h.setText(String.valueOf(user.getLast24hPoints()));
         }
     }
 

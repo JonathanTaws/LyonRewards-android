@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/ranking_layout"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="40dp"
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ranking_position"
         tools:text="1."
-        android:width="50dp"
+        android:width="30dp"
         />
 
     <TextView
@@ -21,6 +22,7 @@
         android:id="@+id/ranking_username"
         android:layout_toRightOf="@id/ranking_position"
         android:layout_marginStart="5dp"
+        android:width="100dp"
         tools:text="Jonathan Taws"
         />
 
@@ -28,11 +30,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ranking_nb_points"
+        android:layout_toRightOf="@id/ranking_username"
+        android:layout_marginStart="15dp"
+        android:width="70dp"
+        tools:text="400"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ranking_nb_points_last_24h"
         android:layout_alignParentRight="true"
         android:gravity="right"
-        android:layout_toRightOf="@id/ranking_username"
-        android:layout_marginStart="5dp"
-        android:width="50dp"
+        android:layout_toRightOf="@id/ranking_nb_points"
+        android:layout_marginRight="15dp"
         tools:text="400"/>
 
 </RelativeLayout>
