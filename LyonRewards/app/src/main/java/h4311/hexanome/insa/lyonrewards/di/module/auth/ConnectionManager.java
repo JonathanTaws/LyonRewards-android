@@ -44,6 +44,13 @@ public class ConnectionManager {
         return mConnectedUser;
     }
 
+    public void debitCredit(int nbPoints) {
+        if (mConnectedUser != null) {
+            mConnectedUser.setCurrentPoints(mConnectedUser.getCurrentPoints() - nbPoints);
+            notifySubscribers();
+        }
+    }
+
     public interface ConnectedUserChangedListener {
         void updateConnectedUser(User user);
     }

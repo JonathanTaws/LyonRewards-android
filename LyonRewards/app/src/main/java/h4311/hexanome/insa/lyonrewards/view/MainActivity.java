@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
 
     public static final String ARG_ID_OFFER_READ = "idOfferRead";
+    public static final String ARG_POINTS_OFFER_READ = "scoreOfferRead";
 
     private Fragment currentFragment;
 
@@ -126,21 +127,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onReceive(Context context, Intent intent) {
                 // // TODO: 30/04/2016
                 Log.d("GCM", "Message received and notify !");
+                try {
+                    String idOfferRead = intent.getStringExtra(ARG_ID_OFFER_READ);
+                    int idOffer = Integer.parseInt(idOfferRead);
 
-                String idOfferRead = intent.getStringExtra(ARG_ID_OFFER_READ);
-                int idOffer = Integer.parseInt(idOfferRead);
+                    // Update user
+                    int nbPoints = Integer.parseInt(intent.getStringExtra(ARG_POINTS_OFFER_READ));
+                    mConnectionManager.debitCredit(nbPoints);
 
-                HistoryFragment lastHistory = historyFragments.peek();
+                    HistoryFragment lastHistory = historyFragments.peek();
 
-                if (currentFragment instanceof OfferDetailFragment) {
-                    OfferDetailFragment offerDetailFragment = (OfferDetailFragment) currentFragment;
-                    if (offerDetailFragment.hasSameOffer(idOffer)) {
-                        offerDetailFragment.setOfferAsPaid();
+                    if (currentFragment instanceof OfferDetailFragment) {
+                        OfferDetailFragment offerDetailFragment = (OfferDetailFragment) currentFragment;
+                        if (offerDetailFragment.hasSameOffer(idOffer)) {
+                            offerDetailFragment.setOfferAsPaid();
+                        } else {
+                            displayPaidOfferFragment(idOffer);
+                        }
                     } else {
                         displayPaidOfferFragment(idOffer);
                     }
-                } else {
-                    displayPaidOfferFragment(idOffer);
+                } catch (NullPointerException | NumberFormatException e) {
+                    // Ignore message
+                    Log.d("GCM", "Message received with wrong format.");
                 }
             }
         };

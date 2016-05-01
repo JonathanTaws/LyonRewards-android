@@ -42,6 +42,9 @@ public class OfferDetailFragment extends Fragment {
     @BindView(R.id.card_offer_used)
     protected View mCardOfferIsUsed;
 
+    @BindView(R.id.card_offer_used_text)
+    protected TextView mCardOfferIsUsedText;
+
     @BindView(R.id.offer_detail_partner_name)
     protected TextView mPartnerName;
 
@@ -114,6 +117,7 @@ public class OfferDetailFragment extends Fragment {
             isPaid = getArguments().getBoolean(INTENT_IS_PAID);
 
             if (isPaid) {
+                mCardOfferIsUsedText.setText("Cette offre vient d'être utilisée. Vous avez été débités de " + mOffer.getPoints() + " points.");
                 mCardOfferIsUsed.setVisibility(View.VISIBLE);
             }
 

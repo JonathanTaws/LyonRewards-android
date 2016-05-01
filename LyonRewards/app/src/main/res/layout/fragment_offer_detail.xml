@@ -14,26 +14,27 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_offer_used"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cardMarginVertical"
-            android:layout_marginLeft="@dimen/cardMarginHorizontal"
-            android:layout_marginRight="@dimen/cardMarginHorizontal"
-            android:layout_marginTop="@dimen/cardMarginVertical"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="4dp"
-            app:cardPreventCornerOverlap="false"
-            app:contentPadding="10dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_offer_used"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/cardMarginVertical"
+                android:layout_marginLeft="@dimen/cardMarginHorizontal"
+                android:layout_marginRight="@dimen/cardMarginHorizontal"
+                android:layout_marginTop="@dimen/cardMarginVertical"
+                android:visibility="gone"
                 app:cardBackgroundColor="@android:color/holo_blue_dark"
-                android:visibility="gone">
+                app:cardCornerRadius="0dp"
+                app:cardElevation="4dp"
+                app:cardPreventCornerOverlap="false"
+                app:contentPadding="10dp">
                 <TextView
+                    android:id="@+id/card_offer_used_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Cette offre vient d'être utilisée. Vous avez été débités de 999 points."
                     android:textColor="@android:color/white"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -70,8 +71,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_toLeftOf="@id/offer_detail_partner_image">
+                            android:layout_toLeftOf="@id/offer_detail_partner_image"
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -101,14 +102,16 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingTop="5dp"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:paddingTop="5dp">
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Adresse : "
                                     android:textColor="#666"
                                     android:textSize="14dp" />
+
                                 <TextView
                                     android:id="@+id/offer_detail_partner_address"
                                     android:layout_width="wrap_content"
@@ -126,8 +129,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"
                         android:background="@android:color/darker_gray" />
 
                     <TextView
@@ -141,8 +144,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingTop="5dp"
-                        >
+                        android:paddingTop="5dp">
+
                         <TextView
                             android:id="@+id/offer_detail_nbPoints_desc"
                             android:layout_width="wrap_content"
@@ -150,6 +153,7 @@
                             android:text="999"
                             android:textColor="#666"
                             android:textSize="14dp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -157,7 +161,6 @@
                             android:textColor="#666"
                             android:textSize="14dp" />
                     </LinearLayout>
-
 
 
                     <TextView
@@ -181,20 +184,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"
                         android:background="@android:color/darker_gray" />
 
                     <Button
                         android:id="@+id/offer_detail_pay_button"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:text="Obtenir pour 999 points"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        />
+                        android:text="Obtenir pour 999 points" />
 
                     <LinearLayout
                         android:id="@+id/offer_detail_qrcode_layout"
@@ -215,14 +217,9 @@
                             android:id="@+id/offer_detail_qrcode_image"
                             android:layout_width="@dimen/partner_qrcode_size"
                             android:layout_height="@dimen/partner_qrcode_size"
-                            android:layout_gravity="center"
-                            />
+                            android:layout_gravity="center" />
 
                     </LinearLayout>
-
-
-
-
 
 
                 </LinearLayout>
@@ -234,10 +231,7 @@
         </LinearLayout>
 
 
-
     </ScrollView>
-
-
 
 
 </FrameLayout>

@@ -41,6 +41,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private static final String TAG = "MyGcmListenerService";
 
     private static final String DATA_ID_OFFER = "id_offer";
+    private static final String DATA_SCORE = "score";
 
     /**
      * Called when message is received.
@@ -76,16 +77,17 @@ public class MyGcmListenerService extends GcmListenerService {
          *     - Update UI.
          */
 
-        Intent registrationComplete = new Intent(QuickstartPreferences.GCM_MESSAGE_RECEIVED);
+        Intent messageReceived = new Intent(QuickstartPreferences.GCM_MESSAGE_RECEIVED);
 // todo : set constant
-        registrationComplete.putExtra(MainActivity.ARG_ID_OFFER_READ, data.getString(DATA_ID_OFFER));
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        messageReceived.putExtra(MainActivity.ARG_ID_OFFER_READ, data.getString(DATA_ID_OFFER));
+        messageReceived.putExtra(MainActivity.ARG_POINTS_OFFER_READ, data.getString(DATA_SCORE));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(messageReceived);
 
         /**
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(data.getString(DATA_ID_OFFER), data.getString("score"), data.getString("title"));
+        sendNotification(data.getString(DATA_ID_OFFER), data.getString(DATA_SCORE), data.getString("title"));
         // [END_EXCLUDE]
     }
     // [END receive_message]
