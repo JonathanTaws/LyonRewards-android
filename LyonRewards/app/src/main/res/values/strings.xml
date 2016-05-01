@@ -20,6 +20,12 @@
 
     <string name="scan_prompt">Scanner un QR code pour obtenir des points</string>
 
+    <!-- Strings related to ranking -->
+    <string name="ranking_header_position">#</string>
+    <string name="ranking_header_username">Utilisateur</string>
+    <string name="ranking_header_nb_points">Total de points</string>
+    <string name="ranking_header_nb_points_last_24h">Points du jour</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Connexion</string>

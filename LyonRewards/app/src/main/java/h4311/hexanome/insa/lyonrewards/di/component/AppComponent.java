@@ -18,6 +18,7 @@ import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentMyEventsTab;
 import h4311.hexanome.insa.lyonrewards.view.login.LoginActivity;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundFragment;
 import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsFragment;
+import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsViewAdapter;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragmentOffersAdapter;
@@ -55,4 +56,6 @@ public interface AppComponent {
     void inject(EventCardView eventCardView);
 
     void inject(RankingsFragment rankingsFragment);
+
+    void inject(RankingsViewAdapter rankingsViewAdapter);
 }

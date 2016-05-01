@@ -1,5 +1,6 @@
 package h4311.hexanome.insa.lyonrewards.view.rankings;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.User;
+import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 
 /**
@@ -32,14 +37,21 @@ public class RankingsViewAdapter extends RecyclerView.Adapter<RankingsViewAdapte
         @BindView(R.id.ranking_nb_points)
         protected TextView mRankingNbPoints;
 
+        @BindView(R.id.ranking_nb_points_last_24h)
+        protected TextView mRankingNbPointsLast24h;
+
         private User user;
+
+        private User currentUser;
 
         private int ranking;
 
-        public ViewHolder(View view, MainActivity mainActivity) {
+        public ViewHolder(View view, MainActivity mainActivity, User currentUser) {
             super(view);
             ButterKnife.bind(this, view);
+
             mMainActivity = mainActivity;
+            this.currentUser = currentUser;
         }
 
         public void setUser(User user, int ranking) {
@@ -49,15 +61,25 @@ public class RankingsViewAdapter extends RecyclerView.Adapter<RankingsViewAdapte
         }
 
         private void displayUserRanking() {
+            if(user.equals(currentUser)) {
+                mRankingPosition.setTypeface(null, Typeface.BOLD);
+                mRankingUsername.setTypeface(null, Typeface.BOLD);
+                mRankingNbPoints.setTypeface(null, Typeface.BOLD);
+                mRankingNbPointsLast24h.setTypeface(null, Typeface.BOLD);
+            }
             mRankingPosition.setText(String.valueOf(ranking));
             mRankingUsername.setText(user.getUsername());
             mRankingNbPoints.setText(String.valueOf(user.getGlobalPoints()));
+            mRankingNbPointsLast24h.setText(String.valueOf(user.getLast24hPoints()));
         }
     }
 
     protected List<User> users;
 
     protected MainActivity mainActivity;
+
+    @Inject
+    protected ConnectionManager connectionManager;
 
     public RankingsViewAdapter(List<User> users, MainActivity mainActivity) {
         this.users = users;
@@ -67,7 +89,10 @@ public class RankingsViewAdapter extends RecyclerView.Adapter<RankingsViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ranking_layout, parent, false);
-        return new ViewHolder(view, mainActivity);
+
+        ((LyonRewardsApplication) mainActivity.getApplication()).getAppComponent().inject(this);
+
+        return new ViewHolder(view, mainActivity, connectionManager.getConnectedUser());
     }
 
     @Override
