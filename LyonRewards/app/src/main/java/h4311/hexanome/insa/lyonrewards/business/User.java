@@ -127,6 +127,26 @@ public class User implements Parcelable {
         this.currentPoints = currentPoints;
     }
 
+    public String getCurrentToken() {
+        return currentToken;
+    }
+
+    public void setCurrentToken(String currentToken) {
+        this.currentToken = currentToken;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User) {
+            User user = (User) obj;
+            // Check equality without taking into account the token
+            return email.equals(user.email) && firstName.equals(user.firstName) && lastName.equals(user.lastName)
+                    && password.equals(user.password) && username.equals(user.username) && currentPoints == user.currentPoints
+                    && globalPoints == user.globalPoints;
+        }
+        return false;
+    }
+
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         public User createFromParcel(Parcel in) {
             return new User(in);
@@ -165,13 +185,5 @@ public class User implements Parcelable {
         dest.writeInt(globalPoints);
         dest.writeInt(currentPoints);
         dest.writeString(currentToken);
-    }
-
-    public String getCurrentToken() {
-        return currentToken;
-    }
-
-    public void setCurrentToken(String currentToken) {
-        this.currentToken = currentToken;
     }
 }
