@@ -54,7 +54,7 @@ public class Event implements Parcelable {
 
     @SerializedName("tags")
     @Expose
-    private List<Integer> tags = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
     @SerializedName("progress")
     @Expose
@@ -80,7 +80,7 @@ public class Event implements Parcelable {
      * @param tags
      * @param userProgression
      */
-    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, String imageUrl, List<Integer> tags, Float userProgression) {
+    public Event(Integer id, String title, String description, Date publishDate, Date startDate, Date endDate, Double latitude, Double longitude, String imageUrl, List<String> tags, Float userProgression) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -238,14 +238,14 @@ public class Event implements Parcelable {
     /**
      * @return The tags
      */
-    public List<Integer> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
     /**
      * @param tags The tags
      */
-    public void setTags(List<Integer> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
@@ -297,7 +297,7 @@ public class Event implements Parcelable {
         this.latitude = in.readDouble();
         this.longitude = in.readDouble();
         this.imageUrl = in.readString();
-        in.readList(this.tags, Integer.class.getClassLoader());
+        in.readList(this.tags, String.class.getClassLoader());
         this.userProgression = in.readFloat();
     }
 
