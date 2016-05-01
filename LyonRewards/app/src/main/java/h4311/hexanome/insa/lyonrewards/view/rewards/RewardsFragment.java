@@ -56,6 +56,10 @@ public class RewardsFragment extends Fragment {
         return fragment;
     }
 
+    public static String getFragmentTag() {
+        return "REWARD_FRAGMENT";
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

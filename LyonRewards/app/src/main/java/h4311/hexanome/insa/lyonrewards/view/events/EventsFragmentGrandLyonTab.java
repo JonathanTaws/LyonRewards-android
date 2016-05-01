@@ -16,6 +16,7 @@ import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -103,6 +104,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
                     }
                     mNoDataText.setVisibility(View.VISIBLE);
                 } else {
+                    Collections.reverse(eventList);
                     mContentEvents.addAll(eventList);
                     mAdapter.notifyDataSetChanged();
                 }

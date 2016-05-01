@@ -44,7 +44,7 @@ public interface LyonRewardsEndpoint {
     Call<Event> getEventById(@Path("id") int eventId, @Query("userId") int userId);
 
     @GET("events")
-    Call<List<Event>> getAllEvents(@Query("userId") int userId, @Query("participatedOnly") boolean userParticipatedOnly);
+    Call<List<Event>> getAllEvents(@Query("userId") int userId, @Query("sort") String sortBy, @Query("participatedOnly") boolean userParticipatedOnly);
 
     /** ------------------------------------ CITIZEN ACTS ------------------------------------  **/
 

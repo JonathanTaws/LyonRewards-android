@@ -68,7 +68,7 @@ public class LyonRewardsApi {
     }
 
     public void getAllEvents(int userId, boolean userParticipatedOnly, Callback<List<Event>> callback) {
-        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents(userId, userParticipatedOnly);
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents(userId, "startDate", userParticipatedOnly);
         allEvents.enqueue(callback);
     }
 

@@ -26,7 +26,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -58,11 +61,22 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener, ConnectionManager.ConnectedUserChangedListener {
 
     public static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
-    public static final String REWARDS_FRAGMENT = "REWARDS_FRAGMENT";
     public static final String REWARDS_DETAIL_FRAGMENT = "REWARDS_DETAIL_FRAGMENT";
 
     // Intent arg
     public static final String INTENT_USER_CONNECTED = "usertoken";
+
+    private static final Map<String, Integer> MENU_FRAGMENT_ID;
+    static {
+        Map<String, Integer> map = new HashMap<>();
+        map.put(QrReaderFragment.getFragmentTag(), R.id.nav_scan_qrcode);
+        map.put(EventsFragment.getFragmentTag(), R.id.nav_events);
+        map.put(RewardsFragment.getFragmentTag(), R.id.nav_rewards);
+        // TODO : map.put(ProfileFragment.getFragmentTag(), R.id.nav_user_profil);
+        map.put(RankingsFragment.getFragmentTag(), R.id.nav_rankings);
+        // TODO : map.put(SettingsFragment.getFragmentTag(), R.id.nav_settings);
+        MENU_FRAGMENT_ID = Collections.unmodifiableMap(map);
+    }
 
 
     @BindView(R.id.maintoolbar)
@@ -165,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String extraOfferIdString = getIntent().getStringExtra(ARG_ID_OFFER_READ);
         if (extraOfferIdString != null) {
+            int nbPoints = Integer.parseInt(intent.getStringExtra(ARG_POINTS_OFFER_READ));
+            mConnectionManager.debitCredit(nbPoints);
             displayPaidOfferFragment(Integer.parseInt(extraOfferIdString));
         } else {
             // Default fragment
@@ -219,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String previousTag = previous.getTag();
                 if (previousTag.equals(EventsFragment.getFragmentTag())) {
                     oldFragment = new EventsFragment();
-                } else if (previousTag.equals(REWARDS_FRAGMENT)) {
+                } else if (previousTag.equals(RewardsFragment.getFragmentTag())) {
                     oldFragment = RewardsFragment.newInstance();
                 } else if (previousTag.equals(OfferDetailFragment.getFragmentTag())) {
                     oldFragment = OfferDetailFragment.newInstance((Offer) previous.getArgs().get(0));
@@ -353,6 +369,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().setTitle(title);
         }
 
+        // Check if we need to set a selected menu item
+        Integer menuItemId = MENU_FRAGMENT_ID.get(tag);
+        if (menuItemId != null) {
+            navigationView.setCheckedItem(menuItemId.intValue());
+        }
+
         currentFragment = fragment;
     }
 
@@ -392,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTitle = EventsFragment.getFragmentTitle();
         } else if (id == R.id.nav_rewards) {
             fragment = RewardsFragment.newInstance();
-            fragmentName = MainActivity.REWARDS_FRAGMENT;
+            fragmentName = RewardsFragment.getFragmentTag();
             fragmentTitle = "Boutique";
         }
         else if(id == R.id.nav_rankings) {
