@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,6 +16,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 
@@ -49,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.login_progress)
     protected View mProgressView;
 
+
     @Inject
     protected ConnectionManager mConnectionManager;
 
@@ -70,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
+
+
     }
 
     @OnClick(R.id.login_btn_login)

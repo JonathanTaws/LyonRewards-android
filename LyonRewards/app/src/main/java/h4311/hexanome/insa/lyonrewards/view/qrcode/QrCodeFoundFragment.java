@@ -2,23 +2,28 @@ package h4311.hexanome.insa.lyonrewards.view.qrcode;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.transition.Scene;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Date;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,11 +31,15 @@ import butterknife.OnClick;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.events.EventCardView;
 import h4311.hexanome.insa.lyonrewards.view.events.EventSuccessCardView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Jonathan on 28/04/2016.
@@ -75,11 +84,17 @@ public class QrCodeFoundFragment extends Fragment {
     @BindView(R.id.card_points_granted_text)
     protected TextView mCardPointsGrantedText;
 
+    @BindView(R.id.button_reclaim_points_progress)
+    protected ProgressBar mButtonReclaimPointsProgress;
+
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
     @Inject
     protected ConnectionManager connectionManager;
+
+    @BindColor(R.color.colorPrimary)
+    protected int mPrimaryColor;
 
     private QrCodeContent mQrCodeContent;
 
@@ -111,6 +126,9 @@ public class QrCodeFoundFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_qr_code_found, container, false);
         ButterKnife.bind(this, view);
         ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
+
+        mButtonReclaimPointsProgress.getIndeterminateDrawable().setColorFilter(mPrimaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        mButtonReclaimPointsProgress.setProgressTintList(ColorStateList.valueOf(mPrimaryColor));
 
         if (getArguments() != null) {
             mQrCodeContent = getArguments().getParcelable(ARG_QR_CODE_VALUE);
@@ -197,37 +215,35 @@ public class QrCodeFoundFragment extends Fragment {
     }
 
     @OnClick(R.id.button_reclaim_points)
-    public void buttonReclaimPointsOnClick() {
+    public void buttonReclaimPointsOnClick(View button) {
 
+        button.setVisibility(View.GONE);
+        mButtonReclaimPointsProgress.setVisibility(View.VISIBLE);
 
-
-        // todo : put in add act to user
-
-        qrCodeReceived.setCompleted(true);
-        qrCodeReceived.setCompletedDate(new Date());
-
-        View viewHierarchy = new EventSuccessCardView(getContext(), qrCodeReceived);
-        Scene mSceneClaimButtonClicked = new Scene(mCardViewQrCodeContainer, viewHierarchy);
-        TransitionManager.go(mSceneClaimButtonClicked, TransitionInflater.from(getContext()).inflateTransition(R.transition.slide_left));
-
-        mCardPointsGrantedText.setText("Félicitations, vous venez de gagner " + qrCodeReceived.getPoints() + " points.");
-        mButtonReclaimPointsContainer.setVisibility(View.GONE);
-        mCardPointsGrantedContainer.setVisibility(View.VISIBLE);
-
-
-        /*
         lyonRewardsApi.addActToUser(connectionManager.getConnectedUser(), mQrCodeContent.getActId(), new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if(response.code() == 200) {
+                if (response.isSuccessful()) {
 
+                    // Update the user
                     User user = response.body();
                     connectionManager.setConnectedUser(user);
 
+                    // Update the current fragment
+                    qrCodeReceived.setCompleted(true);
+                    qrCodeReceived.setCompletedDate(new Date());
 
-//                    Intent intent = new Intent(getApplicationContext(), EventDetailActivity.class);
-  //                  intent.putExtra(EventDetailActivity.INTENT_EVENT, event);
-    //                startActivity(intent);
+                    View viewHierarchy = new EventSuccessCardView(getContext(), qrCodeReceived);
+                    Scene mSceneClaimButtonClicked = new Scene(mCardViewQrCodeContainer, viewHierarchy);
+                    TransitionManager.go(mSceneClaimButtonClicked, TransitionInflater.from(getContext()).inflateTransition(R.transition.slide_left));
+
+                    mCardPointsGrantedText.setText("Félicitations, vous venez de gagner " + qrCodeReceived.getPoints() + " points.");
+                    mButtonReclaimPointsContainer.setVisibility(View.GONE);
+                    mCardPointsGrantedContainer.setVisibility(View.VISIBLE);
+
+                } else {
+                    // todo handle error
+                    Log.d("API", "Error : " + response.message());
                 }
             }
 
@@ -235,6 +251,6 @@ public class QrCodeFoundFragment extends Fragment {
             public void onFailure(Call<User> call, Throwable t) {
                 // TODO
             }
-        });*/
+        });
     }
 }
