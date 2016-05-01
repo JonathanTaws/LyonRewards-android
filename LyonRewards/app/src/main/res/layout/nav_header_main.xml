@@ -28,13 +28,26 @@
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
                 android:src="@drawable/lyon_rewards_logo_head_black" />
 
-            <TextView
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:gravity="right"
-                android:textSize="16dp"
-                android:text="1 548 points" />
+                android:gravity="right">
+                <TextView
+                    android:id="@+id/nav_header_user_nb_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:text="1 548" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:text=" points" />
+            </LinearLayout>
         </LinearLayout>
 
         <TextView

@@ -37,6 +37,7 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
+import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.di.module.gcm.QuickstartPreferences;
@@ -54,7 +55,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EventsFragment.OnFragmentInteractionListener, OnQrCodeFoundListener, RewardsFragment.OnFragmentInteractionListener, ConnectionManager.ConnectedUserChangedListener {
 
     public static final String QR_SCANNER_FRAGMENT = "QR_SCANNER_FRAGMENT";
     public static final String EVENTS_FRAGMENT = "EVENTS_FRAGMENT";
@@ -104,12 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
 
-        // Update nav header
-        View hView = navigationView.getHeaderView(0);
-        TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
-        drawerUserTitle.setText(mConnectionManager.getConnectedUser().getFirstName() + " " + mConnectionManager.getConnectedUser().getLastName());
-        TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
-        drawerUserEmail.setText(mConnectionManager.getConnectedUser().getEmail());
+        mConnectionManager.addSubscriberAndNotify(this);
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -182,6 +178,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         isReceiverRegistered = false;
         isGcmMessageReceiverRegistered = false;
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mConnectionManager.removeSubscriber(this);
     }
 
     private void registerReceiver() {
@@ -408,6 +410,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         List<Object> args = new ArrayList<>();
         args.add(qrCodeContent);
         setFragment(fragment, QrCodeFoundFragment.getFragmentTag(), QrCodeFoundFragment.getFragmentTitle(), true, args, true);
+    }
+
+    @Override
+    public void updateConnectedUser(User user) {
+        // Update nav header
+        View hView = navigationView.getHeaderView(0);
+        TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
+        drawerUserTitle.setText(user.getFirstName() + " " + user.getLastName());
+        TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
+        drawerUserEmail.setText(user.getEmail());
+        TextView drawerUserPoints = (TextView) hView.findViewById(R.id.nav_header_user_nb_points);
+        drawerUserPoints.setText(String.valueOf(user.getCurrentPoints()));
     }
 
 }
