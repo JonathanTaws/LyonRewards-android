@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_color_normal"
+            android:textColor="@color/colorPrimaryText"
             android:padding="10dp"
             android:textSize="@dimen/default_text_size"
             android:text="Il n'existe actuellement aucun succès pour cet évènement."/>

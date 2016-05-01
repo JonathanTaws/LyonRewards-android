@@ -46,4 +46,5 @@
         running the sample again.</string>
     <string name="gcm_defaultSenderId">988055759912</string>
     <string name="action_scan_qrcode">Scanner un QR Code</string>
+    <string name="scanner_qrcode_already_found">Vous avez déjà récupéré les points de ce QR code.</string>
 </resources>

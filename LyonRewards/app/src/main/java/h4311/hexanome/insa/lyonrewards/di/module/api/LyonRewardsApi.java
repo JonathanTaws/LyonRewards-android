@@ -1,9 +1,6 @@
 package h4311.hexanome.insa.lyonrewards.di.module.api;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,14 +9,10 @@ import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.UserConnection;
-import h4311.hexanome.insa.lyonrewards.business.act.CitizenAct;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
 
 public class LyonRewardsApi {
 
@@ -80,7 +73,7 @@ public class LyonRewardsApi {
     }
 
     public void getQrCodesFromEvent(int eventId, int userId, Callback<List<QRCodeCitizenAct>> callback) {
-        Call<List<QRCodeCitizenAct>> event = mLyonRewardsEndpoint.getQrCodeFromEvent(eventId, userId);
+        Call<List<QRCodeCitizenAct>> event = mLyonRewardsEndpoint.getQrCodesListFromEvent(eventId, userId);
         event.enqueue(callback);
     }
 

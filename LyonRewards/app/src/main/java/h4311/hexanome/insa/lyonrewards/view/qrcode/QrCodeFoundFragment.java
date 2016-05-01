@@ -2,23 +2,20 @@ package h4311.hexanome.insa.lyonrewards.view.qrcode;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.transition.Scene;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -29,16 +26,11 @@ import butterknife.OnClick;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
-import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
-import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventCardView;
 import h4311.hexanome.insa.lyonrewards.view.events.EventSuccessCardView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Jonathan on 28/04/2016.
@@ -48,7 +40,10 @@ public class QrCodeFoundFragment extends Fragment {
     private static final String ARG_QR_CODE_VALUE = "qrCodeContent";
 
     @BindView(R.id.content)
-    protected View mContentView;
+    protected View mContentViewQrCodeAvailable;
+
+    @BindView(R.id.wrong_qrcode_container)
+    protected View mContentViewQrCodeUnavailable;
 
     @BindView(R.id.loading_spinner)
     protected View mLoadingView;
@@ -68,7 +63,17 @@ public class QrCodeFoundFragment extends Fragment {
     @BindView(R.id.cardview_qrcode_success_container)
     protected LinearLayout mCardViewQrCodeContainer;
 
+    @BindView(R.id.qrcode_found_title)
+    protected TextView mFoundTitle;
 
+    @BindView(R.id.button_reclaim_points_container)
+    protected View mButtonReclaimPointsContainer;
+
+    @BindView(R.id.card_points_granted_container)
+    protected View mCardPointsGrantedContainer;
+
+    @BindView(R.id.card_points_granted_text)
+    protected TextView mCardPointsGrantedText;
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
@@ -77,8 +82,6 @@ public class QrCodeFoundFragment extends Fragment {
     protected ConnectionManager connectionManager;
 
     private QrCodeContent mQrCodeContent;
-
-    private Scene mSceneClaimButtonClicked;
 
     private Event eventReceived;
     private QRCodeCitizenAct qrCodeReceived;
@@ -100,7 +103,7 @@ public class QrCodeFoundFragment extends Fragment {
     }
 
     public static String getFragmentTitle() {
-        return "QR Code détecté";
+        return "QR code détecté";
     }
 
     @Override
@@ -113,9 +116,8 @@ public class QrCodeFoundFragment extends Fragment {
             mQrCodeContent = getArguments().getParcelable(ARG_QR_CODE_VALUE);
 
             // Initially hide the content view.
-            mContentView.setVisibility(View.GONE);
+            mContentViewQrCodeAvailable.setVisibility(View.GONE);
 
-            mSceneClaimButtonClicked = Scene.getSceneForLayout(mCardViewQrCodeContainer, R.layout.cardview_qrcode_success, getContext());
 
             // Event card view
             new AsyncTask<Void, Void, Boolean>() {
@@ -137,79 +139,45 @@ public class QrCodeFoundFragment extends Fragment {
                 @Override
                 protected void onPostExecute(final Boolean success) {
                     if (success) {
-                        crossfadeViews();
+                        showQrCodeFoundView(true);
                     } else {
-                        // todo handle error
+                        showQrCodeFoundView(false);
                     }
                 }
             }.execute();
-
-            /*
-            lyonRewardsApi.getEventById(mQrCodeContent.getEventId(), connectionManager.getConnectedUser().getId(), new Callback<Event>() {
-                @Override
-                public void onResponse(Call<Event> call, Response<Event> response) {
-                    if (response.isSuccessful()) {
-                        Event event = response.body();
-                        EventCardView eventCardView = new EventCardView(getContext(), event);
-                        mCardViewEventContainer.addView(eventCardView);
-                        eventReceived = true;
-                        crossfadeViews();
-                    } else {
-                        // Todo error
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Event> call, Throwable t) {
-                    // TODO Handle error
-                }
-            });
-
-            lyonRewardsApi.getQrCodeById(mQrCodeContent.getActId(), new Callback<QRCodeCitizenAct>() {
-                @Override
-                public void onResponse(Call<QRCodeCitizenAct> call, Response<QRCodeCitizenAct> response) {
-                    if (response.isSuccessful()) {
-                        QRCodeCitizenAct qrCodeCitizenAct = response.body();
-                        mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeCitizenAct));
-                        qrCodeReceived = true;
-                        crossfadeViews();
-                    }
-                    else {
-                        // TODO Handle error
-                        Log.d("API", "getQrCodeById onResponse error");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<QRCodeCitizenAct> call, Throwable t) {
-                    // TODO Handle error
-                    Log.d("API", "getQrCodeById " + t.getMessage());
-                }
-            });*/
-
         }
-
-
 
         return view;
     }
 
-    private void crossfadeViews() {
-        if (eventReceived == null || qrCodeReceived == null) {
-            return;
-        }
+    private void showQrCodeFoundView(boolean qrCodeFound) {
+        View contentView;
 
-        mCardViewEventContainer.addView(new EventCardView(getActivity(), eventReceived));
-        mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeReceived));
+        if (qrCodeFound) {
+            // Check if the code is new for the user
+            if (qrCodeReceived.isCompleted()) {
+                mFoundTitle.setText(R.string.scanner_qrcode_already_found);
+                mButtonReclaimPointsContainer.setVisibility(View.GONE);
+            } else {
+                mFoundTitle.setText(R.string.scanner_qrcode_found);
+            }
+
+            mCardViewEventContainer.addView(new EventCardView(getActivity(), eventReceived));
+            mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeReceived));
+
+            contentView = mContentViewQrCodeAvailable;
+        } else {
+            contentView = mContentViewQrCodeUnavailable;
+        }
 
         // Set the content view to 0% opacity but visible, so that it is visible
         // (but fully transparent) during the animation.
-        mContentView.setAlpha(0f);
-        mContentView.setVisibility(View.VISIBLE);
+        contentView.setAlpha(0f);
+        contentView.setVisibility(View.VISIBLE);
 
         // Animate the content view to 100% opacity, and clear any animation
         // listener set on the view.
-        mContentView.animate()
+        contentView.animate()
                 .alpha(1f)
                 .setDuration(mShortAnimationDuration)
                 .setListener(null);
@@ -228,56 +196,24 @@ public class QrCodeFoundFragment extends Fragment {
                 });
     }
 
-   /* @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr_code_found);
-        ButterKnife.bind(this);
-
-        ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
-
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_18dp);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        buttonReclaimPoints.setOnClickListener(this);
-
-        mEvents = new ArrayList<>();
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        qrCodeFoundEvent.setLayoutManager(layoutManager);
-
-        /*
-        mAdapter = new EventsFragmentGrandLyonTabViewAdapter(mEvents, this);
-        qrCodeFoundEvent.setAdapter(mAdapter);
-
-        QrCodeContent qrCodeContent = getIntent().getExtras().getParcelable(ARG_QR_CODE_VALUE);
-
-        qrCodeValueTextView.setText(qrCodeContent.getValue());
-
-        lyonRewardsApi.getEventById(qrCodeContent.getEventId(), connectionManager.getConnectedUser().getId(), new Callback<Event>() {
-            @Override
-            public void onResponse(Call<Event> call, Response<Event> response) {
-                // TODO Check if necessary
-                if(response.code() == 200) {
-                    Event event = response.body();
-                    mEvents.add(event);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Event> call, Throwable t) {
-                // TODO Handle error
-            }
-        });
-
-    }*/
-
     @OnClick(R.id.button_reclaim_points)
     public void buttonReclaimPointsOnClick() {
 
+
+
+        // todo : put in add act to user
+
+        qrCodeReceived.setCompleted(true);
+        qrCodeReceived.setCompletedDate(new Date());
+
+        View viewHierarchy = new EventSuccessCardView(getContext(), qrCodeReceived);
+        Scene mSceneClaimButtonClicked = new Scene(mCardViewQrCodeContainer, viewHierarchy);
         TransitionManager.go(mSceneClaimButtonClicked, TransitionInflater.from(getContext()).inflateTransition(R.transition.slide_left));
+
+        mCardPointsGrantedText.setText("Félicitations, vous venez de gagner " + qrCodeReceived.getPoints() + " points.");
+        mButtonReclaimPointsContainer.setVisibility(View.GONE);
+        mCardPointsGrantedContainer.setVisibility(View.VISIBLE);
+
 
         /*
         lyonRewardsApi.addActToUser(connectionManager.getConnectedUser(), mQrCodeContent.getActId(), new Callback<User>() {

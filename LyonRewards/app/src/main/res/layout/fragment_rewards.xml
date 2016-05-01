@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@drawable/bottom_background"
+            android:gravity="center_vertical"
             android:padding="10dp">
 
             <TextView
@@ -28,6 +29,12 @@
                 android:textColor="#222"
                 android:textSize="14dp"
                 android:text="1 254"/>
+
+           <!-- <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/lyon_rewards_logo"
+                android:layout_marginLeft="5dp"/>-->
 
         </LinearLayout>
 

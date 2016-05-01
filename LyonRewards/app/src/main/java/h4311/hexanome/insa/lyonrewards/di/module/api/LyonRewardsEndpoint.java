@@ -27,11 +27,15 @@ public interface LyonRewardsEndpoint {
     @GET("hello")
     Call<JsonObject> getHello();
 
+    /** --------------------------------------- OFFERS ---------------------------------------  **/
+
     @GET("offers")
     Call<List<Offer>> getAllOffers();
 
     @GET("offers/{id}")
     Call<Offer> getOfferById(@Path("id") int offerId);
+
+    /** --------------------------------------- EVENTS ---------------------------------------  **/
 
     @GET("events")
     Call<List<Event>> getAllEvents();
@@ -42,11 +46,15 @@ public interface LyonRewardsEndpoint {
     @GET("events")
     Call<List<Event>> getAllEvents(@Query("userId") int userId, @Query("participatedOnly") boolean userParticipatedOnly);
 
+    /** ------------------------------------ CITIZEN ACTS ------------------------------------  **/
+
     @GET("events/{id}/qrcodes")
-    Call<List<QRCodeCitizenAct>> getQrCodeFromEvent(@Path("id") int eventId, @Query("userId") int userId);
+    Call<List<QRCodeCitizenAct>> getQrCodesListFromEvent(@Path("id") int eventId, @Query("userId") int userId);
 
     @GET("acts/{id}")
     Call<QRCodeCitizenAct> getQrCodeById(@Path("id") int qrCodeId, @Query("userId") int userId, @Query("type") String type);
+
+    /** ---------------------------------------- USERS ---------------------------------------  **/
 
     @POST("users/{userId}/acts/{actId}/credit")
     Call<User> addActToUser(@Path("userId") int userId, @Path("actId") int actId);
