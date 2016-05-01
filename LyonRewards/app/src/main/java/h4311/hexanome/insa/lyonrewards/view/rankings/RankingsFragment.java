@@ -43,6 +43,15 @@ public class RankingsFragment extends Fragment {
     @BindView(R.id.rankings_recycler_view)
     protected RecyclerView mRecyclerView;
 
+    @BindView(R.id.ranking_position)
+    protected TextView mRankingPositionHeader;
+
+    @BindView(R.id.ranking_username)
+    protected TextView mRankingUsernameHeader;
+
+    @BindView(R.id.ranking_nb_points)
+    protected TextView mRankingNbPointsHeader;
+
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
@@ -88,6 +97,10 @@ public class RankingsFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
+
+        mRankingPositionHeader.setText("#");
+        mRankingUsernameHeader.setText("Utilisateur");
+        mRankingNbPointsHeader.setText("Total de points");
 
         return view;
     }
