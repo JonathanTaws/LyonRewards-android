@@ -94,7 +94,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
                 @Override
                 public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                     List<Event> eventList = response.body();
-                    if (eventList.isEmpty()) {
+                    if (eventList == null || eventList.isEmpty()) {
                         // todo : empty list
                     } else {
                         mContentEvents.addAll(eventList);
@@ -113,7 +113,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
                 @Override
                 public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                     List<Event> eventList = response.body();
-                    if (eventList.isEmpty()) {
+                    if (eventList == null || eventList.isEmpty()) {
                         // todo : empty list
                     } else {
                         mContentEvents.addAll(eventList);
@@ -124,7 +124,7 @@ public class EventsFragmentGrandLyonTab extends Fragment {
                         @Override
                         public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                             List<Event> eventFutureList = response.body();
-                            if (eventFutureList.isEmpty()) {
+                            if (eventFutureList == null || eventFutureList.isEmpty()) {
                                 // todo : empty list
                             } else {
                                 mContentEvents.addAll(eventFutureList);

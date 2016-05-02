@@ -67,6 +67,22 @@ public class User implements Parcelable {
     @Expose
     private int busDistance;
 
+    @SerializedName("bike_points")
+    @Expose
+    private int bikePoints;
+
+    @SerializedName("walk_points")
+    @Expose
+    private int walkPoints;
+
+    @SerializedName("tram_points")
+    @Expose
+    private int tramPoints;
+
+    @SerializedName("bus_points")
+    @Expose
+    private int busPoints;
+
     private String currentToken;
 
     /**
@@ -76,7 +92,7 @@ public class User implements Parcelable {
 
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints, int bikeDistance, int walkDistance, int tramDistance, int busDistance) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints, int bikeDistance, int walkDistance, int tramDistance, int busDistance, int bikePoints, int walkPoints, int tramPoints, int busPoints) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -91,6 +107,10 @@ public class User implements Parcelable {
         this.walkDistance = walkDistance;
         this.tramDistance = tramDistance;
         this.busDistance = busDistance;
+        this.bikePoints = bikePoints;
+        this.walkPoints = walkPoints;
+        this.tramPoints = tramPoints;
+        this.busPoints = busPoints;
     }
 
     public int getId() {
@@ -219,6 +239,10 @@ public class User implements Parcelable {
         this.walkDistance = in.readInt();
         this.tramDistance = in.readInt();
         this.busDistance = in.readInt();
+        this.bikePoints = in.readInt();
+        this.walkPoints = in.readInt();
+        this.tramPoints = in.readInt();
+        this.busPoints = in.readInt();
     }
 
     @Override
@@ -243,6 +267,10 @@ public class User implements Parcelable {
         dest.writeInt(walkDistance);
         dest.writeInt(tramDistance);
         dest.writeInt(busDistance);
+        dest.writeInt(bikePoints);
+        dest.writeInt(walkPoints);
+        dest.writeInt(tramPoints);
+        dest.writeInt(busPoints);
     }
 
     public int getBikeDistance() {
@@ -275,5 +303,37 @@ public class User implements Parcelable {
 
     public void setBusDistance(int busDistance) {
         this.busDistance = busDistance;
+    }
+
+    public int getBikePoints() {
+        return bikePoints;
+    }
+
+    public void setBikePoints(int bikePoints) {
+        this.bikePoints = bikePoints;
+    }
+
+    public int getWalkPoints() {
+        return walkPoints;
+    }
+
+    public void setWalkPoints(int walkPoints) {
+        this.walkPoints = walkPoints;
+    }
+
+    public int getTramPoints() {
+        return tramPoints;
+    }
+
+    public void setTramPoints(int tramPoints) {
+        this.tramPoints = tramPoints;
+    }
+
+    public int getBusPoints() {
+        return busPoints;
+    }
+
+    public void setBusPoints(int busPoints) {
+        this.busPoints = busPoints;
     }
 }

@@ -9,6 +9,7 @@ import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.TravelData;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.UserConnection;
+import h4311.hexanome.insa.lyonrewards.business.UserTravelProgression;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -66,6 +67,9 @@ public interface LyonRewardsEndpoint {
 
     @GET("users/{username}")
     Call<User> getUserByUserName(@Path("username") String username);
+
+    @GET("users/{userId}/travelprogress")
+    Call<UserTravelProgression> getUserTravelProgression(@Path("userId") int userId);
 
     @FormUrlEncoded
     @POST("login/")
