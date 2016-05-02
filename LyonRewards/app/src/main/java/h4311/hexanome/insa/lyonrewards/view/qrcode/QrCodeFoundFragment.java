@@ -230,6 +230,9 @@ public class QrCodeFoundFragment extends Fragment {
                     User user = response.body();
                     connectionManager.setConnectedUser(user);
 
+                    // Get the new event, updated
+                 //   lyonRewardsApi.getEventById(eventReceived.getId(), )
+
                     // Update the current fragment
                     qrCodeReceived.setCompleted(true);
                     qrCodeReceived.setCompletedDate(new Date());

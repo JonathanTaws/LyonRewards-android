@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String extraOfferIdString = getIntent().getStringExtra(ARG_ID_OFFER_READ);
         if (extraOfferIdString != null) {
-            int nbPoints = Integer.parseInt(intent.getStringExtra(ARG_POINTS_OFFER_READ));
+            int nbPoints = Integer.parseInt(getIntent().getStringExtra(ARG_POINTS_OFFER_READ));
             mConnectionManager.debitCredit(nbPoints);
             displayPaidOfferFragment(Integer.parseInt(extraOfferIdString));
         } else {

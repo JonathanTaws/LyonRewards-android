@@ -98,6 +98,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private void sendNotification(String idOffer, String points, String title) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.ARG_ID_OFFER_READ, idOffer);
+        intent.putExtra(MainActivity.ARG_POINTS_OFFER_READ, points);
         intent.setAction("TESTACT");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
