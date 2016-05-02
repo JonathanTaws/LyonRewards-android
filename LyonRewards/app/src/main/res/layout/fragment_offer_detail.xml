@@ -23,7 +23,7 @@
                 android:layout_marginRight="@dimen/cardMarginHorizontal"
                 android:layout_marginTop="@dimen/cardMarginVertical"
                 android:visibility="gone"
-                app:cardBackgroundColor="@android:color/holo_blue_dark"
+                app:cardBackgroundColor="@color/colorPrimary"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false"
