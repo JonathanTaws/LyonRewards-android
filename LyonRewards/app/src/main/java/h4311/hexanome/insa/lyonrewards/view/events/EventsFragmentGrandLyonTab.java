@@ -49,9 +49,6 @@ public class EventsFragmentGrandLyonTab extends Fragment {
     @BindView(R.id.scrolltab_tab_recyclerview)
     protected RecyclerView mRecyclerView;
 
-    @BindView(R.id.scrolltab_tab_no_data_text)
-    protected TextView mNoDataText;
-
     private RecyclerView.Adapter mAdapter;
 
     private List<Event> mContentEvents = new ArrayList<>();
@@ -92,30 +89,66 @@ public class EventsFragmentGrandLyonTab extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getAllEvents(mConnectionManager.getConnectedUser().getId(), mShowOnlyEventsWithUserParticipation, new Callback<List<Event>>() {
-            @Override
-            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                List<Event> eventList = response.body();
-                if (eventList.isEmpty()) {
-                    if (mShowOnlyEventsWithUserParticipation) {
-                        mNoDataText.setText("Vous n'avez participé à aucun évènement.");
+        if (mShowOnlyEventsWithUserParticipation) { // My events tab
+            lyonRewardsApi.getMyEvents(mConnectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
+                @Override
+                public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                    List<Event> eventList = response.body();
+                    if (eventList.isEmpty()) {
+                        // todo : empty list
                     } else {
-                        mNoDataText.setText("Il n'existe aucun évènement en cours ou à venir.");
+                        mContentEvents.addAll(eventList);
+                        mAdapter.notifyDataSetChanged();
                     }
-                    mNoDataText.setVisibility(View.VISIBLE);
-                } else {
-                    Collections.reverse(eventList);
-                    mContentEvents.addAll(eventList);
-                    mAdapter.notifyDataSetChanged();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Event>> call, Throwable t) {
-                // TODO : Error message
-                Log.d("API", "error : " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Event>> call, Throwable t) {
+                    // TODO : Error message
+                    Log.d("API", "error : " + t.getMessage());
+                }
+            });
+        } else {
+            lyonRewardsApi.getAllEventsOngoing(mConnectionManager.getConnectedUser().getId(), mShowOnlyEventsWithUserParticipation, new Callback<List<Event>>() {
+                @Override
+                public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                    List<Event> eventList = response.body();
+                    if (eventList.isEmpty()) {
+                        // todo : empty list
+                    } else {
+                        mContentEvents.addAll(eventList);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    lyonRewardsApi.getAllEventsFuture(mConnectionManager.getConnectedUser().getId(), mShowOnlyEventsWithUserParticipation, new Callback<List<Event>>() {
+                        @Override
+                        public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                            List<Event> eventFutureList = response.body();
+                            if (eventFutureList.isEmpty()) {
+                                // todo : empty list
+                            } else {
+                                mContentEvents.addAll(eventFutureList);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Event>> call, Throwable t) {
+                            // TODO : Error message
+                            Log.d("API", "error : " + t.getMessage());
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<List<Event>> call, Throwable t) {
+                    // TODO : Error message
+                    Log.d("API", "error : " + t.getMessage());
+                }
+            });
+        }
+
+
 
 
     }

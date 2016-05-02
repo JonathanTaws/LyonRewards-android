@@ -109,7 +109,7 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
             */
         }
 
-        @OnClick(R.id.card_event_card_view)
+        /*@OnClick(R.id.card_event_card_view)
         public void cardviewOnClick() {
             if (mEvent != null) {
                 EventDetailFragment fragment = EventDetailFragment.newInstance(mEvent);
@@ -118,7 +118,7 @@ public class EventsFragmentGrandLyonTabViewAdapter extends RecyclerView.Adapter<
                 args.add(mEvent);
                 mMainActivity.setFragment(fragment, EventDetailFragment.getFragmentTag(), fragmentTitle, true, args);
             }
-        }
+        }*/
     }
 
     protected List<Event> events;

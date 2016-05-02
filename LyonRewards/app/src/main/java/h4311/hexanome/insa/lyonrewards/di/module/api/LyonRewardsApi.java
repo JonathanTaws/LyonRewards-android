@@ -46,6 +46,8 @@ public class LyonRewardsApi {
         getAllEvents(userId, false, callback);
     }
 
+
+
     public void getEventById(int eventId, int userId, Callback<Event> callback) {
         Call<Event> event = mLyonRewardsEndpoint.getEventById(eventId, userId);
         event.enqueue(callback);
@@ -67,8 +69,23 @@ public class LyonRewardsApi {
         }
     }
 
+    public void getMyEvents(int userId, Callback<List<Event>> callback) {
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents(userId, "startDate", true);
+        allEvents.enqueue(callback);
+    }
+
     public void getAllEvents(int userId, boolean userParticipatedOnly, Callback<List<Event>> callback) {
         Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEvents(userId, "startDate", userParticipatedOnly);
+        allEvents.enqueue(callback);
+    }
+
+    public void getAllEventsOngoing(int userId, boolean userParticipatedOnly, Callback<List<Event>> callback) {
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEventsType(userId, "startDate", userParticipatedOnly, "ongoing");
+        allEvents.enqueue(callback);
+    }
+
+    public void getAllEventsFuture(int userId, boolean userParticipatedOnly, Callback<List<Event>> callback) {
+        Call<List<Event>> allEvents = mLyonRewardsEndpoint.getAllEventsType(userId, "startDate", userParticipatedOnly, "future");
         allEvents.enqueue(callback);
     }
 

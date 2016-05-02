@@ -35,6 +35,9 @@ import retrofit2.Response;
  */
 public class EventsFragmentMyEventsTab  extends Fragment {
 
+    // /!\ TODO ! suppr fragment deprecated
+
+
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
@@ -73,7 +76,7 @@ public class EventsFragmentMyEventsTab  extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getAllEventsWithUserProgression(mConnectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
+        lyonRewardsApi.getMyEvents(mConnectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 mContentEvents.addAll(response.body());

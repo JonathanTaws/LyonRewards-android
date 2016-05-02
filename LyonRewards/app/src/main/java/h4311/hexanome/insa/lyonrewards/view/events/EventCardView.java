@@ -12,13 +12,18 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 
 /**
  * Created by Pierre on 29/04/2016.
@@ -66,8 +71,12 @@ public class EventCardView extends LinearLayout {
     @Inject
     ImageLoader mImageLoader;
 
-    public EventCardView(Activity activity) {
+    private Event mEvent;
+    private MainActivity mActivity;
+
+    public EventCardView(MainActivity activity) {
         super(activity);
+        mActivity = activity;
 
         ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
 
@@ -81,12 +90,14 @@ public class EventCardView extends LinearLayout {
         addView(child);
     }
 
-    public EventCardView(Activity activity, Event event) {
+    public EventCardView(MainActivity activity, Event event) {
         this(activity);
         setEvent(event);
     }
 
     public void setEvent(Event event) {
+        mEvent = event;
+
         mTitle.setText(event.getTitle());
 
         mStartDate.setText(event.getStartDateString());
@@ -120,6 +131,17 @@ public class EventCardView extends LinearLayout {
 
         // Image
         mImageLoader.displayImage(event.getImageUrl(), mEventImage);
+    }
+
+    @OnClick(R.id.card_event_card_view)
+    public void cardviewOnClick() {
+        if (mEvent != null) {
+            EventDetailFragment fragment = EventDetailFragment.newInstance(mEvent);
+            String fragmentTitle = mEvent.getTitle();
+            List<Object> args = new ArrayList<>();
+            args.add(mEvent);
+            mActivity.setFragment(fragment, EventDetailFragment.getFragmentTag(), fragmentTitle, true, args);
+        }
     }
 
 }

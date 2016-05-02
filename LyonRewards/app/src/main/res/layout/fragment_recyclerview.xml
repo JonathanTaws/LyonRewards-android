@@ -7,12 +7,4 @@
         android:id="@+id/scrolltab_tab_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <TextView
-        android:id="@+id/scrolltab_tab_no_data_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Aucune donnée"
-        android:gravity="center"
-        android:padding="10dp"
-        android:visibility="gone"/>
 </FrameLayout>

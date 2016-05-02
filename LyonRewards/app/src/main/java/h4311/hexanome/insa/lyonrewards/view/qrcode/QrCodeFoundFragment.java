@@ -35,6 +35,7 @@ import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
+import h4311.hexanome.insa.lyonrewards.view.MainActivity;
 import h4311.hexanome.insa.lyonrewards.view.events.EventCardView;
 import h4311.hexanome.insa.lyonrewards.view.events.EventSuccessCardView;
 import retrofit2.Call;
@@ -180,7 +181,7 @@ public class QrCodeFoundFragment extends Fragment {
                 mFoundTitle.setText(R.string.scanner_qrcode_found);
             }
 
-            mCardViewEventContainer.addView(new EventCardView(getActivity(), eventReceived));
+            mCardViewEventContainer.addView(new EventCardView((MainActivity) getActivity(), eventReceived));
             mCardViewQrCodeContainer.addView(new EventSuccessCardView(getContext(), qrCodeReceived));
 
             contentView = mContentViewQrCodeAvailable;

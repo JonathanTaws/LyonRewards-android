@@ -152,7 +152,7 @@ public class EventDetailPointsFragmentTabViewAdapter extends RecyclerView.Adapte
                             }
 
                             // Update ui in main fragment
-                            int nbSuccess = mContentSuccessDone.size();
+                            int nbSuccess = mContentSuccessDone.size() + mContentSuccessUnknown.size();
                             int nbDone = (int) (nbSuccess * mEvent.getUserProgression());
                             float progress = mEvent.getUserProgression() * 100.0f;
                             float progressTodo = 100 - progress;
