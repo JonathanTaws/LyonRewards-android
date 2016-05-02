@@ -10,6 +10,7 @@ import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.TravelData;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.UserConnection;
+import h4311.hexanome.insa.lyonrewards.business.UserTravelProgression;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -147,6 +148,11 @@ public class LyonRewardsApi {
             return null;
         }
         return execute.body();
+    }
+
+    public void getUserTravelProgression(int userId, Callback<UserTravelProgression> callback) {
+        Call<UserTravelProgression> call = mLyonRewardsEndpoint.getUserTravelProgression(userId);
+        call.enqueue(callback);
     }
 
     public void travel(int userId, JsonObject bodyData, Callback<TravelData> callback) {

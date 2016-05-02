@@ -19,6 +19,7 @@ import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,6 +33,9 @@ import butterknife.OnCheckedChanged;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.TravelData;
+import h4311.hexanome.insa.lyonrewards.business.UserTravelProgression;
+import h4311.hexanome.insa.lyonrewards.business.act.CitizenAct;
+import h4311.hexanome.insa.lyonrewards.business.act.TravelCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
@@ -42,6 +46,7 @@ import retrofit2.Response;
 import android.app.PendingIntent;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -67,6 +72,12 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     @BindView(R.id.current_moving_container)
     protected View mCurrentMovingTypeContainer;
 
+    @BindView(R.id.current_moving_type)
+    protected TextView mCurrentMovingType;
+
+    @BindView(R.id.main_framelayout)
+    protected View mFrameLayout;
+
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
@@ -89,7 +100,12 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     private TravelCardView mTravelTram;
     private TravelCardView mTravelWalk;
 
-    private TravelCardView.TYPE mCurrentType = null;
+    private String mCurrentTypeText = "";
+
+    private long mLastAccTimestamp = 0;
+
+
+    private static final int ACCELEROMETER_DELAY = 500;
 
     @OnCheckedChanged(R.id.switch_tracker)
     public void onCheckedChanged(boolean isChecked) {
@@ -162,8 +178,36 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
         mTravelContainer.addView(mTravelTram);
         mTravelContainer.addView(mTravelWalk);
 
+        // Get user progression and update progress circle bars
+        lyonRewardsApi.getUserTravelProgression(mConnectionManager.getConnectedUser().getId(), new Callback<UserTravelProgression>() {
+            @Override
+            public void onResponse(Call<UserTravelProgression> call, Response<UserTravelProgression> response) {
+                if (response.isSuccessful()) {
+                    UserTravelProgression userTravelProgression = response.body();
+                    mTravelBike.updateProgression(userTravelProgression.getBikeProgress() * 100.0f);
+                    mTravelBus.updateProgression(userTravelProgression.getBusProgress() * 100.0f);
+                    mTravelTram.updateProgression(userTravelProgression.getTramProgress() * 100.0f);
+                    mTravelWalk.updateProgression(userTravelProgression.getWalkProgress() * 100.0f);
+                } else {
+                    // todo : handle error
+                    Log.d("API", "Error : " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserTravelProgression> call, Throwable t) {
+                // todo : handle error
+                Log.d("API", "Error : " + t.getMessage());
+            }
+        });
+
+       // Snackbar.make(mFrameLayout, "TEST", Snackbar.LENGTH_INDEFINITE)
+         //       .show();
+
         return view;
     }
+
+
 
     private void disableTracker() {
         mSensorManager.unregisterListener(this);
@@ -207,8 +251,8 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
         //Start the accelerometer sensor
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        //mSensorManager.unregisterListener(this);
-        //mSensorManager.registerListener(this, mAccelerometer, 5000000, 5000000);
+        mSensorManager.unregisterListener(this);
+        mSensorManager.registerListener(this, mAccelerometer, 1000000, 1000000);
 
         //Keep this fragment alive
         wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DoNotSleep");
@@ -224,7 +268,18 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     @Override
     public void onSensorChanged(SensorEvent event) {
         // /!\ use : System.currentTimeMillis() and not  event.timestamp
-        Log.d("ACC", "Update received : " + event.values[0] + " - " + event.values[1] + " - " + event.values[2]);
+        long timestamp = System.currentTimeMillis();
+
+        if ((timestamp - mLastAccTimestamp) > ACCELEROMETER_DELAY) {
+            Log.d("ACC", "Update received : " + event.values[0] + " - " + event.values[1] + " - " + event.values[2]);
+            JsonObject json = new JsonObject();
+            json.addProperty("x", event.values[0]);
+            json.addProperty("y", event.values[1]);
+            json.addProperty("z", event.values[2]);
+            json.addProperty("timestamp", timestamp);
+            mAccJson.add(json);
+            mLastAccTimestamp = timestamp;
+        }
     }
 
     @Override
@@ -299,11 +354,41 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
                         Log.d("LOC", "API response : " + gson.toJson(response));
 
-                        if (mCurrentType == null && data.getMode() != null) {
-                            // // TODO: 02/05/2016
+                        if (data.getMode() != null) {
 
-                            mCurrentMovingTypeContainer.setVisibility(View.VISIBLE);
+                            boolean isNewType = (!data.getMode().equals(mCurrentTypeText));
+
+                            TravelCardView updatedTravelCardView = setMovingCurrentType(data.getMode(), isNewType);
+
+                            if (updatedTravelCardView != null) {
+                                // Update progression
+                                float progression = ((data.getNewTotalKm() % data.getStepSuccess()) / (float) data.getStepSuccess());
+                                progression *= 100;
+
+                                // Check if citizen acts were created
+                                if (!data.getTravelCitizenActs().isEmpty()) {
+                                    int distance = 0;
+                                    int nbPoints = 0;
+
+                                    for (TravelCitizenAct travelCitizenAct : data.getTravelCitizenActs()) {
+                                        distance += travelCitizenAct.getDistanceStep();
+                                        nbPoints += travelCitizenAct.getPoints();
+                                    }
+
+                                    updatedTravelCardView.addSuccess(progression, data.getNewTotalKm(), data.getPointsGranted());
+
+                                    String snackBarText =
+                                            data.getTravelCitizenActs().get(0).getTitle() + " : vous venez de gagner " + nbPoints + " points en parcourant " + distance + " km.";
+
+                                    Snackbar.make(mFrameLayout, snackBarText, Snackbar.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    updatedTravelCardView.updateProgression(progression);
+                                }
+                            }
                         }
+
+
                     } else {
                         Log.d("API", "Error : " + response.message());
                     }
@@ -323,6 +408,50 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
             mGpsJson = new JsonArray();
             mAccJson = new JsonArray();
         }
+    }
+
+    private TravelCardView setMovingCurrentType(String type, boolean updateCurrentMode) {
+        mCurrentTypeText = type;
+        String textType = "";
+        TravelCardView travelCardView = null;
+        switch (type) {
+            case "walk":
+                textType = "pied";
+                travelCardView = mTravelWalk;
+                break;
+            case "bike":
+                textType = "vélo";
+                travelCardView = mTravelBike;
+                break;
+            case "bus":
+                textType = "bus";
+                travelCardView = mTravelBus;
+                break;
+            case "tram":
+                textType = "tram";
+                travelCardView = mTravelTram;
+                break;
+            case "car":
+                textType = "voiture";
+                break;
+        }
+
+        if (updateCurrentMode) {
+            mCurrentMovingType.setText(textType);
+            mCurrentMovingTypeContainer.setVisibility(View.VISIBLE);
+
+            if (travelCardView != null) {
+                int index = mTravelContainer.indexOfChild(travelCardView);
+                if (index > 0) {
+                    mTravelContainer.removeView(travelCardView);
+                    mTravelContainer.addView(travelCardView, 0);
+                }
+            }
+        }
+
+        return travelCardView;
+
+        // todo : specific text for car type
     }
 
     @Override
