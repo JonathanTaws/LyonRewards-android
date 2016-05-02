@@ -44,6 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.app.PendingIntent;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -75,6 +76,9 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     @BindView(R.id.current_moving_type)
     protected TextView mCurrentMovingType;
 
+    @BindView(R.id.current_moving_image)
+    protected ImageView mCurrentMovingImage;
+
     @BindView(R.id.main_framelayout)
     protected View mFrameLayout;
 
@@ -93,7 +97,8 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     private JsonArray mAccJson = new JsonArray();
     private int mNbGpsData = 0;
 
-    private static int MAX_NB_GPS_DATA = 2;
+    private static int MAX_NB_GPS_DATA = 10;
+
     private GoogleApiClient mGoogleApiClient;
     private TravelCardView mTravelBike;
     private TravelCardView mTravelBus;
@@ -104,8 +109,9 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
     private long mLastAccTimestamp = 0;
 
-
     private static final int ACCELEROMETER_DELAY = 500;
+
+    private static final int LOCATION_REQUEST_DELAY = 1000;
 
     @OnCheckedChanged(R.id.switch_tracker)
     public void onCheckedChanged(boolean isChecked) {
@@ -268,7 +274,7 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     @Override
     public void onSensorChanged(SensorEvent event) {
         // /!\ use : System.currentTimeMillis() and not  event.timestamp
-        long timestamp = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis() / 1000;
 
         if ((timestamp - mLastAccTimestamp) > ACCELEROMETER_DELAY) {
             Log.d("ACC", "Update received : " + event.values[0] + " - " + event.values[1] + " - " + event.values[2]);
@@ -295,8 +301,8 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     private void startLocationUpdates() {
         LocationRequest locRequest = LocationRequest.create();
         locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locRequest.setInterval(1000);
-        locRequest.setFastestInterval(200);
+        locRequest.setInterval(LOCATION_REQUEST_DELAY);
+        locRequest.setFastestInterval(LOCATION_REQUEST_DELAY);
 
         // Ask permission for location
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -333,10 +339,10 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
         if (location.hasSpeed()) {
             json.addProperty("speed", location.getSpeed());
         } else {
-            json.addProperty("speed", -1);
+            json.addProperty("speed", "-1");
         }
 
-        json.addProperty("timestamp", location.getTime());
+        json.addProperty("timestamp", location.getTime() / 1000);
 
         mGpsJson.add(json);
 
@@ -407,6 +413,7 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
             Log.d("LOC", "data : " + param.toString());
             mGpsJson = new JsonArray();
             mAccJson = new JsonArray();
+            mNbGpsData = 0;
         }
     }
 
@@ -414,22 +421,28 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
         mCurrentTypeText = type;
         String textType = "";
         TravelCardView travelCardView = null;
+        int typeImgId = -1;
+
         switch (type) {
             case "walk":
                 textType = "pied";
                 travelCardView = mTravelWalk;
+                typeImgId = R.drawable.ic_directions_walk_white_24dp;
                 break;
             case "bike":
                 textType = "vélo";
                 travelCardView = mTravelBike;
+                typeImgId = R.drawable.ic_directions_bike_white_24dp;
                 break;
             case "bus":
                 textType = "bus";
                 travelCardView = mTravelBus;
+                typeImgId = R.drawable.ic_directions_bus_white_24dp;
                 break;
             case "tram":
                 textType = "tram";
                 travelCardView = mTravelTram;
+                typeImgId = R.drawable.ic_tram_white_24dp;
                 break;
             case "car":
                 textType = "voiture";
@@ -438,6 +451,9 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
         if (updateCurrentMode) {
             mCurrentMovingType.setText(textType);
+            if (typeImgId != -1) {
+                mCurrentMovingImage.setImageResource(typeImgId);
+            }
             mCurrentMovingTypeContainer.setVisibility(View.VISIBLE);
 
             if (travelCardView != null) {

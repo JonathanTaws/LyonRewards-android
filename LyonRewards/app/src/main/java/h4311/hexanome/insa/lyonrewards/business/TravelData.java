@@ -19,7 +19,7 @@ public class TravelData {
 
     @SerializedName("new_total_km")
     @Expose
-    private Integer newTotalKm;
+    private Float newTotalKm;
 
     @SerializedName("step_success")
     @Expose
@@ -45,7 +45,7 @@ public class TravelData {
      * @param stepSuccess
      * @param mode
      */
-    public TravelData(String mode, Integer newTotalKm, Integer stepSuccess, Integer pointsGranted, List<TravelCitizenAct> travelCitizenActs) {
+    public TravelData(String mode, Float newTotalKm, Integer stepSuccess, Integer pointsGranted, List<TravelCitizenAct> travelCitizenActs) {
         this.mode = mode;
         this.newTotalKm = newTotalKm;
         this.stepSuccess = stepSuccess;
@@ -70,14 +70,14 @@ public class TravelData {
     /**
      * @return The newTotalKm
      */
-    public Integer getNewTotalKm() {
+    public Float getNewTotalKm() {
         return newTotalKm;
     }
 
     /**
      * @param newTotalKm The new_total_km
      */
-    public void setNewTotalKm(Integer newTotalKm) {
+    public void setNewTotalKm(Float newTotalKm) {
         this.newTotalKm = newTotalKm;
     }
 
