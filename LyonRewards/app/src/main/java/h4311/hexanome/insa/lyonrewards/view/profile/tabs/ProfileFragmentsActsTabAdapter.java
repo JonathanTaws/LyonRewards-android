@@ -59,13 +59,13 @@ public class ProfileFragmentsActsTabAdapter extends RecyclerView.Adapter<Recycle
 
         public EventViewHolder(View view, MainActivity activity) {
             super(view);
-            this.view = view;
             ButterKnife.bind(this, view);
             this.mainActivity = activity;
         }
 
         public void setEvent(Event event) {
             this.event = event;
+            eventTitle.setText(event.getTitle());
         }
 
     }
@@ -97,11 +97,12 @@ public class ProfileFragmentsActsTabAdapter extends RecyclerView.Adapter<Recycle
         switch (viewType) {
             case TYPE_EVENT: {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.list_item_card_big, parent, false);
+                        .inflate(R.layout.item_event, parent, false);
                 return new EventViewHolder(view, mActivity);
             }
             case TYPE_QR_CODE_CITIZEN_ACT: {
                 EventSuccessCardView eventSuccessCardView = new EventSuccessCardView(parent.getContext());
+
                 return new QrCodeCitizenActViewHolder(eventSuccessCardView, mActivity);
             }
             default:

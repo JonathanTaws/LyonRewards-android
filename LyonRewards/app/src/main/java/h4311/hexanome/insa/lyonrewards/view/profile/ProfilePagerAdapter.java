@@ -12,8 +12,8 @@ import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
  */
 public class ProfilePagerAdapter extends ScrolltabPagerAdapter {
 
-    private static String[] tabsLabels = { "Mes actes", "Mes informations" };
-    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ ProfileFragmentActsTab.class, ProfileFragmentInfoTab.class };
+    private static String[] tabsLabels = { "Mes informations", "Mes actes" };
+    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ ProfileFragmentInfoTab.class, ProfileFragmentActsTab.class };
 
     public ProfilePagerAdapter(FragmentManager fm) {
         super(fm);
@@ -34,9 +34,9 @@ public class ProfilePagerAdapter extends ScrolltabPagerAdapter {
         int index = position % getTabsLabels().length;
         switch (index) {
             case 0:
-                return ProfileFragmentActsTab.newInstance();
-            case 1:
                 return ProfileFragmentInfoTab.newInstance();
+            case 1:
+                return ProfileFragmentActsTab.newInstance();
         }
         return null;
     }

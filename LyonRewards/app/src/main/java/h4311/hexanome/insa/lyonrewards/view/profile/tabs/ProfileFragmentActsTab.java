@@ -13,6 +13,7 @@ import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
@@ -107,8 +109,11 @@ public class ProfileFragmentActsTab extends Fragment {
                     List<Event> events = response.body();
 
                     for(Event event : events) {
-
+                        mObjects.add(event);
+                        mObjects.add(new QRCodeCitizenAct(1, "test", "test", 12, 1, true, new Date()));
                     }
+
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
