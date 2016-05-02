@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/lyon_pont"
-        android:adjustViewBounds="true" />
-
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.github.florent37.materialviewpager.MaterialViewPager
         android:id="@+id/profile_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="match_parent"
 
-        <android.support.v4.view.PagerTitleStrip
-            android:id="@+id/pager_title_strip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@color/red"
-            android:textColor="#fff"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp" />
+        app:viewpager_color="@color/colorPrimary"
+        app:viewpager_headerHeight="@dimen/scrolltab_header_height"
+        app:viewpager_headerAlpha="1.0"
+        app:viewpager_hideToolbarAndTitle="false"
+        app:viewpager_enableToolbarElevation="true"
+        app:viewpager_parallaxHeaderFactor="0"
+        app:viewpager_headerAdditionalHeight="3dp"
+        app:viewpager_displayToolbarWhenSwipe="true"
+        app:viewpager_transparentToolbar="true"
+        app:viewpager_animatedHeaderImage="false"
+        app:viewpager_disableToolbar="true"
+        app:viewpager_pagerTitleStrip="@layout/scrolltab_tab_layout"
+        app:viewpager_header="@layout/header_profile" />
+
+        <!--app:viewpager_logo="@layout/header_logo"-->
+        <!--app:viewpager_logoMarginTop="50dp"-->
+        <!--app:viewpager_hideLogoWithFade="true"-->
 
 
-    </android.support.v4.view.ViewPager>
 
-</LinearLayout>
+</FrameLayout>

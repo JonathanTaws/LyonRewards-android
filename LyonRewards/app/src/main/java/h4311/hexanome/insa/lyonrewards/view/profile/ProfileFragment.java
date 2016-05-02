@@ -3,21 +3,16 @@ package h4311.hexanome.insa.lyonrewards.view.profile;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Arrays;
-import java.util.List;
+import com.github.florent37.materialviewpager.MaterialViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.R;
-import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentActsTab;
-import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentInfoTab;
 
 /**
  * Created by Jonathan on 02/05/2016.
@@ -25,9 +20,13 @@ import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentInfoTab;
 public class ProfileFragment extends Fragment {
 
     @BindView(R.id.profile_pager)
-    protected ViewPager profilePager;
+    protected MaterialViewPager profilePager;
 
     private ProfilePagerAdapter mProfilePagerAdapter;
+
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
 
     public static String getFragmentTag() {
         return ProfileFragment.class.getName();
@@ -63,7 +62,13 @@ public class ProfileFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         mProfilePagerAdapter = new ProfilePagerAdapter(getFragmentManager());
-        profilePager.setAdapter(mProfilePagerAdapter);
+        profilePager.getViewPager().setAdapter(mProfilePagerAdapter);
+
+        profilePager.getViewPager().setOffscreenPageLimit(profilePager.getViewPager().getAdapter().getCount());
+        profilePager.getPagerTitleStrip().setViewPager(profilePager.getViewPager());
+
+        Toolbar toolbar = profilePager.getToolbar();
+        toolbar.setVisibility(View.GONE);
 
         return view;
     }
