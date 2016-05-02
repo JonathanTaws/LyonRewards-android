@@ -86,6 +86,7 @@ public class EventsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     mViewPager.notifyHeaderChanged();
+                    // TODO Change ?
                     Toast.makeText(getActivity().getApplicationContext(), "Yes, the title is clickable", Toast.LENGTH_SHORT).show();
                 }
             });

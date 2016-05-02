@@ -16,6 +16,7 @@ import h4311.hexanome.insa.lyonrewards.view.events.EventDetailPointsFragmentTabV
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTab;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentMyEventsTab;
 import h4311.hexanome.insa.lyonrewards.view.login.LoginActivity;
+import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentActsTab;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeFoundFragment;
 import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsFragment;
 import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsViewAdapter;
@@ -61,4 +62,6 @@ public interface AppComponent {
     void inject(RankingsViewAdapter rankingsViewAdapter);
 
     void inject(TrackerFragment trackerFragment);
+
+    void inject(ProfileFragmentActsTab profileFragmentActsTab);
 }

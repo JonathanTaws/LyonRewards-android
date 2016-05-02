@@ -2,9 +2,7 @@ package h4311.hexanome.insa.lyonrewards.view.profile;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 
-import h4311.hexanome.insa.lyonrewards.view.events.EventsFragmentGrandLyonTab;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentActsTab;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentInfoTab;
 import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
