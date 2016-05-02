@@ -3,6 +3,11 @@ package h4311.hexanome.insa.lyonrewards.business;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import h4311.hexanome.insa.lyonrewards.business.act.TravelCitizenAct;
+
 /**
  * Created by Pierre on 02/05/2016.
  */
@@ -24,6 +29,10 @@ public class TravelData {
     @Expose
     private Integer pointsGranted;
 
+    @SerializedName("tags")
+    @Expose
+    private List<TravelCitizenAct> travelCitizenActs = new ArrayList<>();
+
     /**
      * No args constructor for use in serialization
      */
@@ -36,11 +45,12 @@ public class TravelData {
      * @param stepSuccess
      * @param mode
      */
-    public TravelData(String mode, Integer newTotalKm, Integer stepSuccess, Integer pointsGranted) {
+    public TravelData(String mode, Integer newTotalKm, Integer stepSuccess, Integer pointsGranted, List<TravelCitizenAct> travelCitizenActs) {
         this.mode = mode;
         this.newTotalKm = newTotalKm;
         this.stepSuccess = stepSuccess;
         this.pointsGranted = pointsGranted;
+        this.travelCitizenActs = travelCitizenActs;
     }
 
     /**
@@ -99,4 +109,11 @@ public class TravelData {
         this.pointsGranted = pointsGranted;
     }
 
+    public List<TravelCitizenAct> getTravelCitizenActs() {
+        return travelCitizenActs;
+    }
+
+    public void setTravelCitizenActs(List<TravelCitizenAct> travelCitizenActs) {
+        this.travelCitizenActs = travelCitizenActs;
+    }
 }

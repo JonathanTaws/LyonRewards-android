@@ -13,7 +13,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -22,7 +21,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +49,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -64,6 +63,9 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
     @BindView(R.id.travel_container)
     protected LinearLayout mTravelContainer;
+
+    @BindView(R.id.current_moving_container)
+    protected View mCurrentMovingTypeContainer;
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
@@ -82,6 +84,12 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
     private static int MAX_NB_GPS_DATA = 2;
     private GoogleApiClient mGoogleApiClient;
+    private TravelCardView mTravelBike;
+    private TravelCardView mTravelBus;
+    private TravelCardView mTravelTram;
+    private TravelCardView mTravelWalk;
+
+    private TravelCardView.TYPE mCurrentType = null;
 
     @OnCheckedChanged(R.id.switch_tracker)
     public void onCheckedChanged(boolean isChecked) {
@@ -93,6 +101,7 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
                 showNotification();
             }
         } else {
+            mCurrentMovingTypeContainer.setVisibility(View.GONE);
             disableTracker();
             cancelNotification();
         }
@@ -133,7 +142,7 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Init sensors to track
-        locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        //locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         pm = (PowerManager) getActivity().getApplicationContext().getSystemService(Service.POWER_SERVICE);
 
@@ -143,41 +152,36 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
         ((LyonRewardsApplication) getActivity().getApplication()).getAppComponent().inject(this);
 
-        mTravelContainer.addView(new TravelCardView(getActivity(), TravelCardView.TYPE.BIKE));
-        mTravelContainer.addView(new TravelCardView(getActivity(), TravelCardView.TYPE.BUS));
-        mTravelContainer.addView(new TravelCardView(getActivity(), TravelCardView.TYPE.TRAM));
-        mTravelContainer.addView(new TravelCardView(getActivity(), TravelCardView.TYPE.WALK));
+        mTravelBike = new TravelCardView(getActivity(), TravelCardView.TYPE.BIKE, mConnectionManager.getConnectedUser());
+        mTravelBus = new TravelCardView(getActivity(), TravelCardView.TYPE.BUS, mConnectionManager.getConnectedUser());
+        mTravelTram = new TravelCardView(getActivity(), TravelCardView.TYPE.TRAM, mConnectionManager.getConnectedUser());
+        mTravelWalk = new TravelCardView(getActivity(), TravelCardView.TYPE.WALK, mConnectionManager.getConnectedUser());
+
+        mTravelContainer.addView(mTravelBike);
+        mTravelContainer.addView(mTravelBus);
+        mTravelContainer.addView(mTravelTram);
+        mTravelContainer.addView(mTravelWalk);
 
         return view;
     }
 
     private void disableTracker() {
         mSensorManager.unregisterListener(this);
-        //Disable location updates only if permission was granted
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            //locationManager.removeUpdates(this);
-        }
 
         stopLocationUpdates();
-        if (wakelock.isHeld())
+
+        if (wakelock.isHeld()) {
             wakelock.release();
+        }
     }
 
     private void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
     }
 
     private boolean enableTracker() {
-        //Ask permission for location
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            Toast.makeText(getActivity(), "Veuillez autoriser la localisation pour l'analyse",
-                    Toast.LENGTH_LONG).show();
-            return false;
-        }
 
         //Ask user to enable location service
         try {
@@ -185,34 +189,26 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
             if (off == 0) {
                 Intent onGPS = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(onGPS);
-                Toast.makeText(getActivity(), "Veuillez activer la localisation pour l'analyse",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Veuillez activer la localisation pour l'analyse.", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } catch (Settings.SettingNotFoundException e) {
-            Toast.makeText(getActivity(), "Erreur : impossible d'activer la localisation",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Erreur : impossible d'activer la localisation.", Toast.LENGTH_SHORT).show();
         }
+
+        // Create an instance of GoogleAPIClient.
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        mGoogleApiClient.connect();
 
         //Start the accelerometer sensor
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //mSensorManager.unregisterListener(this);
         //mSensorManager.registerListener(this, mAccelerometer, 5000000, 5000000);
-
-        //Start the location sensor
-        //locationManager.removeUpdates(this);
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, -1, this);
-
-        // Create an instance of GoogleAPIClient.
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-
-        mGoogleApiClient.connect();
-
-
 
         //Keep this fragment alive
         wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DoNotSleep");
@@ -222,6 +218,7 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     @Override
     public void onDetach() {
         super.onDetach();
+        stopLocationUpdates();
     }
 
     @Override
@@ -235,43 +232,33 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
         // Do nothing here
     }
 
-
-/*
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }*/
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         startLocationUpdates();
     }
 
     private void startLocationUpdates() {
-        Log.d("LOC", "StartLocationUpdates");
         LocationRequest locRequest = LocationRequest.create();
         locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locRequest.setInterval(1000);
         locRequest.setFastestInterval(200);
+
+        // Ask permission for location
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            Toast.makeText(getActivity(), "Veuillez autoriser la géolocalisation pour l'analyse de déplacements.", Toast.LENGTH_LONG).show();
             return;
         }
-        Log.d("LOC", "StartLocationUpdates : request");
+
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locRequest, this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // todo : check
+        startLocationUpdates();
     }
 
     @Override
@@ -279,25 +266,50 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
         if (location == null) {
             return;
         }
+
         Log.d("LOC", "update received : " + String.valueOf(location.getLatitude()) + " - " + String.valueOf(location.getLongitude()));
+
         mNbGpsData++;
 
         JsonObject json = new JsonObject();
         json.addProperty("latitude", location.getLatitude());
         json.addProperty("longitude", location.getLongitude());
-        json.addProperty("accuracy", location.getAccuracy());
+
+        if (location.hasSpeed()) {
+            json.addProperty("speed", location.getSpeed());
+        } else {
+            json.addProperty("speed", -1);
+        }
+
         json.addProperty("timestamp", location.getTime());
+
         mGpsJson.add(json);
+
         if (mNbGpsData >= MAX_NB_GPS_DATA) {
             JsonObject param = new JsonObject();
             param.add("gps", mGpsJson);
             param.add("accel", mAccJson);
-            // Todo : API call
 
             lyonRewardsApi.travel(mConnectionManager.getConnectedUser().getId(), param, new Callback<TravelData>() {
                 @Override
                 public void onResponse(Call<TravelData> call, Response<TravelData> response) {
-                    // todo : handle result and update ui
+                    if (response.isSuccessful()) {
+                        Gson gson = new Gson();
+                        TravelData data = response.body();
+
+                        Log.d("LOC", "API response : " + gson.toJson(response));
+
+                        if (mCurrentType == null && data.getMode() != null) {
+                            // // TODO: 02/05/2016
+
+                            mCurrentMovingTypeContainer.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        Log.d("API", "Error : " + response.message());
+                    }
+
+
+
                 }
 
                 @Override
@@ -307,7 +319,6 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
                 }
             });
 
-
             Log.d("LOC", "data : " + param.toString());
             mGpsJson = new JsonArray();
             mAccJson = new JsonArray();
@@ -316,7 +327,6 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override

@@ -56,7 +56,7 @@
                                     android:id="@+id/card_travel_progress_percent"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="75 "
+                                    android:text="0 "
                                     android:textColor="@color/white"
                                     android:textSize="10dp" />
                                 <TextView
@@ -87,13 +87,14 @@
                     android:layout_height="100dp">
 
                     <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/card_travel_circularProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:cpb_background_progressbar_color="#FFCDD2"
+                        app:cpb_background_progressbar_color="@color/colorBackgroundLight"
                         app:cpb_background_progressbar_width="8dp"
-                        app:cpb_progress="75"
-                        app:cpb_progressbar_color="#F44336"
+                        app:cpb_progress="0"
+                        app:cpb_progressbar_color="@color/colorPrimary"
                         app:cpb_progressbar_width="10dp" />
 
                     <LinearLayout

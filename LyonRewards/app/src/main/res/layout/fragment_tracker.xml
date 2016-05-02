@@ -45,6 +45,7 @@
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/current_moving_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/cardMarginVertical"
@@ -56,7 +57,8 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="4dp"
         app:cardPreventCornerOverlap="false"
-        app:contentPadding="5dp">
+        app:contentPadding="5dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +76,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:text="Déplacement à vélo en cours"
+                android:text="Déplacement à "
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/current_moving_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="vélo"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text=" en cours"
                 android:textColor="@color/white" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

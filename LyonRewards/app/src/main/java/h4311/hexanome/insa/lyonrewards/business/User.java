@@ -51,6 +51,22 @@ public class User implements Parcelable {
     @Expose
     private int currentPoints;
 
+    @SerializedName("bike_distance")
+    @Expose
+    private int bikeDistance;
+
+    @SerializedName("walk_distance")
+    @Expose
+    private int walkDistance;
+
+    @SerializedName("tram_distance")
+    @Expose
+    private int tramDistance;
+
+    @SerializedName("bus_distance")
+    @Expose
+    private int busDistance;
+
     private String currentToken;
 
     /**
@@ -60,7 +76,7 @@ public class User implements Parcelable {
 
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints, int bikeDistance, int walkDistance, int tramDistance, int busDistance) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -71,6 +87,10 @@ public class User implements Parcelable {
         this.currentPoints = currentPoints;
         this.last24hPoints = last24hPoints;
         this.lastMonthPoints = lastMonthPoints;
+        this.bikeDistance = bikeDistance;
+        this.walkDistance = walkDistance;
+        this.tramDistance = tramDistance;
+        this.busDistance = busDistance;
     }
 
     public int getId() {
@@ -195,6 +215,10 @@ public class User implements Parcelable {
         this.currentToken = in.readString();
         this.last24hPoints = in.readInt();
         this.lastMonthPoints = in.readInt();
+        this.bikeDistance = in.readInt();
+        this.walkDistance = in.readInt();
+        this.tramDistance = in.readInt();
+        this.busDistance = in.readInt();
     }
 
     @Override
@@ -215,5 +239,41 @@ public class User implements Parcelable {
         dest.writeString(currentToken);
         dest.writeInt(last24hPoints);
         dest.writeInt(lastMonthPoints);
+        dest.writeInt(bikeDistance);
+        dest.writeInt(walkDistance);
+        dest.writeInt(tramDistance);
+        dest.writeInt(busDistance);
+    }
+
+    public int getBikeDistance() {
+        return bikeDistance;
+    }
+
+    public void setBikeDistance(int bikeDistance) {
+        this.bikeDistance = bikeDistance;
+    }
+
+    public int getWalkDistance() {
+        return walkDistance;
+    }
+
+    public void setWalkDistance(int walkDistance) {
+        this.walkDistance = walkDistance;
+    }
+
+    public int getTramDistance() {
+        return tramDistance;
+    }
+
+    public void setTramDistance(int tramDistance) {
+        this.tramDistance = tramDistance;
+    }
+
+    public int getBusDistance() {
+        return busDistance;
+    }
+
+    public void setBusDistance(int busDistance) {
+        this.busDistance = busDistance;
     }
 }
