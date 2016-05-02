@@ -458,14 +458,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void updateConnectedUser(User user) {
-        // Update nav header
-        View hView = navigationView.getHeaderView(0);
-        TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
-        drawerUserTitle.setText(user.getFirstName() + " " + user.getLastName());
-        TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
-        drawerUserEmail.setText(user.getEmail());
-        TextView drawerUserPoints = (TextView) hView.findViewById(R.id.nav_header_user_nb_points);
-        drawerUserPoints.setText(String.valueOf(user.getCurrentPoints()));
+        if (user != null) {
+            // Update nav header
+            View hView = navigationView.getHeaderView(0);
+            TextView drawerUserTitle = (TextView) hView.findViewById(R.id.nav_header_user_title);
+            drawerUserTitle.setText(user.getFirstName() + " " + user.getLastName());
+            TextView drawerUserEmail = (TextView) hView.findViewById(R.id.nav_header_user_email);
+            drawerUserEmail.setText(user.getEmail());
+            TextView drawerUserPoints = (TextView) hView.findViewById(R.id.nav_header_user_nb_points);
+            drawerUserPoints.setText(String.valueOf(user.getCurrentPoints()));
+        }
     }
 
 }

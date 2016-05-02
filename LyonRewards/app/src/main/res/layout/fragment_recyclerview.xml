@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrolltab_tab_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/scrolltab_tab_no_data_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Aucune donnée"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:padding="10dp"
         android:visibility="gone"/>
-</FrameLayout>
+</LinearLayout>
