@@ -1,8 +1,12 @@
 package h4311.hexanome.insa.lyonrewards.di.module.auth;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.User;
 
 /**
@@ -42,6 +46,20 @@ public class ConnectionManager {
 
     public User getConnectedUser() {
         return mConnectedUser;
+    }
+
+    public void disconnect(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.preference_file_user), Context.MODE_PRIVATE);
+
+        String noUser = context.getString(R.string.no_user);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(context.getString(R.string.current_user), noUser);
+
+        editor.apply();
+
+        mConnectedUser = null;
     }
 
     public void debitCredit(int nbPoints) {

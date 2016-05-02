@@ -47,6 +47,7 @@ import h4311.hexanome.insa.lyonrewards.di.module.gcm.QuickstartPreferences;
 import h4311.hexanome.insa.lyonrewards.di.module.gcm.RegistrationIntentService;
 import h4311.hexanome.insa.lyonrewards.view.events.EventDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.events.EventsFragment;
+import h4311.hexanome.insa.lyonrewards.view.login.LoginActivity;
 import h4311.hexanome.insa.lyonrewards.view.profile.ProfileFragment;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.OnQrCodeFoundListener;
 import h4311.hexanome.insa.lyonrewards.view.qrcode.QrCodeContent;
@@ -434,6 +435,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = ProfileFragment.newInstance(bundle);
             fragmentName = ProfileFragment.getFragmentTag();
             fragmentTitle = ProfileFragment.getFragmentTitle();
+        }
+        else if(id == R.id.nav_logout) {
+            mConnectionManager.disconnect(getApplicationContext());
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+
+            return true;
         }
         else {
             // Stay on currentFragment if option is not yet implemented

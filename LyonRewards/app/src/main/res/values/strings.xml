@@ -54,4 +54,9 @@
     <string name="gcm_defaultSenderId">988055759912</string>
     <string name="action_scan_qrcode">Scanner un QR Code</string>
     <string name="scanner_qrcode_already_found">Vous avez déjà récupéré les points de ce QR code.</string>
+
+    <string name="preference_file_user" translatable="false">h4311.hexanome.insa.lyonrewards.PREFERENCE_FILE_KEY</string>
+    <string name="no_user">noUser</string>
+    <string name="current_user">currentUser</string>
+
 </resources>
