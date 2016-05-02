@@ -80,18 +80,7 @@ public class EventsFragment extends Fragment {
         mViewPager.getViewPager().setOffscreenPageLimit(mViewPager.getViewPager().getAdapter().getCount());
         mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
 
-        View logo = view.findViewById(R.id.scrolltab_header_logo);
-        if (logo != null)
-            logo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mViewPager.notifyHeaderChanged();
-                    // TODO Change ?
-                    Toast.makeText(getActivity().getApplicationContext(), "Yes, the title is clickable", Toast.LENGTH_SHORT).show();
-                }
-            });
 
-        // TODO : check
         Toolbar toolbar = mViewPager.getToolbar();
         toolbar.setVisibility(View.GONE);
 
