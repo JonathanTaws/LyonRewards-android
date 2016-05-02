@@ -3,7 +3,9 @@ package h4311.hexanome.insa.lyonrewards.view.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -17,6 +19,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
@@ -75,6 +80,19 @@ public class LoginActivity extends AppCompatActivity {
 
         ((LyonRewardsApplication) getApplication()).getAppComponent().inject(this);
 
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                getApplicationContext().getString(R.string.preference_file_user), Context.MODE_PRIVATE
+        );
+
+        String noUserString = getApplicationContext().getString(R.string.no_user);
+        String userString = sharedPreferences.getString(getApplicationContext().getString(R.string.current_user), noUserString);
+
+        if(!userString.equals(noUserString)) {
+            showProgress(true);
+            User user = new Gson().fromJson(userString, User.class);
+            saveUserToSharedPrefs(user);
+            proceedToMainActivity(user);
+        }
 
     }
 
@@ -171,6 +189,30 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 0;
     }
 
+    private void proceedToMainActivity(User user) {
+        mConnectionManager.setConnectedUser(user);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        this.startActivity(intent);
+        this.finish();
+    }
+
+    private void saveUserToSharedPrefs(User user) {
+        Context context = getApplicationContext();
+
+        String userString = new Gson().toJson(user,
+                User.class);
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.preference_file_user), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(context.getString(R.string.current_user), userString);
+
+        editor.apply();
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -209,10 +251,8 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
 
             if (success) {
-                mConnectionManager.setConnectedUser(mUser);
-                Intent intent = new Intent(mActivity, MainActivity.class);
-                mActivity.startActivity(intent);
-                mActivity.finish();
+                saveUserToSharedPrefs(mUser);
+                proceedToMainActivity(mUser);
                 finish();
             } else {
                 showProgress(false);
