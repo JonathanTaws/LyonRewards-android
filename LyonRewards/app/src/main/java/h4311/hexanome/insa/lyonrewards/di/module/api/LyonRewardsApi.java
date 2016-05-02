@@ -7,6 +7,7 @@ import java.util.List;
 
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
+import h4311.hexanome.insa.lyonrewards.business.TravelData;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.UserConnection;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
@@ -116,6 +117,22 @@ public class LyonRewardsApi {
     }
 
 
+    /** ---------------------------------------- USERS ---------------------------------------  **/
+
+    public User loginUser(String username, String password) throws IOException {
+        Call<UserConnection> call = mLyonRewardsEndpoint.login(username, password);
+        Response<UserConnection> execute = call.execute();
+
+        UserConnection userConnection = execute.body();
+        if (userConnection == null) {
+            return null;
+        } else {
+            User user = userConnection.getUser();
+            user.setCurrentToken(userConnection.getToken());
+            return user;
+        }
+    }
+
     public void addActToUser(User user, int actId, Callback<User> callback) {
         Call<User> call = mLyonRewardsEndpoint.addActToUser(user.getId(), actId);
         call.enqueue(callback);
@@ -132,19 +149,11 @@ public class LyonRewardsApi {
         return execute.body();
     }
 
-    public User loginUser(String username, String password) throws IOException {
-        Call<UserConnection> call = mLyonRewardsEndpoint.login(username, password);
-        Response<UserConnection> execute = call.execute();
-
-        UserConnection userConnection = execute.body();
-        if (userConnection == null) {
-            return null;
-        } else {
-            User user = userConnection.getUser();
-            user.setCurrentToken(userConnection.getToken());
-            return user;
-        }
+    public void travel(int userId, JsonObject bodyData, Callback<TravelData> callback) {
+        Call<TravelData> call = mLyonRewardsEndpoint.travel(userId, bodyData);
+        call.enqueue(callback);
     }
+
 
     public void getRankings(Callback<List<User>> callback) {
         Call<List<User>> call = mLyonRewardsEndpoint.getRankings();

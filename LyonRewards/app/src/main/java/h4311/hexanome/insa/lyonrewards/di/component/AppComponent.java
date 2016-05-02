@@ -22,6 +22,7 @@ import h4311.hexanome.insa.lyonrewards.view.rankings.RankingsViewAdapter;
 import h4311.hexanome.insa.lyonrewards.view.rewards.OfferDetailFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragment;
 import h4311.hexanome.insa.lyonrewards.view.rewards.RewardsFragmentOffersAdapter;
+import h4311.hexanome.insa.lyonrewards.view.tracker.TrackerFragment;
 
 /**
  * Created by Pierre on 26/04/2016.
@@ -58,4 +59,6 @@ public interface AppComponent {
     void inject(RankingsFragment rankingsFragment);
 
     void inject(RankingsViewAdapter rankingsViewAdapter);
+
+    void inject(TrackerFragment trackerFragment);
 }

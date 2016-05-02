@@ -6,12 +6,14 @@ import java.util.List;
 
 import h4311.hexanome.insa.lyonrewards.business.Event;
 import h4311.hexanome.insa.lyonrewards.business.Offer;
+import h4311.hexanome.insa.lyonrewards.business.TravelData;
 import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.business.UserConnection;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -68,6 +70,9 @@ public interface LyonRewardsEndpoint {
     @FormUrlEncoded
     @POST("login/")
     Call<UserConnection> login(@Field("username") String username, @Field("password") String password);
+
+    @POST("users/{userId}/travel/")
+    Call<TravelData> travel(@Path("userId") int userId, @Body JsonObject bodyData);
 
     @GET("users/ranking")
     Call<List<User>> getRankings();
