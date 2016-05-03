@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:layout_centerHorizontal="true">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/scrolltab_header_logo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:adjustViewBounds="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/header_thumbnail" />-->
+
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
-        android:src="@drawable/header_thumbnail" />
+        android:background="@drawable/circle"></FrameLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:text="T"/>
 </FrameLayout>

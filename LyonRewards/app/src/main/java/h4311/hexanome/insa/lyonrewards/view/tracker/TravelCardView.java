@@ -117,11 +117,12 @@ public class TravelCardView extends LinearLayout {
         mCircularProgressBar.setProgressWithAnimation(progress);
     }
 
-    public void addSuccess(float progression, int newTotalKm, int pointsGranted) {
+    public void addSuccess(float progression, float newTotalKm, int pointsGranted) {
         updateProgression(100.0f);
         updateProgression(progression);
-        mNumberKm.setText(String.valueOf(newTotalKm));
-        mNumberKmProgress.setText(String.valueOf(newTotalKm));
+        int newTotalKmInt = (int) newTotalKm;
+        mNumberKm.setText(String.valueOf(newTotalKmInt));
+        mNumberKmProgress.setText(String.valueOf(newTotalKmInt));
         mNumberPointsValue += pointsGranted;
         mNumberPoints.setText(String.valueOf(mNumberPointsValue));
     }
