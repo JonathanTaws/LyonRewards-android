@@ -60,59 +60,21 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/lyon_rewards_logo_head" />
+                android:src="@drawable/lyon_rewards_logo_head"
+                />
 
-            <EditText
-                android:id="@+id/login_pseudo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="Nom d'utilisateur"
-                android:inputType="text"
-                android:padding="10dp"
-                android:singleLine="true"
-                android:text="Antoine"
-                android:textColor="#222222"
-                android:textColorHint="#999999" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
 
-            <EditText
-                android:id="@+id/login_password"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="Mot de passe"
-                android:inputType="textPassword"
-                android:padding="10dp"
-                android:singleLine="true"
-                android:text="azertyuiop"
-                android:textColor="#222222"
-                android:textColorHint="#999999" />
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
 
-            <!-- Login Button -->
 
-            <Button
-                android:id="@+id/login_btn_login"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:background="@color/colorPrimary"
-                android:text="Se connecter"
-
-                android:textColor="@android:color/white" />
-
-            <!-- Link to Login Screen -->
-
-            <Button
-                android:id="@+id/btnLinkToRegisterScreen"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dip"
-                android:background="@null"
-                android:text="Pas encore inscrit ? S'enregistrer maintenant."
-                android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15dp" />
         </LinearLayout>
 
 

@@ -65,6 +65,9 @@ public interface LyonRewardsEndpoint {
     @POST("users/{userId}/acts/{actId}/credit")
     Call<User> addActToUser(@Path("userId") int userId, @Path("actId") int actId);
 
+    @GET("/users/{id}")
+    Call<User> getUserById(@Path("id") int id);
+
     @GET("users/{username}")
     Call<User> getUserByUserName(@Path("username") String username);
 
