@@ -112,28 +112,31 @@ public class TravelCardView extends LinearLayout {
         mType.setText(nameType);
         mImage.setImageResource(imageRes);
         mNumberKm.setText(String.format("%.02f", numberKm));
-        mNumberKmProgress.setText(String.valueOf(numberKm));
+        mNumberKmProgress.setText(String.format("%.02f", numberKm));
         mNumberPoints.setText(String.valueOf(mNumberPointsValue));
     }
 
-    public void updateProgression(Float progress) {
+    public void updateProgression(Float progress, float newTotalKm) {
         mProgressPercent.setText(String.valueOf((int) progress.floatValue()));
         mCircularProgressBar.setProgressWithAnimation(progress);
+
+        mNumberKm.setText(String.format("%.02f", newTotalKm));
+        mNumberKmProgress.setText(String.format("%.02f", newTotalKm));
     }
 
     public void addSuccess(float progression, float newTotalKm, int pointsGranted) {
 
-        int newTotalKmInt = (int) newTotalKm;
-        mNumberKm.setText(String.valueOf(newTotalKmInt));
-        mNumberKmProgress.setText(String.valueOf(newTotalKmInt));
+        mNumberKm.setText(String.format("%.02f", newTotalKm));
+        mNumberKmProgress.setText(String.format("%.02f", newTotalKm));
         mNumberPointsValue += pointsGranted;
         mNumberPoints.setText(String.valueOf(mNumberPointsValue));
-        updateProgression(100.0f);
+        updateProgression(100.0f, newTotalKm);
         try {
             Thread.sleep(1500);
+            mCircularProgressBar.setProgress(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        updateProgression(progression);
+        updateProgression(progression, newTotalKm);
     }
 }

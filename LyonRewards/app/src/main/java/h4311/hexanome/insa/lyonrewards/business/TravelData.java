@@ -29,7 +29,7 @@ public class TravelData {
     @Expose
     private Integer pointsGranted;
 
-    @SerializedName("tags")
+    @SerializedName("citizen_acts")
     @Expose
     private List<TravelCitizenAct> travelCitizenActs = new ArrayList<>();
 

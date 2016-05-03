@@ -168,6 +168,7 @@ public class OfferDetailFragment extends Fragment {
     }
 
     public void setOfferAsPaid() {
+        mCardOfferIsUsedText.setText("Cette offre vient d'être utilisée. Vous avez été débités de " + mOffer.getPoints() + " points.");
         mCardOfferIsUsed.setVisibility(View.VISIBLE);
         mPayButton.setVisibility(View.VISIBLE);
         mQrCodeLayout.setVisibility(View.GONE);

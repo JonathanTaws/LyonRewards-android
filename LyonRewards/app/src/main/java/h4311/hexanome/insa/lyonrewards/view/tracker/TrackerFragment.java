@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -34,7 +35,6 @@ import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.TravelData;
 import h4311.hexanome.insa.lyonrewards.business.UserTravelProgression;
-import h4311.hexanome.insa.lyonrewards.business.act.CitizenAct;
 import h4311.hexanome.insa.lyonrewards.business.act.TravelCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
@@ -58,6 +58,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.inject.Inject;
 
@@ -98,7 +104,9 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     private int mNbGpsData = 0;
 
     // todo : 10
-    private static int MAX_NB_GPS_DATA = 3;
+    private static int MAX_NB_GPS_DATA = 1;
+
+    private static boolean MOCK_DATA = true;
 
     private GoogleApiClient mGoogleApiClient;
     private TravelCardView mTravelBike;
@@ -191,10 +199,12 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
             public void onResponse(Call<UserTravelProgression> call, Response<UserTravelProgression> response) {
                 if (response.isSuccessful()) {
                     UserTravelProgression userTravelProgression = response.body();
-                    mTravelBike.updateProgression(userTravelProgression.getBikeProgress() * 100.0f);
-                    mTravelBus.updateProgression(userTravelProgression.getBusProgress() * 100.0f);
-                    mTravelTram.updateProgression(userTravelProgression.getTramProgress() * 100.0f);
-                    mTravelWalk.updateProgression(userTravelProgression.getWalkProgress() * 100.0f);
+                    mTravelBike.updateProgression(userTravelProgression.getBikeProgress() * 100.0f, mConnectionManager.getConnectedUser().getBikeDistance());
+                    mTravelBus.updateProgression(userTravelProgression.getBusProgress() * 100.0f, mConnectionManager.getConnectedUser().getBusDistance());
+                    mTravelTram.updateProgression(userTravelProgression.getTramProgress() * 100.0f, mConnectionManager.getConnectedUser().getTramDistance());
+                    mTravelWalk.updateProgression(userTravelProgression.getWalkProgress() * 100.0f, mConnectionManager.getConnectedUser().getWalkDistance());
+
+
                 } else {
                     // todo : handle error
                     Log.d("API", "Error : " + response.message());
@@ -208,12 +218,19 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
             }
         });
 
-       // Snackbar.make(mFrameLayout, "TEST", Snackbar.LENGTH_INDEFINITE)
-         //       .show();
+
+
+        /*
+       Snackbar.make(mFrameLayout, "TEST", Snackbar.LENGTH_SHORT)
+                .show();*/
 
         return view;
     }
 
+    private void showSnackBar(String snackBarText) {
+        Snackbar.make(mFrameLayout, snackBarText, Snackbar.LENGTH_LONG)
+                .show();
+    }
 
 
     private void disableTracker() {
@@ -347,10 +364,25 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
 
         mGpsJson.add(json);
 
+
+
         if (mNbGpsData >= MAX_NB_GPS_DATA) {
             JsonObject param = new JsonObject();
             param.add("gps", mGpsJson);
             param.add("accel", mAccJson);
+
+            if (MOCK_DATA) {
+                JsonParser jsonParser = new JsonParser();
+                try {
+                    AssetManager am = getContext().getAssets();
+                    InputStream inputStream = am.open("data_velo.json");
+                    param = (JsonObject) jsonParser.parse(new InputStreamReader(inputStream));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             lyonRewardsApi.travel(mConnectionManager.getConnectedUser().getId(), param, new Callback<TravelData>() {
                 @Override
@@ -382,15 +414,17 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
                                         nbPoints += travelCitizenAct.getPoints();
                                     }
 
+                                    Log.d("LOC", "has travel citizen acts");
+
                                     updatedTravelCardView.addSuccess(progression, data.getNewTotalKm(), data.getPointsGranted());
 
                                     String snackBarText =
                                             data.getTravelCitizenActs().get(0).getTitle() + " : vous venez de gagner " + nbPoints + " points en parcourant " + distance + " km.";
 
-                                    Snackbar.make(mFrameLayout, snackBarText, Snackbar.LENGTH_SHORT)
-                                            .show();
+                                    showSnackBar(snackBarText);
+                                    //Snackbar.make(mFrameLayout, snackBarText, Snackbar.LENGTH_INDEFINITE).show();
                                 } else {
-                                    updatedTravelCardView.updateProgression(progression);
+                                    updatedTravelCardView.updateProgression(progression, data.getNewTotalKm());
                                 }
                             }
                         }
