@@ -17,4 +17,5 @@
     app:pstsTabTextColor="@android:color/white"
     app:pstsTabBackground="@color/scrolltab_tab_bg_color"
 
+
     />
