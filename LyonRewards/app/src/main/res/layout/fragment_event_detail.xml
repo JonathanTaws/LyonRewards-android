@@ -5,7 +5,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <FrameLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
@@ -29,10 +29,9 @@
             app:viewpager_animatedHeaderImage="false"
             app:viewpager_disableToolbar="true"
             app:viewpager_pagerTitleStrip="@layout/scrolltab_tab_layout_without_alpha"
-
             />
 
-    </FrameLayout>
+    </LinearLayout>
 
     </RelativeLayout>
 

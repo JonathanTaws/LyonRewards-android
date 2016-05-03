@@ -84,25 +84,25 @@ public class TravelCardView extends LinearLayout {
             case WALK:
                 nameType = "pied";
                 imageRes = R.drawable.ic_directions_walk_black_48dp;
-                numberKm = mUser.getWalkDistance();
+                numberKm = (int) mUser.getWalkDistance();
                 numberPoints = mUser.getWalkPoints();
                 break;
             case BIKE:
                 nameType = "vélo";
                 imageRes = R.drawable.ic_directions_bike_black_48dp;
-                numberKm = mUser.getBikeDistance();
+                numberKm = (int) mUser.getBikeDistance();
                 numberPoints = mUser.getBikePoints();
                 break;
             case TRAM:
                 nameType = "tram";
                 imageRes = R.drawable.ic_tram_black_48dp;
-                numberKm = mUser.getTramDistance();
+                numberKm = (int) mUser.getTramDistance();
                 numberPoints = mUser.getTramPoints();
                 break;
             case BUS:
                 nameType = "bus";
                 imageRes = R.drawable.ic_directions_bus_black_48dp;
-                numberKm = mUser.getBusDistance();
+                numberKm = (int) mUser.getBusDistance();
                 numberPoints = mUser.getBusPoints();
                 break;
         }

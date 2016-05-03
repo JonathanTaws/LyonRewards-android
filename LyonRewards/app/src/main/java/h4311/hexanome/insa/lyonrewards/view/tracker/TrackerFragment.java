@@ -97,7 +97,8 @@ public class TrackerFragment extends Fragment implements SensorEventListener, Go
     private JsonArray mAccJson = new JsonArray();
     private int mNbGpsData = 0;
 
-    private static int MAX_NB_GPS_DATA = 10;
+    // todo : 10
+    private static int MAX_NB_GPS_DATA = 3;
 
     private GoogleApiClient mGoogleApiClient;
     private TravelCardView mTravelBike;

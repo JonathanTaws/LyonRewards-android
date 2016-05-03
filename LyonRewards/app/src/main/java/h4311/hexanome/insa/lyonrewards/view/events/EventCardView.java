@@ -3,6 +3,7 @@ package h4311.hexanome.insa.lyonrewards.view.events;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,8 @@ public class EventCardView extends LinearLayout {
         ((LyonRewardsApplication) activity.getApplication()).getAppComponent().inject(this);
 
         setOrientation(LinearLayout.VERTICAL);
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        setLayoutParams(layoutParams);
 
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View child = inflater.inflate(R.layout.cardview_event_layout, null);

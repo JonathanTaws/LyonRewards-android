@@ -92,7 +92,7 @@ public class User implements Parcelable {
 
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints, int bikeDistance, int walkDistance, int tramDistance, int busDistance, int bikePoints, int walkPoints, int tramPoints, int busPoints) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, int globalPoints, int currentPoints, int last24hPoints, int lastMonthPoints, float bikeDistance, float walkDistance, float tramDistance, float busDistance, int bikePoints, int walkPoints, int tramPoints, int busPoints) {
         this.id = id;
         this.username = username;
         this.password = password;
