@@ -237,6 +237,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Fragment oldFragment = null;
                 HistoryFragment previous = historyFragments.peek();
                 String previousTag = previous.getTag();
+                if(previousTag == null) {
+                    super.onBackPressed();
+                }
                 if (previousTag.equals(EventsFragment.getFragmentTag())) {
                     oldFragment = new EventsFragment();
                 } else if (previousTag.equals(RewardsFragment.getFragmentTag())) {
