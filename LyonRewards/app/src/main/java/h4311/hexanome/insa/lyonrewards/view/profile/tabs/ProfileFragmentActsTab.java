@@ -102,15 +102,16 @@ public class ProfileFragmentActsTab extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getAllEventsWithUserProgression(connectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
+        lyonRewardsApi.getMyEvents(connectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 if(response.code() == 200) {
                     List<Event> events = response.body();
 
                     for(Event event : events) {
+
                         mObjects.add(event);
-                        mObjects.add(new QRCodeCitizenAct(1, "test", "test", 12, 1, true, new Date()));
+                        //mObjects.add(new QRCodeCitizenAct(1, "test", "test", 12, 1, true, new Date()));
                     }
 
                     mAdapter.notifyDataSetChanged();
