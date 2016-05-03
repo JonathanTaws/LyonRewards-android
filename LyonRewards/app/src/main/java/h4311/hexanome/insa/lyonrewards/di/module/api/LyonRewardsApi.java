@@ -180,4 +180,9 @@ public class LyonRewardsApi {
         Call<List<JsonObject>> call = mLyonRewardsEndpoint.getUserHistoryType(id, limit, "acts", "newest");
         call.enqueue(callback);
     }
+
+    public void getUserHistoryOffers(int id, int limit, Callback<List<JsonObject>> callback) {
+        Call<List<JsonObject>> call = mLyonRewardsEndpoint.getUserHistoryType(id, limit, "offers", "newest");
+        call.enqueue(callback);
+    }
 }

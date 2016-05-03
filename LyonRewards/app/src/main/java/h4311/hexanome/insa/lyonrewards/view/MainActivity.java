@@ -412,6 +412,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             fragment = QrReaderFragment.newInstance(bundle);
             fragmentName = QrReaderFragment.getFragmentTag();
+            fragmentTitle = QrReaderFragment.getFragmentTitle();
         } else if (id == R.id.nav_tracker) {
             fragment = TrackerFragment.newInstance();
             fragmentName = MainActivity.TRACKER_FRAGMENT;

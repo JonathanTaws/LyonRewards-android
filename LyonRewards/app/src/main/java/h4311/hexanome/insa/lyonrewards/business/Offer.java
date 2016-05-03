@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 import h4311.hexanome.insa.lyonrewards.business.act.Partner;
 
 public class Offer implements Parcelable {
@@ -29,6 +31,8 @@ public class Offer implements Parcelable {
     @SerializedName("partner")
     @Expose
     private Partner partner;
+
+    private Date useDate;
 
     /**
      * No args constructor for use in serialization
@@ -154,4 +158,11 @@ public class Offer implements Parcelable {
         dest.writeParcelable(partner, 0);
     }
 
+    public Date getUseDate() {
+        return useDate;
+    }
+
+    public void setUseDate(Date useDate) {
+        this.useDate = useDate;
+    }
 }

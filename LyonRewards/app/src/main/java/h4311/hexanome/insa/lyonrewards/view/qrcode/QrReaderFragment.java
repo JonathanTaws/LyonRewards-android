@@ -54,6 +54,10 @@ public class QrReaderFragment extends Fragment implements QRCodeReaderView.OnQRC
         return "OfferDetailFragment";
     }
 
+    public static String getFragmentTitle() {
+        return "Scanner un QR code";
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

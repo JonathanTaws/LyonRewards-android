@@ -19,6 +19,7 @@ import h4311.hexanome.insa.lyonrewards.view.login.LoginActivity;
 import h4311.hexanome.insa.lyonrewards.view.profile.ProfileFragment;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentActsTab;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentInfoTab;
+import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentOffersTab;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentTravelsTab;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentsActsTabAdapter;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.holders.EventViewHolder;
@@ -80,4 +81,6 @@ public interface AppComponent {
     void inject(EventViewHolder eventViewHolder);
 
     void inject(ProfileFragmentTravelsTab profileFragmentTravelsTab);
+
+    void inject(ProfileFragmentOffersTab profileFragmentOffersTab);
 }
