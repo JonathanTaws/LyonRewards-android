@@ -122,12 +122,18 @@ public class TravelCardView extends LinearLayout {
     }
 
     public void addSuccess(float progression, float newTotalKm, int pointsGranted) {
-        updateProgression(100.0f);
-        updateProgression(progression);
+
         int newTotalKmInt = (int) newTotalKm;
         mNumberKm.setText(String.valueOf(newTotalKmInt));
         mNumberKmProgress.setText(String.valueOf(newTotalKmInt));
         mNumberPointsValue += pointsGranted;
         mNumberPoints.setText(String.valueOf(mNumberPointsValue));
+        updateProgression(100.0f);
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        updateProgression(progression);
     }
 }
