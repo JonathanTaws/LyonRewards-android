@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -36,6 +37,9 @@ import h4311.hexanome.insa.lyonrewards.business.User;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A login screen that offers login via email/password.
@@ -72,8 +76,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+        setContentView(R.layout.splash_screen);
+
         //getSupportActionBar().hide();
         getSupportActionBar().setTitle("Connexion");
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -87,11 +91,33 @@ public class LoginActivity extends AppCompatActivity {
         String noUserString = getApplicationContext().getString(R.string.no_user);
         String userString = sharedPreferences.getString(getApplicationContext().getString(R.string.current_user), noUserString);
 
+
+
         if(!userString.equals(noUserString)) {
-            showProgress(true);
-            User user = new Gson().fromJson(userString, User.class);
-            saveUserToSharedPrefs(user);
-            proceedToMainActivity(user);
+
+            final User storedUser = new Gson().fromJson(userString, User.class);
+            mLyonRewardsApi.getUserById(storedUser.getId(), new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    User user = storedUser;
+                    if(response.code() == 200) {
+                        user = response.body();
+                        saveUserToSharedPrefs(user);
+                    }
+                    proceedToMainActivity(user);
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    // TODO
+                    Log.d("API", "Error : " + t.getMessage());
+                    proceedToMainActivity(storedUser);
+                }
+            });
+        }
+        else {
+            setContentView(R.layout.activity_login);
+            ButterKnife.bind(this);
         }
 
     }

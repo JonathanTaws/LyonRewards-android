@@ -139,6 +139,11 @@ public class LyonRewardsApi {
         call.enqueue(callback);
     }
 
+    public void getUserById(int id, Callback<User> callback) {
+        Call<User> call = mLyonRewardsEndpoint.getUserById(id);
+        call.enqueue(callback);
+    }
+
     public User getUserByUserName(String username) {
         Call<User> call = mLyonRewardsEndpoint.getUserByUserName(username);
         Response<User> execute;
