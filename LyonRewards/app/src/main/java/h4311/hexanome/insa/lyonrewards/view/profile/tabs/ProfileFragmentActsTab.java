@@ -5,16 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -23,7 +28,9 @@ import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
+import h4311.hexanome.insa.lyonrewards.business.act.TravelCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
@@ -36,6 +43,8 @@ import retrofit2.Response;
  * Created by Jonathan on 02/05/2016.
  */
 public class ProfileFragmentActsTab extends Fragment {
+
+    private static final int MAX_NB_RESULTS = 100;
 
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
@@ -77,7 +86,6 @@ public class ProfileFragmentActsTab extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -102,15 +110,32 @@ public class ProfileFragmentActsTab extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getAllEventsWithUserProgression(connectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
+        lyonRewardsApi.getUserHistory(connectionManager.getConnectedUser().getId(), MAX_NB_RESULTS, new Callback<List<JsonObject>>() {
             @Override
-            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+            public void onResponse(Call<List<JsonObject>> call, Response<List<JsonObject>> response) {
                 if(response.code() == 200) {
-                    List<Event> events = response.body();
+                    List<JsonObject> objects = response.body();
 
-                    for(Event event : events) {
-                        mObjects.add(event);
-                        mObjects.add(new QRCodeCitizenAct(1, "test", "test", 12, 1, true, new Date()));
+                    Gson gson = new Gson();
+                    for(JsonObject jsonObject : objects) {
+                        if(jsonObject.has("citizen_act")) {
+                            JsonObject citizenActJson = jsonObject.getAsJsonObject("citizen_act");
+                            if("travel".equals(citizenActJson.get("type"))) {
+                                TravelCitizenAct travelCitizenAct = gson.fromJson(jsonObject, TravelCitizenAct.class);
+                                mObjects.add(travelCitizenAct);
+                            }
+                            else if("qrcode".equals(citizenActJson.get("type"))) {
+                                QRCodeCitizenAct qrCodeCitizenAct = gson.fromJson(jsonObject, QRCodeCitizenAct.class);
+                                mObjects.add(qrCodeCitizenAct);
+                            }
+                        }
+                        else if(jsonObject.has("partner_offer")) {
+                            Offer partnerOffer = gson.fromJson(jsonObject, Offer.class);
+                            mObjects.add(partnerOffer);
+                        }
+                        else {
+                            Log.d("API", "error : unkown json ");
+                        }
                     }
 
                     mAdapter.notifyDataSetChanged();
@@ -118,8 +143,9 @@ public class ProfileFragmentActsTab extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Event>> call, Throwable t) {
+            public void onFailure(Call<List<JsonObject>> call, Throwable t) {
                 // TODO
+                Log.d("API", "error : " + t.getMessage());
             }
         });
 

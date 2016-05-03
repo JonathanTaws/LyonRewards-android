@@ -170,4 +170,9 @@ public class LyonRewardsApi {
         Call<List<User>> call = mLyonRewardsEndpoint.getRankings();
         call.enqueue(callback);
     }
+
+    public void getUserHistory(int id, int limit, Callback<List<JsonObject>> callback) {
+        Call<List<JsonObject>> call = mLyonRewardsEndpoint.getUserHistory(id, limit);
+        call.enqueue(callback);
+    }
 }
