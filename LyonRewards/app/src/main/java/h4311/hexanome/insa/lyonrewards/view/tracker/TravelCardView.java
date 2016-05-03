@@ -73,7 +73,7 @@ public class TravelCardView extends LinearLayout {
     public void setType(TYPE type) {
         String nameType = "";
         int imageRes = 0;
-        int numberKm = 0;
+        float numberKm = 0;
         int numberPoints = 0;
 
         switch (type) {
@@ -107,7 +107,7 @@ public class TravelCardView extends LinearLayout {
 
         mType.setText(nameType);
         mImage.setImageResource(imageRes);
-        mNumberKm.setText(String.valueOf(numberKm));
+        mNumberKm.setText(String.format("%.02f", numberKm));
         mNumberKmProgress.setText(String.valueOf(numberKm));
         mNumberPoints.setText(String.valueOf(mNumberPointsValue));
     }
