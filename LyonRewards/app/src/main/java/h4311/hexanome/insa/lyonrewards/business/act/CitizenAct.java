@@ -3,6 +3,8 @@ package h4311.hexanome.insa.lyonrewards.business.act;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class CitizenAct {
 
     @SerializedName("id")

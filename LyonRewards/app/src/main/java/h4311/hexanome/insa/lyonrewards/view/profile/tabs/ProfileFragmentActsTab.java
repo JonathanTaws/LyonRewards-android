@@ -5,16 +5,25 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -23,7 +32,9 @@ import butterknife.ButterKnife;
 import h4311.hexanome.insa.lyonrewards.LyonRewardsApplication;
 import h4311.hexanome.insa.lyonrewards.R;
 import h4311.hexanome.insa.lyonrewards.business.Event;
+import h4311.hexanome.insa.lyonrewards.business.Offer;
 import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
+import h4311.hexanome.insa.lyonrewards.business.act.TravelCitizenAct;
 import h4311.hexanome.insa.lyonrewards.di.module.api.LyonRewardsApi;
 import h4311.hexanome.insa.lyonrewards.di.module.auth.ConnectionManager;
 import h4311.hexanome.insa.lyonrewards.view.MainActivity;
@@ -37,6 +48,8 @@ import retrofit2.Response;
  */
 public class ProfileFragmentActsTab extends Fragment {
 
+    private static final int MAX_NB_RESULTS = 100;
+
     @Inject
     protected LyonRewardsApi lyonRewardsApi;
 
@@ -48,10 +61,11 @@ public class ProfileFragmentActsTab extends Fragment {
 
     private RecyclerView.Adapter mAdapter;
 
-    private List<Object> mObjects;
+    // todo : user history with acts type
+    private List<Object> mObjects = new ArrayList<>();
 
     public ProfileFragmentActsTab() {
-        mObjects = new ArrayList<>();
+
     }
 
     public static String getFragmentTag() {
@@ -77,7 +91,6 @@ public class ProfileFragmentActsTab extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -105,12 +118,36 @@ public class ProfileFragmentActsTab extends Fragment {
         lyonRewardsApi.getMyEvents(connectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                if(response.code() == 200) {
+                if(response.isSuccessful()) {
                     List<Event> events = response.body();
 
-                    for(Event event : events) {
+                    for (final Event event : events) {
 
-                        mObjects.add(event);
+                        lyonRewardsApi.getQrCodesFromEvent(event.getId(), connectionManager.getConnectedUser().getId(), new Callback<List<QRCodeCitizenAct>>() {
+                            @Override
+                            public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
+                                if (response.isSuccessful()) {
+                                    for (QRCodeCitizenAct qrCodeCitizenAct : response.body()) {
+                                        if (qrCodeCitizenAct.isCompleted()) {
+                                            qrCodeCitizenAct.setEventTitle(event.getTitle());
+                                            // todo : order
+                                            mObjects.add(qrCodeCitizenAct);
+                                        }
+                                    }
+                                } else {
+                                    // TODO
+                                    Log.d("API", "error : " + response.message());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<QRCodeCitizenAct>> call, Throwable t) {
+                                // TODO
+                                Log.d("API", "error : " + t.getMessage());
+                            }
+                        });
+
+                        //mObjects.add(event);
                         //mObjects.add(new QRCodeCitizenAct(1, "test", "test", 12, 1, true, new Date()));
                     }
 
@@ -121,6 +158,7 @@ public class ProfileFragmentActsTab extends Fragment {
             @Override
             public void onFailure(Call<List<Event>> call, Throwable t) {
                 // TODO
+                Log.d("API", "error : " + t.getMessage());
             }
         });
 

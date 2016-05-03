@@ -83,4 +83,10 @@ public interface LyonRewardsEndpoint {
 
     @GET("users/ranking")
     Call<List<User>> getRankings();
+
+    @GET("users/{id}/history")
+    Call<List<JsonObject>> getUserHistory(@Path("id") int id, @Query("limit") int limit);
+
+    @GET("users/{id}/history")
+    Call<List<JsonObject>> getUserHistoryType(@Path("id") int id, @Query("limit") int limit, @Query("transaction") String type, @Query("order") String orderBy);
 }

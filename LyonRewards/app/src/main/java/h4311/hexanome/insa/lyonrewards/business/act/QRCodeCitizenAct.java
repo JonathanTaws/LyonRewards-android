@@ -23,6 +23,8 @@ public class QRCodeCitizenAct extends CitizenAct {
     @Expose
     private Date completedDate;
 
+    private String eventTitle;
+
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy");
 
     /**
@@ -79,5 +81,13 @@ public class QRCodeCitizenAct extends CitizenAct {
 
     public void setCompletedDate(Date completedDate) {
         this.completedDate = completedDate;
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 }

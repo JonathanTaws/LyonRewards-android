@@ -3,8 +3,11 @@ package h4311.hexanome.insa.lyonrewards.view.profile;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import java.util.List;
+
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentActsTab;
 import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentInfoTab;
+import h4311.hexanome.insa.lyonrewards.view.profile.tabs.ProfileFragmentTravelsTab;
 import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
 
 /**
@@ -12,11 +15,15 @@ import h4311.hexanome.insa.lyonrewards.view.scrolltab.ScrolltabPagerAdapter;
  */
 public class ProfilePagerAdapter extends ScrolltabPagerAdapter {
 
-    private static String[] tabsLabels = { "Mes informations", "Mes actes" };
-    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ ProfileFragmentInfoTab.class, ProfileFragmentActsTab.class };
+    private static String[] tabsLabels = { "Mes informations", "Mes succès", "Mes déplacements" };
+    private static Class<? extends Fragment>[] tabsFragments = new Class[]{ ProfileFragmentInfoTab.class, ProfileFragmentActsTab.class, ProfileFragmentTravelsTab.class };
+    private final List<Object> historyOffers;
+    private final List<Object> historyTravels;
 
-    public ProfilePagerAdapter(FragmentManager fm) {
+    public ProfilePagerAdapter(FragmentManager fm, List<Object> historyOffers, List<Object> historyTravels) {
         super(fm);
+        this.historyOffers = historyOffers;
+        this.historyTravels = historyTravels;
     }
 
     @Override
@@ -37,6 +44,8 @@ public class ProfilePagerAdapter extends ScrolltabPagerAdapter {
                 return ProfileFragmentInfoTab.newInstance();
             case 1:
                 return ProfileFragmentActsTab.newInstance();
+            case 2:
+                return ProfileFragmentTravelsTab.newInstance();
         }
         return null;
     }

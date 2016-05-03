@@ -55,6 +55,12 @@ public class TravelCardView extends LinearLayout {
     }
 
     public TravelCardView(Activity activity, TYPE type, User user) {
+        this(activity, user);
+
+        setType(type);
+    }
+
+    public TravelCardView(Activity activity, User user) {
         super(activity);
         mUser = user;
 
@@ -66,8 +72,6 @@ public class TravelCardView extends LinearLayout {
         ButterKnife.bind(this, child);
 
         addView(child);
-
-        setType(type);
     }
 
     public void setType(TYPE type) {
