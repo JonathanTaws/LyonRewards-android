@@ -21,96 +21,117 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/card_qrcode_success_image_size"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/card_qrcode_success_image"
-                android:layout_width="@dimen/card_qrcode_success_image_size"
-                android:layout_height="@dimen/card_qrcode_success_image_size"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:padding="18dp"
-                android:src="@drawable/icon_success_key_unknown" />
+            <TextView
+                android:id="@+id/card_qrcode_success_cardview_title_event"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:textAllCaps="true"
+                android:text="Titre évènement"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+                <!--android:minHeight="@dimen/card_qrcode_success_image_size"-->
+
+
+                <ImageView
+                    android:id="@+id/card_qrcode_success_image"
+                    android:layout_width="@dimen/card_qrcode_success_image_size"
+                    android:layout_height="@dimen/card_qrcode_success_image_size"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="18dp"
+                    android:src="@drawable/icon_success_key_unknown" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/card_qrcode_success_image"
-                    android:orientation="vertical"
-                    android:paddingRight="10dp"
-                    android:paddingTop="10dp">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/card_qrcode_success_title"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Titre du QR Code"
-                        android:textColor="#222"
-                        android:textSize="14dp" />
+                        android:layout_toRightOf="@id/card_qrcode_success_image"
+                        android:orientation="vertical"
+                        android:paddingRight="10dp"
+                        android:paddingTop="10dp">
 
-                    <TextView
-                        android:id="@+id/card_qrcode_success_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        <TextView
+                            android:id="@+id/card_qrcode_success_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Titre du QR Code"
+                            android:textColor="#222"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/card_qrcode_success_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="Indice pour trouver le QR Code"
+                            android:textColor="#666"
+                            android:textSize="14dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_gravity="bottom"
+                        android:gravity="bottom"
+                        android:layout_toRightOf="@id/card_qrcode_success_image"
+                        android:orientation="horizontal"
                         android:paddingTop="5dp"
-                        android:text="Indice pour trouver le QR Code"
-                        android:textColor="#666"
-                        android:textSize="14dp" />
+                        android:paddingBottom="10dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:id="@+id/card_qrcode_success_nbpoints"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="100"
+                            android:textColor="#58863A"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text=" Points"
+                            android:textColor="#58863A"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/card_qrcode_success_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="28 AVR."
+                            android:textColor="#666"
+                            android:textSize="12dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="bottom"
-                    android:gravity="bottom"
-                    android:layout_toRightOf="@id/card_qrcode_success_image"
-                    android:orientation="horizontal"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="10dp"
-                    android:paddingRight="10dp">
 
-                    <TextView
-                        android:id="@+id/card_qrcode_success_nbpoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="100"
-                        android:textColor="#58863A"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text=" Points"
-                        android:textColor="#58863A"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:id="@+id/card_qrcode_success_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="28 AVR."
-                        android:textColor="#666"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
 
-
         </LinearLayout>
+
 
 
     </android.support.v7.widget.CardView>

@@ -17,9 +17,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -57,10 +61,11 @@ public class ProfileFragmentActsTab extends Fragment {
 
     private RecyclerView.Adapter mAdapter;
 
-    private List<Object> mObjects;
+    // todo : user history with acts type
+    private List<Object> mObjects = new ArrayList<>();
 
     public ProfileFragmentActsTab() {
-        mObjects = new ArrayList<>();
+
     }
 
     public static String getFragmentTag() {
@@ -110,32 +115,40 @@ public class ProfileFragmentActsTab extends Fragment {
 
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
 
-        lyonRewardsApi.getUserHistory(connectionManager.getConnectedUser().getId(), MAX_NB_RESULTS, new Callback<List<JsonObject>>() {
+        lyonRewardsApi.getMyEvents(connectionManager.getConnectedUser().getId(), new Callback<List<Event>>() {
             @Override
-            public void onResponse(Call<List<JsonObject>> call, Response<List<JsonObject>> response) {
-                if(response.code() == 200) {
-                    List<JsonObject> objects = response.body();
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                if(response.isSuccessful()) {
+                    List<Event> events = response.body();
 
-                    Gson gson = new Gson();
-                    for(JsonObject jsonObject : objects) {
-                        if(jsonObject.has("citizen_act")) {
-                            JsonObject citizenActJson = jsonObject.getAsJsonObject("citizen_act");
-                            if("travel".equals(citizenActJson.get("type"))) {
-                                TravelCitizenAct travelCitizenAct = gson.fromJson(jsonObject, TravelCitizenAct.class);
-                                mObjects.add(travelCitizenAct);
+                    for (final Event event : events) {
+
+                        lyonRewardsApi.getQrCodesFromEvent(event.getId(), connectionManager.getConnectedUser().getId(), new Callback<List<QRCodeCitizenAct>>() {
+                            @Override
+                            public void onResponse(Call<List<QRCodeCitizenAct>> call, Response<List<QRCodeCitizenAct>> response) {
+                                if (response.isSuccessful()) {
+                                    for (QRCodeCitizenAct qrCodeCitizenAct : response.body()) {
+                                        if (qrCodeCitizenAct.isCompleted()) {
+                                            qrCodeCitizenAct.setEventTitle(event.getTitle());
+                                            // todo : order
+                                            mObjects.add(qrCodeCitizenAct);
+                                        }
+                                    }
+                                } else {
+                                    // TODO
+                                    Log.d("API", "error : " + response.message());
+                                }
                             }
-                            else if("qrcode".equals(citizenActJson.get("type"))) {
-                                QRCodeCitizenAct qrCodeCitizenAct = gson.fromJson(jsonObject, QRCodeCitizenAct.class);
-                                mObjects.add(qrCodeCitizenAct);
+
+                            @Override
+                            public void onFailure(Call<List<QRCodeCitizenAct>> call, Throwable t) {
+                                // TODO
+                                Log.d("API", "error : " + t.getMessage());
                             }
-                        }
-                        else if(jsonObject.has("partner_offer")) {
-                            Offer partnerOffer = gson.fromJson(jsonObject, Offer.class);
-                            mObjects.add(partnerOffer);
-                        }
-                        else {
-                            Log.d("API", "error : unkown json ");
-                        }
+                        });
+
+                        //mObjects.add(event);
+                        //mObjects.add(new QRCodeCitizenAct(1, "test", "test", 12, 1, true, new Date()));
                     }
 
                     mAdapter.notifyDataSetChanged();
@@ -143,7 +156,7 @@ public class ProfileFragmentActsTab extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<JsonObject>> call, Throwable t) {
+            public void onFailure(Call<List<Event>> call, Throwable t) {
                 // TODO
                 Log.d("API", "error : " + t.getMessage());
             }

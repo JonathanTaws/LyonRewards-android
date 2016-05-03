@@ -3,6 +3,9 @@ package h4311.hexanome.insa.lyonrewards.business.act;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Pierre on 02/05/2016.
  */
@@ -15,6 +18,10 @@ public class TravelCitizenAct extends CitizenAct {
     @SerializedName("type")
     @Expose
     private String type;
+
+    private Date completedDate;
+
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy");
 
     /**
      * No args constructor for use in serialization
@@ -42,5 +49,17 @@ public class TravelCitizenAct extends CitizenAct {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Date getCompletedDate() {
+        return completedDate;
+    }
+
+    public String getCompletedDateString() {
+        return simpleDateFormat.format(completedDate);
+    }
+
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
     }
 }

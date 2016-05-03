@@ -18,6 +18,8 @@ import h4311.hexanome.insa.lyonrewards.business.act.QRCodeCitizenAct;
  */
 public class EventSuccessCardView extends LinearLayout {
 
+    private boolean history;
+
     @BindView(R.id.card_qrcode_success_image)
     protected ImageView mImage;
 
@@ -33,8 +35,12 @@ public class EventSuccessCardView extends LinearLayout {
     @BindView(R.id.card_qrcode_success_date)
     protected TextView mDate;
 
-    public EventSuccessCardView(Context context) {
+    @BindView(R.id.card_qrcode_success_cardview_title_event)
+    protected TextView mTitleEvent;
+
+    public EventSuccessCardView(Context context, boolean history) {
         super(context);
+        this.history = history;
 
         setOrientation(LinearLayout.VERTICAL);
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -46,12 +52,23 @@ public class EventSuccessCardView extends LinearLayout {
         addView(child);
     }
 
+    public EventSuccessCardView(Context context) {
+        this(context, false);
+    }
+
     public EventSuccessCardView(Context context, QRCodeCitizenAct qrCodeReceived) {
-        this(context);
+        this(context, false);
         setQrCodeCitizenAct(qrCodeReceived);
     }
 
     public void setQrCodeCitizenAct(QRCodeCitizenAct qrCodeCitizenAct) {
+        if (history) {
+            if (qrCodeCitizenAct.getEventTitle() != null) {
+                mTitleEvent.setText(qrCodeCitizenAct.getEventTitle());
+                mTitleEvent.setVisibility(VISIBLE);
+            }
+        }
+
         mTitle.setText(qrCodeCitizenAct.getTitle());
         mDescription.setText(qrCodeCitizenAct.getDescription());
         mNbPoints.setText(String.valueOf(qrCodeCitizenAct.getPoints()));
