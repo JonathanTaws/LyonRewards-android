@@ -231,22 +231,38 @@ public class QrCodeFoundFragment extends Fragment {
                     connectionManager.setConnectedUser(user);
 
                     // Get the new event, updated
-                    eventReceived = lyonRewardsApi.getEventById(mQrCodeContent.getEventId(), connectionManager.getConnectedUser().getId());
-                    mCardViewEventContainer.removeAllViews();
-                    mCardViewEventContainer.addView(new EventCardView((MainActivity) getActivity(), eventReceived));
+                    lyonRewardsApi.getEventById(mQrCodeContent.getEventId(), connectionManager.getConnectedUser().getId(), new Callback<Event>() {
+                        @Override
+                        public void onResponse(Call<Event> call, Response<Event> response) {
+                            if (response.isSuccessful()) {
+                                eventReceived = response.body();
 
-                    // Update the current fragment
-                    qrCodeReceived.setCompleted(true);
-                    qrCodeReceived.setCompletedDate(new Date());
+                                mCardViewEventContainer.removeAllViews();
+                                mCardViewEventContainer.addView(new EventCardView((MainActivity) getActivity(), eventReceived));
 
-                    View viewHierarchy = new EventSuccessCardView(getContext(), qrCodeReceived);
-                    Scene mSceneClaimButtonClicked = new Scene(mCardViewQrCodeContainer, viewHierarchy);
-                    TransitionManager.go(mSceneClaimButtonClicked, TransitionInflater.from(getContext()).inflateTransition(R.transition.slide_left));
+                                // Update the current fragment
+                                qrCodeReceived.setCompleted(true);
+                                qrCodeReceived.setCompletedDate(new Date());
 
-                    mCardPointsGrantedText.setText("Félicitations, vous venez de gagner " + qrCodeReceived.getPoints() + " points.");
-                    mButtonReclaimPointsContainer.setVisibility(View.GONE);
-                    mCardPointsGrantedContainer.setVisibility(View.VISIBLE);
+                                View viewHierarchy = new EventSuccessCardView(getContext(), qrCodeReceived);
+                                Scene mSceneClaimButtonClicked = new Scene(mCardViewQrCodeContainer, viewHierarchy);
+                                TransitionManager.go(mSceneClaimButtonClicked, TransitionInflater.from(getContext()).inflateTransition(R.transition.slide_left));
 
+                                mCardPointsGrantedText.setText("Félicitations, vous venez de gagner " + qrCodeReceived.getPoints() + " points.");
+                                mButtonReclaimPointsContainer.setVisibility(View.GONE);
+                                mCardPointsGrantedContainer.setVisibility(View.VISIBLE);
+                            } else {
+                                // todo handle error
+                                Log.d("API", "Error : " + response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Event> call, Throwable t) {
+                            // todo handle error
+                            Log.d("API", "Error : " + t.getMessage());
+                        }
+                    });
                 } else {
                     // todo handle error
                     Log.d("API", "Error : " + response.message());
@@ -258,5 +274,6 @@ public class QrCodeFoundFragment extends Fragment {
                 // TODO
             }
         });
+
     }
 }
