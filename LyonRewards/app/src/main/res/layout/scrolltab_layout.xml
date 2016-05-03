@@ -13,12 +13,11 @@
         android:id="@+id/scrolltab_material_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         app:viewpager_color="@color/colorPrimary"
         app:viewpager_headerHeight="@dimen/scrolltab_header_height"
         app:viewpager_headerAlpha="1.0"
         app:viewpager_hideLogoWithFade="true"
-        app:viewpager_hideToolbarAndTitle="false"
+        app:viewpager_hideToolbarAndTitle="true"
         app:viewpager_enableToolbarElevation="true"
         app:viewpager_parallaxHeaderFactor="0"
         app:viewpager_headerAdditionalHeight="3dp"
