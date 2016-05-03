@@ -53,19 +53,19 @@ public class User implements Parcelable {
 
     @SerializedName("bike_distance")
     @Expose
-    private int bikeDistance;
+    private float bikeDistance;
 
     @SerializedName("walk_distance")
     @Expose
-    private int walkDistance;
+    private float walkDistance;
 
     @SerializedName("tram_distance")
     @Expose
-    private int tramDistance;
+    private float tramDistance;
 
     @SerializedName("bus_distance")
     @Expose
-    private int busDistance;
+    private float busDistance;
 
     @SerializedName("bike_points")
     @Expose
@@ -235,10 +235,10 @@ public class User implements Parcelable {
         this.currentToken = in.readString();
         this.last24hPoints = in.readInt();
         this.lastMonthPoints = in.readInt();
-        this.bikeDistance = in.readInt();
-        this.walkDistance = in.readInt();
-        this.tramDistance = in.readInt();
-        this.busDistance = in.readInt();
+        this.bikeDistance = in.readFloat();
+        this.walkDistance = in.readFloat();
+        this.tramDistance = in.readFloat();
+        this.busDistance = in.readFloat();
         this.bikePoints = in.readInt();
         this.walkPoints = in.readInt();
         this.tramPoints = in.readInt();
@@ -263,45 +263,45 @@ public class User implements Parcelable {
         dest.writeString(currentToken);
         dest.writeInt(last24hPoints);
         dest.writeInt(lastMonthPoints);
-        dest.writeInt(bikeDistance);
-        dest.writeInt(walkDistance);
-        dest.writeInt(tramDistance);
-        dest.writeInt(busDistance);
+        dest.writeFloat(bikeDistance);
+        dest.writeFloat(walkDistance);
+        dest.writeFloat(tramDistance);
+        dest.writeFloat(busDistance);
         dest.writeInt(bikePoints);
         dest.writeInt(walkPoints);
         dest.writeInt(tramPoints);
         dest.writeInt(busPoints);
     }
 
-    public int getBikeDistance() {
+    public float getBikeDistance() {
         return bikeDistance;
     }
 
-    public void setBikeDistance(int bikeDistance) {
+    public void setBikeDistance(float bikeDistance) {
         this.bikeDistance = bikeDistance;
     }
 
-    public int getWalkDistance() {
+    public float getWalkDistance() {
         return walkDistance;
     }
 
-    public void setWalkDistance(int walkDistance) {
+    public void setWalkDistance(float walkDistance) {
         this.walkDistance = walkDistance;
     }
 
-    public int getTramDistance() {
+    public float getTramDistance() {
         return tramDistance;
     }
 
-    public void setTramDistance(int tramDistance) {
+    public void setTramDistance(float tramDistance) {
         this.tramDistance = tramDistance;
     }
 
-    public int getBusDistance() {
+    public float getBusDistance() {
         return busDistance;
     }
 
-    public void setBusDistance(int busDistance) {
+    public void setBusDistance(float busDistance) {
         this.busDistance = busDistance;
     }
 
